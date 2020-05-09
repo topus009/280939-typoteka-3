@@ -43,8 +43,8 @@ const generateMockData = async (count) => {
       return {
         title: getRandomString(titlesSamples),
         createdDate: getRandomDate(),
-        announce: [...fullText].slice(0, 5).join(` `),
-        fullText: [...fullText].join(` `),
+        announce: fullText.slice(0, 5).join(` `),
+        fullText: fullText.join(` `),
         category: category.slice(0, 3),
       };
     });
@@ -54,7 +54,6 @@ const generateMockData = async (count) => {
 
 const run = async (input) => {
   const count = getUserCount(input);
-
   const content = await generateMockData(count);
   await writeToFileAsync(``, FILE_NAME, JSON.stringify(content));
   exit(`success`);
