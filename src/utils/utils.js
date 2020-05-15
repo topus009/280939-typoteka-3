@@ -3,7 +3,7 @@
 const fs = require(`fs`);
 const chalk = require(`chalk`);
 const path = require(`path`);
-const moment = require(`moment`);
+const dayjs = require(`dayjs`);
 const {exitCodes} = require(`../config/constants`);
 
 const getRangomInteger = (min, max, noNeedRoundOff) => {
@@ -54,12 +54,12 @@ const exit = (type) => {
 
 const getRandomDate = () => {
   const MAX_MONTHS_FROM_NOW = 3;
-  const currentDate = moment.now();
-  const pastDate = moment(currentDate).subtract(MAX_MONTHS_FROM_NOW, `months`);
+  const currentDate = dayjs();
+  const pastDate = dayjs(currentDate).subtract(MAX_MONTHS_FROM_NOW, `month`);
   const start = pastDate.valueOf();
   const end = currentDate;
 
-  return moment(getRangomInteger(start, end, true)).format(`YYYY-MM-DD HH:mm:ss`);
+  return dayjs(getRangomInteger(start, end, true)).format(`YYYY-MM-DD HH:mm:ss`);
 };
 
 const getRandomString = (arr) => {
