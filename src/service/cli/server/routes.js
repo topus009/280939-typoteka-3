@@ -8,9 +8,9 @@ const {
   HTTP_NOT_FOUND_CODE,
 } = HTTP_CODES;
 
-const getDefautRoute = (res) => {
+const getDefautRoute = (res, message) => {
   writeHead(res, HTTP_NOT_FOUND_CODE, `text/plain`);
-  res.end(`Не повезло, :(`);
+  res.end(message || `Не повезло, :(`);
 };
 
 const getBaseRoute = async (res) => {
@@ -25,14 +25,18 @@ const getBaseRoute = async (res) => {
   }
 
   const jsonData = JSON.parse(data);
-  const template = [];
-  template.push(`<ul>\n`);
-  for (const item of jsonData) {
-    template.push(`<li>${item.title}</li>\n`);
+  if (jsonData.length) {
+    const template = [];
+    template.push(`<ul>\n`);
+    for (const item of jsonData) {
+      template.push(`<li>${item.title}</li>\n`);
+    }
+    template.push(`</ul>`);
+    writeHead(res, HTTP_SUCCESS_CODE);
+    res.end(template.join(``));
+  } else {
+    getDefautRoute(res, `Not found`);
   }
-  template.push(`</ul>`);
-  writeHead(res, HTTP_SUCCESS_CODE);
-  res.end(template.join(``));
 };
 
 module.exports = {
