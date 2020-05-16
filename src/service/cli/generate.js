@@ -58,15 +58,15 @@ const generateMockData = async (count) => {
   const data = Array(count)
     .fill({})
     .map(() => {
-      const fullText = getRandomStrings(samples.announce);
-      const category = getRandomStrings(samples.category);
+      const sentences = getRandomStrings(samples.sentences);
+      const categories = getRandomStrings(samples.categories);
 
       return {
-        title: getRandomString(samples.title),
+        title: getRandomString(samples.titles),
         createdDate: getRandomDate(),
-        announce: fullText.slice(0, 5).join(` `),
-        fullText: fullText.join(` `),
-        category: category.slice(0, 3),
+        announce: sentences.slice(0, 5).join(` `),
+        sentences: sentences.join(` `),
+        categories: categories.slice(0, 3),
       };
     });
 
