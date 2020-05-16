@@ -2,7 +2,7 @@
 const ch = require(`chalk`);
 
 const message = `
-Программа запускает ${ch.red(`http-сервер`)} и формирует файл с данными для API.
+Программа запускает ${ch.cyan(`http-сервер`)} и формирует файл с данными для API.
 
     Гайд:
     ${ch.green(`service.js`)} <${ch.yellow(`command`)}>

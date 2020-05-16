@@ -12,7 +12,7 @@ const [userCommand] = userArguments;
 
 if (userArguments.length === 0 || !cli[userCommand]) {
   cli[DEFAULT_COMMAND].run();
-  exit(`success`);
+  exit(`SUCCESS`);
 }
 
 cli[userCommand].run(userArguments.slice(1));
