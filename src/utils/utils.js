@@ -96,6 +96,19 @@ const getRandomStrings = (arr, maxArrLength) => {
   return res;
 };
 
+const parseCommandParam = (param) => parseInt(param[0], 10);
+
+const writeHead = (
+    res,
+    status,
+    contentType = `text/html`,
+    charset = `UTF-8`,
+) => {
+  res.writeHead(status, {
+    'Content-Type': `${contentType}; charset=${charset}`,
+  });
+};
+
 module.exports = {
   getRangomInteger,
   shuffle,
@@ -106,4 +119,6 @@ module.exports = {
   getRandomDate,
   getRandomString,
   getRandomStrings,
+  parseCommandParam,
+  writeHead,
 };

@@ -10,6 +10,7 @@ const {
   readDirAsync,
   readFileAsync,
   writeToFileAsync,
+  parseCommandParam,
 } = require(`../../utils/utils`);
 const {PATH_TO_FILES} = require(`../../config/constants`);
 
@@ -17,15 +18,15 @@ const DEFAULT_COUNT = 1;
 const FILE_NAME = `mocks.json`;
 const MAX_ITEMS_ALLOWED = 1000;
 
-const getUserCount = (paramValueArr) => {
-  const parsedCount = parseInt(paramValueArr[0], 10);
+const getUserCount = (input) => {
+  const parsedCount = parseCommandParam(input);
 
   if (isNaN(parsedCount)) {
-    console.error(chalk.red(`Вы не указали параметры или они не валидны. Будет создана 1 запись.`));
+    console.log(chalk.red(`Вы не указали параметры или они не валидны. Будет создана 1 запись.`));
 
     return DEFAULT_COUNT;
   } else if (parsedCount > MAX_ITEMS_ALLOWED) {
-    console.error(chalk.red(`Возможно создать не больше ${MAX_ITEMS_ALLOWED} записей`));
+    console.log(chalk.red(`Возможно создать не больше ${MAX_ITEMS_ALLOWED} записей`));
     exit(`ERROR`);
   }
 
