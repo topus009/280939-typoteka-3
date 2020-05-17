@@ -8,7 +8,8 @@
     "eslint": "eslint --ext .js src/",
     "start": "node ./src/service/service.js",
     "server": "npm start -- --server",
-    "watch": "npx nodemon --exec \"npm run server\" -w ./src -w mocks.json"
+    "watch": "npx nodemon --exec \"npm run server\" -w ./src -w mocks.json",
+    "start-front-server": "node ./src/express/index.js"
   },
   "repository": {
     "type": "git",
