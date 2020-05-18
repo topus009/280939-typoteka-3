@@ -4,6 +4,6 @@ const ch = require(`chalk`);
 module.exports = {
   name: `--version`,
   run() {
-    console.log(ch.green(process.version));
+    console.log(ch.cyan(process.version));
   }
 };

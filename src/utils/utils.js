@@ -23,17 +23,30 @@ const shuffle = (someArray) => {
   return someArray;
 };
 
+const readDirAsync = (folderPath) => fs.promises.readdir(folderPath, (err, files) => {
+  if (err) {
+    console.log(chalk.red(err));
+  }
+  return files;
+});
+
 // eslint-disable-next-line consistent-return
-const readFileAsync = async (pathToFile) => {
+const readFileAsync = async (pathToFile, asText) => {
   try {
     const data = await fs.promises.readFile(pathToFile, `utf8`);
-
+    if (asText) {
+      return data;
+    }
     return data
       .toString()
       .split(`\n`)
       .filter(Boolean);
   } catch (err) {
-    console.log(err);
+    console.log(chalk.red(err));
+    if (asText) {
+      return `[]`;
+    }
+    return [];
   }
 };
 
@@ -41,15 +54,15 @@ const writeToFileAsync = async (pathToFile, name, content) => {
   const filePath = path.join(pathToFile, name);
   try {
     await fs.promises.writeFile(filePath, content, `utf8`);
-    console.log(`Файл ${chalk.red(name)} был создан!`);
+    console.log(`Файл ${chalk.green(name)} был создан!`);
     console.log(`Расположение: ${chalk.cyan(path.resolve(filePath))}`);
   } catch (err) {
-    console.log(err);
+    console.log(chalk.red(err));
   }
 };
 
 const exit = (type) => {
-  process.exit(exitCodes[type] || exitCodes.success);
+  process.exit(exitCodes[type] || exitCodes.SUCCESS);
 };
 
 const getRandomDate = () => {
@@ -83,13 +96,29 @@ const getRandomStrings = (arr, maxArrLength) => {
   return res;
 };
 
+const parseCommandParam = (param) => parseInt(param[0], 10);
+
+const writeHead = (
+    res,
+    status,
+    contentType = `text/html`,
+    charset = `UTF-8`,
+) => {
+  res.writeHead(status, {
+    'Content-Type': `${contentType}; charset=${charset}`,
+  });
+};
+
 module.exports = {
   getRangomInteger,
   shuffle,
+  readDirAsync,
   readFileAsync,
   writeToFileAsync,
   exit,
   getRandomDate,
   getRandomString,
   getRandomStrings,
+  parseCommandParam,
+  writeHead,
 };
