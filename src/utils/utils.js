@@ -37,10 +37,7 @@ const readFileAsync = async (pathToFile, asText) => {
     if (asText) {
       return data;
     }
-    return data
-      .toString()
-      .split(`\n`)
-      .filter(Boolean);
+    return data.toString().split(`\n`).filter(Boolean);
   } catch (err) {
     console.log(chalk.red(err));
     if (asText) {

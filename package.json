@@ -7,7 +7,7 @@
     "test": "npm run eslint",
     "eslint": "eslint --ext .js src/",
     "start": "node ./src/service/service.js",
-    "server": "npm start -- --server",
+    "server": "cross-env COMMAND=\"--server\" npm start",
     "watch": "npx nodemon --exec \"npm run server\" -w ./src -w mocks.json",
     "start-front-server": "node ./src/express/index.js"
   },
