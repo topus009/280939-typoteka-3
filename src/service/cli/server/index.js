@@ -6,7 +6,7 @@ const {
 } = require(`../../../utils/utils`);
 const router = require(`./router`);
 
-const DEFAULT_PORT = 3000;
+const DEFAULT_PORT = process.env.PORT || 3000;
 
 const runServer = (port) => {
   const httpServer = http.createServer(router);
