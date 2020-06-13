@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
 const fs = require(`fs`);
-const chalk = require(`chalk`);
 const path = require(`path`);
 const dayjs = require(`dayjs`);
+const logger = require(`./logger`);
 const {exitCodes} = require(`../config/constants`);
 
 const getRangomInteger = (min, max, noNeedRoundOff) => {
@@ -17,44 +17,39 @@ const getRangomInteger = (min, max, noNeedRoundOff) => {
 const shuffle = (someArray) => {
   for (let i = someArray.length - 1; i > 0; i--) {
     const randomPosition = Math.floor(Math.random() * i);
-    [someArray[i], someArray[randomPosition]] = [someArray[randomPosition], someArray[i]];
+    [someArray[i], someArray[randomPosition]] = [
+      someArray[randomPosition],
+      someArray[i],
+    ];
   }
 
   return someArray;
 };
 
-const readDirAsync = (folderPath) => fs.promises.readdir(folderPath, (err, files) => {
-  if (err) {
-    console.log(chalk.red(err));
-  }
-  return files;
-});
+const readDirAsync = (folderPath) =>
+  fs.promises.readdir(folderPath, (err, files) => {
+    if (err) {
+      logger.error(err);
+    }
+    return files;
+  });
 
-// eslint-disable-next-line consistent-return
 const readFileAsync = async (pathToFile, asText) => {
-  try {
-    const data = await fs.promises.readFile(pathToFile, `utf8`);
-    if (asText) {
-      return data;
-    }
-    return data.toString().split(`\n`).filter(Boolean);
-  } catch (err) {
-    console.log(chalk.red(err));
-    if (asText) {
-      return `[]`;
-    }
-    return [];
+  const data = await fs.promises.readFile(pathToFile, `utf8`);
+  if (asText) {
+    return data;
   }
+  return data.toString().split(`\n`).filter(Boolean);
 };
 
 const writeToFileAsync = async (pathToFile, name, content) => {
   const filePath = path.join(pathToFile, name);
   try {
     await fs.promises.writeFile(filePath, content, `utf8`);
-    console.log(`Файл ${chalk.green(name)} был создан!`);
-    console.log(`Расположение: ${chalk.cyan(path.resolve(filePath))}`);
+    logger.log(`Файл ${name} был создан!`);
+    logger.log(`Расположение: ${path.resolve(filePath)}`);
   } catch (err) {
-    console.log(chalk.red(err));
+    logger.error(err);
   }
 };
 
@@ -69,7 +64,9 @@ const getRandomDate = () => {
   const start = pastDate.valueOf();
   const end = currentDate;
 
-  return dayjs(getRangomInteger(start, end, true)).format(`YYYY-MM-DD HH:mm:ss`);
+  return dayjs(getRangomInteger(start, end, true)).format(
+      `YYYY-MM-DD HH:mm:ss`
+  );
 };
 
 const getRandomString = (arr) => {
@@ -99,11 +96,19 @@ const writeHead = (
     res,
     status,
     contentType = `text/html`,
-    charset = `UTF-8`,
+    charset = `UTF-8`
 ) => {
   res.writeHead(status, {
-    'Content-Type': `${contentType}; charset=${charset}`,
+    "Content-Type": `${contentType}; charset=${charset}`,
   });
+};
+
+const sortObjs = (field, isAsc, formatField) => (a, b) => {
+  const aVal = field ? a[field] : a;
+  const bVal = field ? b[field] : b;
+  const _a = formatField ? formatField(aVal) : aVal;
+  const _b = formatField ? formatField(bVal) : bVal;
+  return isAsc ? (_b - _a) : (_a - _b);
 };
 
 module.exports = {
@@ -118,4 +123,5 @@ module.exports = {
   getRandomStrings,
   parseCommandParam,
   writeHead,
+  sortObjs,
 };

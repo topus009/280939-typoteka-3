@@ -1,11 +1,7 @@
 'use strict';
 
-const routes = require(`./routes`);
+const errorsRouter = require(`./routes/error`);
 
-module.exports = (req, res) => {
-  if (routes[req.url]) {
-    routes[req.url](res);
-  } else {
-    routes.default(res);
-  }
+module.exports = {
+  "*": errorsRouter,
 };
