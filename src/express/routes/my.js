@@ -1,10 +1,31 @@
 'use strict';
 
 const {Router} = require(`express`);
+const {
+  categories,
+  myCategories,
+  posts,
+  myPosts,
+  comments,
+  myComments,
+  currentUser,
+} = require(`../db`);
 
-const MyRouter = new Router();
+const myRouter = new Router();
 
-MyRouter.get(`/`, (req, res) => res.send(`/my`));
-MyRouter.get(`/comments`, (req, res) => res.send(`/my/comments`));
+myRouter.get(`/categories`, (req, res) => res.render(`pages/my/admin-categories`, {
+  categories,
+  myCategories,
+}));
+myRouter.get(`/comments`, (req, res) => res.render(`pages/my/admin-comments`, {
+  currentUser,
+  comments,
+  myComments,
+  posts,
+}));
+myRouter.get(`/publications`, (req, res) => res.render(`pages/my/admin-publications`, {
+  posts,
+  myPosts,
+}));
 
-module.exports = MyRouter;
+module.exports = myRouter;
