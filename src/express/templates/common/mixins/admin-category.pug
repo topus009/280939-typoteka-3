@@ -1,0 +1,9 @@
+mixin adminCategory(index, category)
+  - itemId = `modify-form-category-${index}`
+  li.category__list-item
+    form(action='#' method='POST')
+      input(id=`${itemId}` type='text' name='category' value=`${category.label}`)
+      label(for=`${itemId}`)
+        span.visually-hidden Редактировать категорию
+      button.category__button.button.button--category(type='submit') Сохранить
+      button.category__button.button.button--category(type='button') Удалить

@@ -1,0 +1,19 @@
+include ../../common/common.pug
+
++layout('Типотека')
+  +body({
+    mod: 'nobackground',
+    footerProps: {mod: 'padding'},
+    noVendor: true,
+  })
+    +header({
+      type: 'admin'
+    })
+    main.main-page.main-page--padding
+      section.main-page__notes.notes
+        h1.notes__title Мои записи
+        ul.notes__list
+          each postId in myPosts
+            each postData in posts
+              if postId === postData.id
+                +adminPost(postData)

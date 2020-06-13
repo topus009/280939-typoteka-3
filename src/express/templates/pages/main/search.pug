@@ -1,0 +1,30 @@
+include ../../common/common.pug
+
+- isSearchResultEmpty = !searchResults || (searchResults && !searchResults.length);
+- emptyWrapperClass = (query && isSearchResultEmpty) ? 'search-page__wrapper--empty' : 'search-page__wrapper--fixed';
+- searchFormClass = !isSearchResultEmpty ? 'search-page__form--fixed' : '';
+
++layout('Типотека')
+  +body({
+    colored: true,
+    noVendor: true
+  })
+    +header({
+      type: 'admin'
+    })
+    main
+      section.search-page
+        //- add class fixes long list
+        .search-page__wrapper(class=`${emptyWrapperClass}`)
+          h1 Поиск
+          //- add class fixes long list
+          .search.search-page__form(class=`${searchFormClass}`)
+            form(action='#' method='get')
+              label
+                input(type='text' placeholder='Что ищем?' value=`${query || ''}`)
+              button.search__button.button.button--transparent(type='submit') Найти
+            if !isSearchResultEmpty
+              each resultItem in searchResults
+                +searchResult(resultItem)
+          if query && isSearchResultEmpty
+            p.search-page__empty Ничего не нашлось

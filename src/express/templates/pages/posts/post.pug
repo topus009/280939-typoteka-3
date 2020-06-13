@@ -1,0 +1,9 @@
+include ../../common/common.pug
+
++layout('post-page')
+  +body({noVendor: true})
+    +header({
+      type: 'user'
+    })
+    main
+      +postItem({post, categories, currentUser, comments, users, categoriesCount})

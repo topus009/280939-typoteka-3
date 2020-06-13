@@ -1,0 +1,16 @@
+mixin lastComments(lastComments, users)
+  section.main-page__last.last
+    h2.last__name
+      | Последние комментарии&nbsp;
+      span.last__icon.last__icon--cloud
+    if lastComments.length === 0
+      p.last__empty Здесь пока ничего нет...
+    else
+      ul.last__list
+        each comment in lastComments
+          li.last__list-item
+            each user in users
+              if comment.userId === user.id
+                img.last__list-image(src=`${user.avatarSmall}` width='20' height='20' alt='Аватар пользователя')
+                b.last__list-name= `${user.name}`
+            a.last__list-link(href='#')= `${comment.text}`
