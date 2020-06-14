@@ -1,10 +1,11 @@
 - navigationItems = [{url: 'index', label: 'все ссылки'},{url: 'main', label: 'Главная страница'},{url: 'main-variation', label: 'Главная страница (варианты вида)'},{url: 'main-no-news', label: 'Страница без новостей и комментов'},{url: 'admin-my-publications-2', label: 'Мои записи'},{url: 'admin-categories', label: 'Категории'},{url: 'admin-my-publications-1', label: 'Комментарии'},{url: 'new-post-photo', label: 'Страница для нового поста'},{url: 'new-post-photo-1', label: 'Страница добавления нового поста'},{url: 'new-post-photo-2', label: 'Страница добавления нового поста (выбор даты)'},{url: 'new-post-photo-3', label: 'Страница добавления нового поста (заполненная)'},{url: 'main-empty', label: 'Главная страница пустая'},{url: 'registration', label: 'Регистрация'},{url: 'sign-in-error-1', label: 'Регистрация c ошибками'},{url: 'sign-in-error-2', label: 'Регистрация c ошибкой поля email'},{url: 'sign-in-error-3', label: 'Регистрация c ошибкой поля пароль'},{url: 'publications-by-category', label: 'Список публикаций в категории'},{url: '404', label: 'Страница для отображения ошибок'},{url: '500', label: 'Страница для отображения ошибок'},{url: 'search', label: 'Страница поиска'},{url: 'search-2', label: 'Страница поиска с результатами'},{url: 'search-3', label: 'Страница поиска пустая'},{url: 'post-user', label: 'Страница поcта (для пользователя)'},{url: 'post-visitor-no-tags', label: 'Страница поcта (для посетителя) без тегов'},{url: 'post-visitor-no-comments', label: 'Страница поcта (для посетителя) без комментариев'},{url: 'post-visitor-no-photo', label: 'Страница поcта (для посетителя) без фотографии'},{url: 'post-user-2', label: 'Страница поcта (для пользователя) с ошибкой отправки комментария'},{url: 'uikit', label: 'UI KIT'}]
 
-.header__dropdown
-  a.button.button--burger.header__burger(href='#') Открыть меню
-  ul.navigation.header__navigation
-    each item in navigationItems
-      - url = `${item.url}.html`
-      - label = `${item.label}`
-      li.navigation__item
-        a(href=`${url}`)= `${url} --- ${label}`
+mixin navigationMenu()
+  .header__dropdown
+    a.button.button--burger.header__burger(href='#') Открыть меню
+    ul.navigation.header__navigation
+      each item in navigationItems
+        - url = `${item.url}.html`
+        - label = `${item.label}`
+        li.navigation__item
+          a(href=`${url}`)= `${url} --- ${label}`

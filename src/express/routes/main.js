@@ -29,6 +29,7 @@ mainRouter.get(`/search`, (req, res) => {
     res.render(`pages/main/search`);
   }
 });
+
 mainRouter.get(`/`, (req, res) => res.render(`pages/main/main`, {
   posts,
   categories,

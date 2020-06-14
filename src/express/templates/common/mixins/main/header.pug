@@ -14,7 +14,7 @@ mixin headerContent({type})
   case type
     when 'admin'
       button.button.button--colored.header__button-new Новая запись
-      include ../components/navigation-menu.pug
+      +navigationMenu()
     when 'user'
       //- убирать класс линки в зависимости от урла
       nav.header__nav

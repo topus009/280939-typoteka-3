@@ -3,8 +3,8 @@
 const fs = require(`fs`);
 const path = require(`path`);
 const dayjs = require(`dayjs`);
+const {ExitCodes} = require(`../config/constants`);
 const logger = require(`./logger`);
-const {exitCodes} = require(`../config/constants`);
 
 const getRangomInteger = (min, max, noNeedRoundOff) => {
   if (!noNeedRoundOff) {
@@ -54,7 +54,7 @@ const writeToFileAsync = async (pathToFile, name, content) => {
 };
 
 const exit = (type) => {
-  process.exit(exitCodes[type] || exitCodes.SUCCESS);
+  process.exit(ExitCodes[type] || ExitCodes.SUCCESS);
 };
 
 const getRandomDate = () => {
@@ -64,9 +64,7 @@ const getRandomDate = () => {
   const start = pastDate.valueOf();
   const end = currentDate;
 
-  return dayjs(getRangomInteger(start, end, true)).format(
-      `YYYY-MM-DD HH:mm:ss`
-  );
+  return dayjs(getRangomInteger(start, end, true)).format(`YYYY-MM-DD HH:mm:ss`);
 };
 
 const getRandomString = (arr) => {

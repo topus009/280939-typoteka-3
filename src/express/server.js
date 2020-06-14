@@ -1,10 +1,11 @@
 'use strict';
 
-const path = require(`path`);
-const logger = require(`../utils/logger`);
 const express = require(`express`);
-const routers = require(`./router`);
 const dayjs = require(`dayjs`);
+const path = require(`path`);
+const {HttpCodes} = require(`../config/constants`);
+const logger = require(`../utils/logger`);
+const routers = require(`./router`);
 
 require(`dayjs/locale/ru`);
 dayjs.locale(`ru`);
@@ -23,8 +24,8 @@ Object.entries(routers).forEach(([key, router]) => app.use(key, router));
 app.use((err, req, res, next) => {
   logger.error(err.message);
   res
-    .status(500)
-    .render(`pages/error/500`);
+    .status(HttpCodes.HTTP_SERVER_ERROR_CODE)
+    .render(`pages/error/${HttpCodes.HTTP_SERVER_ERROR_CODE}`);
   next(err);
 });
 

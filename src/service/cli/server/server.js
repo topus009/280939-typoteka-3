@@ -1,11 +1,10 @@
 'use strict';
 
 const express = require(`express`);
+const {HttpCodes} = require(`../../../config/constants`);
 const logger = require(`../../../utils/logger`);
+const {parseCommandParam} = require(`../../../utils/utils`);
 const routers = require(`./router`);
-const {
-  parseCommandParam,
-} = require(`../../../utils/utils`);
 
 const DEFAULT_PORT = process.env.PORT || 3000;
 
@@ -18,7 +17,7 @@ const startApp = (port) => {
 
   app.use((err, req, res, next) => {
     logger.error(err.message);
-    res.status(500);
+    res.status(HttpCodes.HTTP_SERVER_ERROR_CODE);
     next(err);
   });
 

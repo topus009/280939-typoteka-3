@@ -3,6 +3,8 @@
 const dayjs = require(`dayjs`);
 const {sortObjs} = require(`../../utils/utils`);
 
+const getCurrentUser = (users, name) => users.find((user) => user.name === name);
+
 const getMyData = ({currentUser, comments, posts}) => {
   const myComments = {};
   const myPosts = [];
@@ -41,7 +43,9 @@ const getHighlitedMatches = (queryString, string) => {
   const rgxp = new RegExp(`(\\S*)?(` + queryString + `)(\\S*)?`, `ig`);
 
   if (queryString.trim().length > 0) {
-    newString = string.replace(rgxp, (match, $1, $2, $3) => ($1 || ``) + `<b>` + $2 + `</b>` + ($3 || ``));
+    newString = string.replace(rgxp, (match, $1, $2, $3) => {
+      return ($1 || ``) + `<b>` + $2 + `</b>` + ($3 || ``);
+    });
   }
   return newString.length !== string.length ? newString : ``;
 };
@@ -62,8 +66,8 @@ const getSearchData = (query, posts) => {
 };
 
 const getHotAndLateatData = ({comments, posts}) => {
-  const maxHotCount = 4;
-  const maxLatestCount = 3;
+  const MAX_HOT_COUNT = 4;
+  const MAX_LATEST_COUNT = 3;
 
   const formatDate = (value) => dayjs(value).valueOf();
   const getCommentsCount = (commentsData) => (id) => {
@@ -77,14 +81,16 @@ const getHotAndLateatData = ({comments, posts}) => {
     Object.keys(comments)
       .reduce((commentsAcc, postId) => [...commentsAcc, ...comments[postId]], [])
       .sort(sortObjs(`createdDate`, true, formatDate))
-      .slice(0, maxLatestCount);
+      .slice(0, MAX_LATEST_COUNT);
 
   const sortedPostsByCommentsCount =
     posts
       .sort(sortObjs(`id`, true, getCommentsCount(comments)))
-      .slice(0, maxHotCount);
+      .slice(0, MAX_HOT_COUNT);
 
-  const postsCount = sortedPostsByCommentsCount.map((post) => [post.id, comments[post.id].length]);
+  const postsCount = sortedPostsByCommentsCount.map((post) => {
+    return [post.id, comments[post.id].length];
+  });
 
   return {
     lastComments: sortedCommentsByLatesDate,
@@ -117,6 +123,7 @@ const getCategoryPostsData = (posts, id) =>
   posts.filter((post) => post.categories.includes(id));
 
 module.exports = {
+  getCurrentUser,
   getMyData,
   getSearchData,
   getHotAndLateatData,

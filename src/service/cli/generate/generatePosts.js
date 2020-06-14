@@ -6,11 +6,8 @@ const {
   getRandomString,
   getRandomStrings,
   writeToFileAsync,
-} = require(`../../../../utils/utils`);
+} = require(`../../../utils/utils`);
 const {getSamples} = require(`./utils`);
-const {PATH_TO_MOCKDATA} = require(`../../../../config/constants`);
-
-const FILE_NAME = PATH_TO_MOCKDATA + `/mocks.json`;
 
 const generateMockData = async (count, users, categories) => {
   const samples = await getSamples();
@@ -47,9 +44,9 @@ const generateMockData = async (count, users, categories) => {
   return data;
 };
 
-const generatePosts = async (count, users, categories) => {
+const generatePosts = async (fileName, count, users, categories) => {
   const content = await generateMockData(count, users, categories);
-  await writeToFileAsync(``, FILE_NAME, JSON.stringify(content));
+  await writeToFileAsync(``, fileName, JSON.stringify(content));
 };
 
 module.exports = generatePosts;

@@ -4,11 +4,8 @@ const {nanoid} = require(`nanoid`);
 const {
   getRandomString,
   writeToFileAsync,
-} = require(`../../../../utils/utils`);
+} = require(`../../../utils/utils`);
 const {getSamples} = require(`./utils`);
-const {PATH_TO_MOCKDATA} = require(`../../../../config/constants`);
-
-const FILE_NAME = PATH_TO_MOCKDATA + `/users.json`;
 
 const generateData = async (count) => {
   const samples = await getSamples();
@@ -35,10 +32,10 @@ const generateData = async (count) => {
   return data;
 };
 
-const generateUsers = async () => {
-  const count = 10;
-  const content = await generateData(count);
-  await writeToFileAsync(``, FILE_NAME, JSON.stringify(content));
+const generateUsers = async (fileName) => {
+  const COUNT = 10;
+  const content = await generateData(COUNT);
+  await writeToFileAsync(``, fileName, JSON.stringify(content));
 };
 
 module.exports = generateUsers;

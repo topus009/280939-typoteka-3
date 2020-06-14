@@ -1,21 +1,24 @@
 'use strict';
 
-const logger = require(`../../../../utils/logger`);
 const path = require(`path`);
+const logger = require(`../../../utils/logger`);
+const {
+  PATH_TO_FILES,
+  DEFAULT_GENERATE_COUNT,
+  GENERATE_MAX_ITEMS_ALLOWED
+} = require(`../../../config/constants`);
 const {
   readDirAsync,
   readFileAsync,
   parseCommandParam,
   exit,
-} = require(`../../../../utils/utils`);
-const {PATH_TO_FILES, DEFAULT_GENERATE_COUNT, GENERATE_MAX_ITEMS_ALLOWED} = require(`../../../../config/constants`);
+} = require(`../../../utils/utils`);
 
 const getUserCount = (input) => {
   const parsedCount = parseCommandParam(input);
 
   if (isNaN(parsedCount)) {
     logger.error(`Вы не указали параметры или они не валидны. Будет создана 1 запись.`);
-
     return DEFAULT_GENERATE_COUNT;
   } else if (parsedCount > GENERATE_MAX_ITEMS_ALLOWED) {
     logger.error(`Возможно создать не больше ${GENERATE_MAX_ITEMS_ALLOWED} записей`);

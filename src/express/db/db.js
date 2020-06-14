@@ -3,19 +3,17 @@
 const users = require(`../../../mockData/users.json`);
 const posts = require(`../../../mockData/mocks.json`);
 const comments = require(`../../../mockData/comments.json`);
-const categories = require(`../../../mockData/categories.json`);
+const {getCurrentUser, getMyData} = require(`./utils`);
+
+const currentUser = getCurrentUser(users, `Topolov Sergey`);
+
 const {
-  currentUser,
   myComments,
   myPosts,
   myCategories,
-} = require(`./db`);
+} = getMyData({currentUser, comments, posts});
 
 module.exports = {
-  users,
-  posts,
-  comments,
-  categories,
   currentUser,
   myComments,
   myPosts,

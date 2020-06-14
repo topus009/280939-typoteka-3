@@ -1,4 +1,4 @@
-include ../../common/common.pug
+include ../../common/index.pug
 
 - isSearchResultEmpty = !searchResults || (searchResults && !searchResults.length);
 - emptyWrapperClass = (query && isSearchResultEmpty) ? 'search-page__wrapper--empty' : 'search-page__wrapper--fixed';

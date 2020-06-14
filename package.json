@@ -8,10 +8,10 @@
     "eslint": "eslint --ext .js \"src/**\"",
     "start": "node ./src/service/service.js",
     "server": "cross-env COMMAND=\"--server\" npm start",
-    "server:watch": "npx nodemon --exec \"npm run server\" -w ./src -w mocks.json",
-    "front-server": "node ./src/express/index.js",
+    "server:watch": "npx nodemon --exec \"npm run server\" -w ./src -w ./mockData",
+    "front-server": "node ./src/express/server.js",
     "lint:pug": "pug-lint ./src",
-    "front-server:watch": "npx nodemon --exec \"npm run front-server\" -w ./src -w mocks.json -e js,json,pug"
+    "front-server:watch": "npx nodemon --exec \"npm run front-server\" -w ./src -w ./mockData -e"
   },
   "repository": {
     "type": "git",
@@ -24,17 +24,17 @@
   },
   "homepage": "https://github.com/topus009/280939-typoteka-3#readme",
   "devDependencies": {
-    "cross-env": "^7.0.2",
+    "cross-env": "7.0.2",
     "eslint": "6.8.0",
     "eslint-config-htmlacademy": "0.5.2",
-    "nodemon": "^2.0.4",
-    "pug-lint": "^2.6.0"
+    "nodemon": "2.0.4",
+    "pug-lint": "2.6.0"
   },
   "dependencies": {
-    "chalk": "^4.0.0",
-    "dayjs": "^1.8.28",
+    "chalk": "4.0.0",
+    "dayjs": "1.8.28",
     "express": "4.17.1",
-    "nanoid": "^3.1.9",
-    "pug": "^3.0.0"
+    "nanoid": "3.1.9",
+    "pug": "3.0.0"
   }
 }
