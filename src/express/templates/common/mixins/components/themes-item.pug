@@ -1,0 +1,8 @@
+mixin themesItem(theme, categoriesCount, isActive = false)
+  - count = categoriesCount[theme.id]
+  if count
+    li.themes__item
+      a.themes__item-link(href='#' class=`${isActive && 'themes__item-link--active'}`)
+        span= `${theme.label}`
+        sup= ` ${count}`
+      //- button.themes__remove-btn(type='button') Удалить категорию

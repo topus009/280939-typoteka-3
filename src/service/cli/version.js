@@ -1,9 +1,9 @@
 'use strict';
-const ch = require(`chalk`);
+const logger = require(`../../utils/logger`);
 
 module.exports = {
   name: `--version`,
   run() {
-    console.log(ch.cyan(process.version));
+    logger.log(process.version);
   }
 };

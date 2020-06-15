@@ -1,10 +1,10 @@
-'use strict';
+"use strict";
 
 const fs = require(`fs`);
-const chalk = require(`chalk`);
 const path = require(`path`);
 const dayjs = require(`dayjs`);
-const {exitCodes} = require(`../config/constants`);
+const {ExitCodes} = require(`../config/constants`);
+const logger = require(`./logger`);
 
 const getRangomInteger = (min, max, noNeedRoundOff) => {
   if (!noNeedRoundOff) {
@@ -17,49 +17,44 @@ const getRangomInteger = (min, max, noNeedRoundOff) => {
 const shuffle = (someArray) => {
   for (let i = someArray.length - 1; i > 0; i--) {
     const randomPosition = Math.floor(Math.random() * i);
-    [someArray[i], someArray[randomPosition]] = [someArray[randomPosition], someArray[i]];
+    [someArray[i], someArray[randomPosition]] = [
+      someArray[randomPosition],
+      someArray[i],
+    ];
   }
 
   return someArray;
 };
 
-const readDirAsync = (folderPath) => fs.promises.readdir(folderPath, (err, files) => {
-  if (err) {
-    console.log(chalk.red(err));
-  }
-  return files;
-});
+const readDirAsync = (folderPath) =>
+  fs.promises.readdir(folderPath, (err, files) => {
+    if (err) {
+      logger.error(err);
+    }
+    return files;
+  });
 
-// eslint-disable-next-line consistent-return
 const readFileAsync = async (pathToFile, asText) => {
-  try {
-    const data = await fs.promises.readFile(pathToFile, `utf8`);
-    if (asText) {
-      return data;
-    }
-    return data.toString().split(`\n`).filter(Boolean);
-  } catch (err) {
-    console.log(chalk.red(err));
-    if (asText) {
-      return `[]`;
-    }
-    return [];
+  const data = await fs.promises.readFile(pathToFile, `utf8`);
+  if (asText) {
+    return data;
   }
+  return data.toString().split(`\n`).filter(Boolean);
 };
 
 const writeToFileAsync = async (pathToFile, name, content) => {
   const filePath = path.join(pathToFile, name);
   try {
     await fs.promises.writeFile(filePath, content, `utf8`);
-    console.log(`Файл ${chalk.green(name)} был создан!`);
-    console.log(`Расположение: ${chalk.cyan(path.resolve(filePath))}`);
+    logger.log(`Файл ${name} был создан!`);
+    logger.log(`Расположение: ${path.resolve(filePath)}`);
   } catch (err) {
-    console.log(chalk.red(err));
+    logger.error(err);
   }
 };
 
 const exit = (type) => {
-  process.exit(exitCodes[type] || exitCodes.SUCCESS);
+  process.exit(ExitCodes[type] || ExitCodes.SUCCESS);
 };
 
 const getRandomDate = () => {
@@ -99,10 +94,10 @@ const writeHead = (
     res,
     status,
     contentType = `text/html`,
-    charset = `UTF-8`,
+    charset = `UTF-8`
 ) => {
   res.writeHead(status, {
-    'Content-Type': `${contentType}; charset=${charset}`,
+    "Content-Type": `${contentType}; charset=${charset}`,
   });
 };
 

@@ -1,0 +1,4 @@
+mixin searchResult(result)
+  .search__result
+    +formattedDate(result.createdDate, {class: 'search__date'})
+    a.search__link !{result.title}

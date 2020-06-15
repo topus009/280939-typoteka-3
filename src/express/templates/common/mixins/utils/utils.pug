@@ -1,0 +1,5 @@
+mixin formattedDate(value, componentAttrs = {})
+  - valueArr = `${value}`.split(' ');
+  - dateTime = valueArr.join('T');
+  - textTime =  valueArr.join(', ');
+  time(datetime=`${dateTime}`)&attributes(componentAttrs)= `${textTime}`

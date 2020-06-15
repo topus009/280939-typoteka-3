@@ -1,0 +1,44 @@
+mixin logo({type, error})
+  a.header__logo.logo(class=`${error ? `header__logo--${error}` : ''}` href='#')
+    case type
+      when 'admin'
+      when 'user-logged'
+        img.logo__image(src='img/icons/logo-image-only.svg' alt='логотип Тайпотеки')
+        span.logo__name Типотека
+      when 'user'
+        img(src='img/icons/logo.svg' alt='логотип Тайпотеки')
+      default
+        img(src='img/icons/logo.svg' alt='логотип Тайпотеки')
+
+mixin headerContent({type})
+  case type
+    when 'admin'
+      button.button.button--colored.header__button-new Новая запись
+      +navigationMenu()
+    when 'user'
+      //- убирать класс линки в зависимости от урла
+      nav.header__nav
+        ul.header__nav-list
+          li.header__list-item
+            a.header__popup(href='/sign-up') Регистрация
+          li.header__list-item
+            a.header__enter(href='/login') Вход с паролем
+    when 'user-logged'
+      nav.header__nav
+        ul.header__nav-list
+          li.header__list-item
+            p Алёна Фролова
+          li.header__list-item
+            a.header__exit(href='#') Выйти
+      a.header__avatar.avatar
+        img(src='img/avatar-2.png' alt='аватар пользователя')
+    when 'default'
+      //- убирать класс линки в зависимости от урла
+      a.header__registration(href='/sign-up') Регистрация
+      a.header__enter(href='/sign-up') Вход с паролем
+
+mixin header(props = {})
+  header.header(class=`${props.error ? 'header--error' : ''}`)
+    +logo(props)
+    +headerContent(props)
+    a.header__search.button.button--search(href='#' aria-label='поиск по сайту')

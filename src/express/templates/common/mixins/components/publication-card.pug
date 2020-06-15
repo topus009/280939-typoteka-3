@@ -1,0 +1,22 @@
+mixin publicationCard(post, comments = [], categories)
+  - hasImage = post.img && post.imgBig
+  li.preview__item(class=`${!hasImage && 'preview__item--noimage'}`)
+    ul.preview__breadcrumbs
+      each postCategoryId in post.categories
+        each categoryData in categories
+          if postCategoryId === categoryData.id
+            li.preview__breadcrumbs-item
+              a.preview__breadcrumbs-link(href='#')= `${categoryData.label}`
+    if hasImage
+      .preview__background
+        img.preview__background-image(src=`${post.img}` width='460' height='240' srcset=`${post.img}, ${post.imgBig}` alt=`${post.img}`)
+    +formattedDate(post.createdDate, {class: 'preview__time'})
+    h3.preview__name
+      a.preview__name-link(href='#')= `${post.title}`
+    p.preview__text= `${post.announce}`
+    if comments.length
+      a.preview__comment(href='#')
+        | Комментарии
+        span.preview__cloud
+        |
+        b.preview__comment-count= ` ${comments.length}`

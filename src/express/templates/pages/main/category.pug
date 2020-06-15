@@ -1,0 +1,26 @@
+include ../../common/index.pug
+
++layout('Типотека')
+  +body({noVendor: true})
+    +header({
+      type: 'user'
+    })
+    main.main-page
+      h1.visually-hidden Главная страница личного блога Типотека
+      p.
+
+        Это приветственный текст, который владелец блога может выбрать, чтобы описать себя 👏
+      if posts.length
+        section.main-page__theme-list
+          h2.visually-hidden Список тем
+          ul.themes
+            each categoryData in categories
+              - isActive = activeCategoryId === categoryData.id
+              +themesItem(categoryData, categoriesCount, isActive)
+        section.main-page__list.preview
+          h2.visually-hidden Список превью статей
+          ul.preview__list
+            each postData in posts
+              - commentsData = comments[postData.id]
+              +publicationCard(postData, commentsData, categories)
+          //- +postsPagination()

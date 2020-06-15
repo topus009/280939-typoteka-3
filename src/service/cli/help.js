@@ -1,4 +1,5 @@
 'use strict';
+
 const ch = require(`chalk`);
 
 const message = `
