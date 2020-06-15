@@ -34,8 +34,9 @@ const generateData = async (count, users, posts) => {
 };
 
 const generateComments = async (fileName, count, users, posts) => {
-  const content = await generateData(count * 3, users, posts);
-  await writeToFileAsync(``, fileName, JSON.stringify(content));
+  const data = await generateData(count * 3, users, posts);
+  await writeToFileAsync(``, fileName, JSON.stringify(data));
+  return data;
 };
 
 module.exports = generateComments;

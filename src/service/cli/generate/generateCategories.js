@@ -16,8 +16,9 @@ const generateData = async () => {
 };
 
 const generateCategories = async (fileName) => {
-  const content = await generateData();
-  await writeToFileAsync(``, fileName, JSON.stringify(content));
+  const data = await generateData();
+  await writeToFileAsync(``, fileName, JSON.stringify(data));
+  return data;
 };
 
 module.exports = generateCategories;

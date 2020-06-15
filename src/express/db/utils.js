@@ -1,7 +1,6 @@
 'use strict';
 
 const dayjs = require(`dayjs`);
-const {sortObjs} = require(`../../utils/utils`);
 
 const getCurrentUser = (users, name) => users.find((user) => user.name === name);
 
@@ -70,7 +69,7 @@ const getHotAndLateatData = ({comments, posts}) => {
   const MAX_LATEST_COUNT = 3;
 
   const formatDate = (value) => dayjs(value).valueOf();
-  const getCommentsCount = (commentsData) => (id) => {
+  const getCommentsCount = (id, commentsData) => {
     if (commentsData[id]) {
       return commentsData[id].length;
     }
@@ -80,12 +79,12 @@ const getHotAndLateatData = ({comments, posts}) => {
   const sortedCommentsByLatesDate =
     Object.keys(comments)
       .reduce((commentsAcc, postId) => [...commentsAcc, ...comments[postId]], [])
-      .sort(sortObjs(`createdDate`, true, formatDate))
+      .sort((a, b) => (formatDate(b.createdDate) - formatDate(a.createdDate)))
       .slice(0, MAX_LATEST_COUNT);
 
   const sortedPostsByCommentsCount =
     posts
-      .sort(sortObjs(`id`, true, getCommentsCount(comments)))
+      .sort((a, b) => (getCommentsCount(b.id, comments)) - getCommentsCount(a.id, comments))
       .slice(0, MAX_HOT_COUNT);
 
   const postsCount = sortedPostsByCommentsCount.map((post) => {

@@ -17,12 +17,9 @@ const fileNames = {
 
 const run = async (input) => {
   const count = getUserCount(input);
-  await generateUsers(fileNames.USERS);
-  await generateCategories(fileNames.CATEGORIES);
-  const users = require(`../../../../mockData/users.json`);
-  const categories = require(`../../../../mockData/categories.json`);
-  await generatePosts(fileNames.MOCKS, count, users, categories);
-  const posts = require(`../../../../mockData/mocks.json`);
+  const users = await generateUsers(fileNames.USERS);
+  const categories = await generateCategories(fileNames.CATEGORIES);
+  const posts = await generatePosts(fileNames.MOCKS, count, users, categories);
   await generateComments(fileNames.COMMENTS, count, users, posts);
   exit(`SUCCESS`);
 };

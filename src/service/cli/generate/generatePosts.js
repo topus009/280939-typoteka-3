@@ -45,8 +45,9 @@ const generateMockData = async (count, users, categories) => {
 };
 
 const generatePosts = async (fileName, count, users, categories) => {
-  const content = await generateMockData(count, users, categories);
-  await writeToFileAsync(``, fileName, JSON.stringify(content));
+  const data = await generateMockData(count, users, categories);
+  await writeToFileAsync(``, fileName, JSON.stringify(data));
+  return data;
 };
 
 module.exports = generatePosts;

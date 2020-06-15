@@ -13,6 +13,5 @@ node_modules/
 
 # Папка с собранными файлами проекта
 build/
-mockData/
 
 jscpd-report.html

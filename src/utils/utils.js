@@ -101,14 +101,6 @@ const writeHead = (
   });
 };
 
-const sortObjs = (field, isAsc, formatField) => (a, b) => {
-  const aVal = field ? a[field] : a;
-  const bVal = field ? b[field] : b;
-  const _a = formatField ? formatField(aVal) : aVal;
-  const _b = formatField ? formatField(bVal) : bVal;
-  return isAsc ? (_b - _a) : (_a - _b);
-};
-
 module.exports = {
   getRangomInteger,
   shuffle,
@@ -121,5 +113,4 @@ module.exports = {
   getRandomStrings,
   parseCommandParam,
   writeHead,
-  sortObjs,
 };

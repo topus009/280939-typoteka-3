@@ -34,8 +34,9 @@ const generateData = async (count) => {
 
 const generateUsers = async (fileName) => {
   const COUNT = 10;
-  const content = await generateData(COUNT);
-  await writeToFileAsync(``, fileName, JSON.stringify(content));
+  const data = await generateData(COUNT);
+  await writeToFileAsync(``, fileName, JSON.stringify(data));
+  return data;
 };
 
 module.exports = generateUsers;
