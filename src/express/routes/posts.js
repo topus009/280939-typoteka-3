@@ -1,35 +1,37 @@
 'use strict';
 
 const {Router} = require(`express`);
-const dayjs = require(`dayjs`);
-const {getCategoriesCount} = require(`../db/utils`);
-const {
-  categories,
-  posts,
-  comments,
-  users,
-  currentUser,
-} = require(`../db`);
+const Api = require(`../api/api`);
 
 const postsRouter = new Router();
 
-const getCurrentPost = (postId) => posts.find((post) => post.id === postId);
+postsRouter.get(`/:id`, async (req, res) => {
+  const {id} = req.params;
+  const categories = await Api.categories.getAll();
+  const users = await Api.users.getAll();
+  const currentUser = await Api.users.getUserByName(`Topolov Sergey`);
+  const post = await Api.posts.getPostById(id);
+  const comments = await Api.comments.getCommentsByPostId(post.id);
+  const categoriesCount = await Api.categories.getCategoriesCount();
 
-const post = getCurrentPost(posts[4].id);
-const categoriesCount = getCategoriesCount(posts);
+  res.render(`pages/posts/post`, {
+    currentUser,
+    comments,
+    categories,
+    post,
+    users,
+    categoriesCount,
+  });
+});
 
-postsRouter.get(`/`, (req, res) => res.render(`pages/posts/post`, {
-  currentUser,
-  comments: comments[post.id],
-  categories,
-  post,
-  users,
-  categoriesCount,
-}));
+postsRouter.get(`/new`, async (req, res) => {
+  const categories = await Api.categories.getAll();
+  const currentDate = await Api.common.getCurrentDate();
 
-postsRouter.get(`/new`, (req, res) => res.render(`pages/posts/new-post`, {
-  categories,
-  currentDate: dayjs().format(`D.MM.YYYY`)
-}));
+  res.render(`pages/posts/new-post`, {
+    categories,
+    currentDate,
+  });
+});
 
 module.exports = postsRouter;
