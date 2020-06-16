@@ -12,7 +12,7 @@ mixin publicationCard(post, comments = [], categories)
         img.preview__background-image(src=`${post.img}` width='460' height='240' srcset=`${post.img}, ${post.imgBig}` alt=`${post.img}`)
     +formattedDate(post.createdDate, {class: 'preview__time'})
     h3.preview__name
-      a.preview__name-link(href='#')= `${post.title}`
+      a.preview__name-link(href=`/posts/${post.id}`)= `${post.title}`
     p.preview__text= `${post.announce}`
     if comments.length
       a.preview__comment(href='#')
