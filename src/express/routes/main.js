@@ -6,13 +6,23 @@ const Api = require(`../api/api`);
 const mainRouter = new Router();
 
 mainRouter.get(`/`, async (req, res) => {
-  const users = await Api.users.getAll();
-  const categories = await Api.categories.getAll();
-  const posts = await Api.posts.getAll();
-  const comments = await Api.comments.getAll();
-  const lastComments = await Api.comments.getLatestComments();
-  const mostPopularPosts = await Api.posts.getHotPosts();
-  const categoriesCount = await Api.categories.getCategoriesCount();
+  const [
+    users,
+    categories,
+    posts,
+    comments,
+    lastComments,
+    mostPopularPosts,
+    categoriesCount,
+  ] = await Promise.all([
+    Api.users.getAll(),
+    Api.categories.getAll(),
+    Api.posts.getAll(),
+    Api.comments.getAll(),
+    Api.comments.getLatestComments(),
+    Api.posts.getHotPosts(),
+    Api.categories.getCategoriesCount(),
+  ]);
 
   res.render(`pages/main/main`, {
     posts,
@@ -39,10 +49,17 @@ mainRouter.get(`/search`, async (req, res) => {
 mainRouter.get(`/category/:id`, async (req, res) => {
   const {id} = req.params;
 
-  const categories = await Api.categories.getAll();
-  const posts = await Api.posts.getPostsByCategoryId(id);
-  const comments = await Api.comments.getAll();
-  const categoriesCount = await Api.categories.getCategoriesCount();
+  const [
+    categories,
+    posts,
+    comments,
+    categoriesCount,
+  ] = await Promise.all([
+    Api.categories.getAll(),
+    Api.posts.getPostsByCategoryId(id),
+    Api.comments.getAll(),
+    Api.categories.getCategoriesCount(),
+  ]);
 
   res.render(`pages/main/category`, {
     posts,

@@ -6,8 +6,13 @@ const Api = require(`../api/api`);
 const myRouter = new Router();
 
 myRouter.get(`/categories`, async (req, res) => {
-  const categories = await Api.categories.getAll();
-  const myCategories = await Api.categories.getMyCategories();
+  const [
+    categories,
+    myCategories,
+  ] = await Promise.all([
+    Api.categories.getAll(),
+    Api.categories.getMyCategories(),
+  ]);
 
   res.render(`pages/my/admin-categories`, {
     categories,
@@ -16,10 +21,17 @@ myRouter.get(`/categories`, async (req, res) => {
 });
 
 myRouter.get(`/comments`, async (req, res) => {
-  const comments = await Api.comments.getAll();
-  const posts = await Api.posts.getAll();
-  const myComments = await Api.comments.getMyComments();
-  const currentUser = await Api.users.getUserByName(`Topolov Sergey`);
+  const [
+    comments,
+    posts,
+    myComments,
+    currentUser,
+  ] = await Promise.all([
+    Api.comments.getAll(),
+    Api.posts.getAll(),
+    Api.comments.getMyComments(),
+    Api.users.getUserByName(`Topolov Sergey`),
+  ]);
 
   res.render(`pages/my/admin-comments`, {
     currentUser,
@@ -30,8 +42,13 @@ myRouter.get(`/comments`, async (req, res) => {
 });
 
 myRouter.get(`/publications`, async (req, res) => {
-  const posts = await Api.posts.getAll();
-  const myPosts = await Api.posts.getMyPosts();
+  const [
+    posts,
+    myPosts,
+  ] = await Promise.all([
+    Api.posts.getAll(),
+    Api.posts.getMyPosts(),
+  ]);
 
   res.render(`pages/my/admin-publications`, {
     posts,

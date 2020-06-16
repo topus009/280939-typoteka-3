@@ -21,8 +21,13 @@ module.exports = {
   },
 
   async getMyPosts() {
-    const posts = await this.getAll();
-    const currentUser = await ApiUsers.getUserByName(`Topolov Sergey`);
+    const [
+      posts,
+      currentUser
+    ] = await Promise.all([
+      this.getAll(),
+      ApiUsers.getUserByName(`Topolov Sergey`)
+    ]);
     const myPosts = [];
 
     posts.forEach((post) => {
@@ -51,8 +56,13 @@ module.exports = {
 
   async getHotPosts() {
     const MAX_HOT_COUNT = 4;
-    const posts = await this.getAll();
-    const comments = await ApiComments.getAll();
+    const [
+      posts,
+      comments
+    ] = await Promise.all([
+      this.getAll(),
+      ApiComments.getAll()
+    ]);
 
     const getCommentsCount = (id, commentsData) => {
       if (commentsData[id]) {

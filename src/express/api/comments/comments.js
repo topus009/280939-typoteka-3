@@ -15,8 +15,13 @@ module.exports = {
   },
 
   async getMyComments() {
-    const comments = await this.getAll();
-    const currentUser = await ApiUsers.getUserByName(`Topolov Sergey`);
+    const [
+      comments,
+      currentUser
+    ] = await Promise.all([
+      this.getAll(),
+      ApiUsers.getUserByName(`Topolov Sergey`)
+    ]);
     const myComments = {};
 
     Object.keys(comments).forEach((postId) => {
