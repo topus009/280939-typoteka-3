@@ -19,6 +19,13 @@ const HttpCodes = {
 const PATH_TO_FILES = path.join(process.cwd(), `data`);
 const PATH_TO_MOCKDATA = path.join(process.cwd(), `mockData`);
 
+const MockFilesPaths = {
+  USERS: `${PATH_TO_MOCKDATA}/users.json`,
+  CATEGORIES: `${PATH_TO_MOCKDATA}/categories.json`,
+  MOCKS: `${PATH_TO_MOCKDATA}/mocks.json`,
+  COMMENTS: `${PATH_TO_MOCKDATA}/comments.json`,
+};
+
 module.exports = {
   ExitCodes,
   DEFAULT_COMMAND,
@@ -28,4 +35,5 @@ module.exports = {
   PATH_TO_MOCKDATA,
   DEFAULT_GENERATE_COUNT,
   GENERATE_MAX_ITEMS_ALLOWED,
+  MockFilesPaths,
 };
