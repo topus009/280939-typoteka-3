@@ -15,7 +15,7 @@ const router = (Api) => {
     const currentUser = Api.users.getUserByName(MY_NAME);
     const categoriesCount = Api.categories.getCategoriesCount();
     const post = Api.posts.findById(id);
-    const comments = Api.comments.getCommentsByPostId(post.id);
+    const comments = Api.comments.getCommentsByPostId(id);
 
     const data = {
       categories,

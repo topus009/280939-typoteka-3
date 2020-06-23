@@ -1,5 +1,5 @@
 mixin logo({type, error})
-  a.header__logo.logo(class=`${error ? `header__logo--${error}` : ''}` href='#')
+  a.header__logo.logo(class=`${error ? `header__logo--${error}` : ''}` href='/')
     case type
       when 'admin'
       when 'user-logged'
@@ -13,16 +13,16 @@ mixin logo({type, error})
 mixin headerContent({type})
   case type
     when 'admin'
-      button.button.button--colored.header__button-new Новая запись
+      a.button.button--colored.header__button-new(href='/posts/new') Новая запись
       +navigationMenu()
     when 'user'
       //- убирать класс линки в зависимости от урла
       nav.header__nav
         ul.header__nav-list
           li.header__list-item
-            a.header__popup(href='/sign-up') Регистрация
+            a.header__popup(href='/auth/sign-up') Регистрация
           li.header__list-item
-            a.header__enter(href='/login') Вход с паролем
+            a.header__enter(href='/auth/login') Вход с паролем
     when 'user-logged'
       nav.header__nav
         ul.header__nav-list
@@ -34,11 +34,11 @@ mixin headerContent({type})
         img(src='img/avatar-2.png' alt='аватар пользователя')
     when 'default'
       //- убирать класс линки в зависимости от урла
-      a.header__registration(href='/sign-up') Регистрация
-      a.header__enter(href='/sign-up') Вход с паролем
+      a.header__registration(href='/auth/sign-up') Регистрация
+      a.header__enter(href='/auth/sign-up') Вход с паролем
 
 mixin header(props = {})
   header.header(class=`${props.error ? 'header--error' : ''}`)
     +logo(props)
     +headerContent(props)
-    a.header__search.button.button--search(href='#' aria-label='поиск по сайту')
+    a.header__search.button.button--search(href='/search' aria-label='поиск по сайту')

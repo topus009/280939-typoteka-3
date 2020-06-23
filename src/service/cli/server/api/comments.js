@@ -43,7 +43,7 @@ const commentsApi = (entityName, DB, Api) => ({
 
   getCommentsByPostId(postId) {
     const comments = DB[entityName];
-    return comments[postId];
+    return comments[postId] || [];
   },
 
   getMyComments() {
@@ -74,7 +74,10 @@ const commentsApi = (entityName, DB, Api) => ({
 
     const sortedCommentsByLatesDate =
       Object.keys(comments)
-        .reduce((commentsAcc, postId) => [...commentsAcc, ...comments[postId]], [])
+        .reduce((commentsAcc, postId) => {
+          const preparedComments = comments[postId].map((item) => ({...item, postId}));
+          return [...commentsAcc, ...preparedComments];
+        }, [])
         .sort((a, b) => (formatDate(b.createdDate) - formatDate(a.createdDate)))
         .slice(0, MAX_LATEST_COUNT);
     return sortedCommentsByLatesDate;
