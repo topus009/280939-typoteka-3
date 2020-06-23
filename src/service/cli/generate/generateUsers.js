@@ -5,6 +5,7 @@ const {
   getRandomString,
   writeToFileAsync,
 } = require(`../../../utils/utils`);
+const {MY_NAME} = require(`../../../config/constants`);
 const {getSamples} = require(`./utils`);
 
 const generateData = async (count) => {
@@ -24,7 +25,7 @@ const generateData = async (count) => {
   // добавление меня любимого
   data.push({
     "id": `vdf45y45dfbvd`,
-    "name": `Topolov Sergey`,
+    "name": MY_NAME,
     "avatar": `https://avatars0.githubusercontent.com/u/22383491?s=88&u=db063b8130d3a29442c041b5720662aa78d45e78&v=4`,
     "avatarSmall": `https://avatars0.githubusercontent.com/u/22383491?s=40&v=4`
   });

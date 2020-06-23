@@ -7,14 +7,21 @@ const ExitCodes = {
   ERROR: 1
 };
 
+const MY_NAME = `Topolov Sergey`;
+const DATE_FORMAT = `YYYY-MM-DD HH:mm:ss`;
 const DEFAULT_GENERATE_COUNT = 1;
 const GENERATE_MAX_ITEMS_ALLOWED = 1000;
 const DEFAULT_COMMAND = `--help`;
 const USER_ARGV_INDEX = 2;
 const HttpCodes = {
-  HTTP_SUCCESS_CODE: 200,
-  HTTP_NOT_FOUND_CODE: 404,
-  HTTP_SERVER_ERROR_CODE: 500,
+  OK: 200,
+  CREATED: 201,
+  NO_CONTENT: 204,
+  BAD_REQUEST: 400,
+  UNAUTHORIZED: 401,
+  FORBIDDEN: 403,
+  NOT_FOUND: 404,
+  INTERNAL_SERVER_ERROR: 500,
 };
 const PATH_TO_FILES = path.join(process.cwd(), `data`);
 const PATH_TO_MOCKDATA = path.join(process.cwd(), `mockData`);
@@ -22,9 +29,11 @@ const PATH_TO_MOCKDATA = path.join(process.cwd(), `mockData`);
 const MockFilesPaths = {
   USERS: `${PATH_TO_MOCKDATA}/users.json`,
   CATEGORIES: `${PATH_TO_MOCKDATA}/categories.json`,
-  MOCKS: `${PATH_TO_MOCKDATA}/mocks.json`,
+  POSTS: `${PATH_TO_MOCKDATA}/mocks.json`,
   COMMENTS: `${PATH_TO_MOCKDATA}/comments.json`,
 };
+
+const BACKEND_API_PREFIX = `/api`;
 
 module.exports = {
   ExitCodes,
@@ -36,4 +45,7 @@ module.exports = {
   DEFAULT_GENERATE_COUNT,
   GENERATE_MAX_ITEMS_ALLOWED,
   MockFilesPaths,
+  BACKEND_API_PREFIX,
+  DATE_FORMAT,
+  MY_NAME,
 };

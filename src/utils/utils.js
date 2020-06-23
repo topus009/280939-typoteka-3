@@ -3,7 +3,7 @@
 const fs = require(`fs`);
 const path = require(`path`);
 const dayjs = require(`dayjs`);
-const {ExitCodes} = require(`../config/constants`);
+const {ExitCodes, DATE_FORMAT} = require(`../config/constants`);
 const logger = require(`./logger`);
 
 const getRangomInteger = (min, max, noNeedRoundOff) => {
@@ -64,7 +64,7 @@ const getRandomDate = () => {
   const start = pastDate.valueOf();
   const end = currentDate;
 
-  return dayjs(getRangomInteger(start, end, true)).format(`YYYY-MM-DD HH:mm:ss`);
+  return dayjs(getRangomInteger(start, end, true)).format(DATE_FORMAT);
 };
 
 const getRandomString = (arr) => {

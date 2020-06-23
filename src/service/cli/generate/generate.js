@@ -12,7 +12,7 @@ const run = async (input) => {
   const count = getUserCount(input);
   const users = await generateUsers(MockFilesPaths.USERS);
   const categories = await generateCategories(MockFilesPaths.CATEGORIES);
-  const posts = await generatePosts(MockFilesPaths.MOCKS, count, users, categories);
+  const posts = await generatePosts(MockFilesPaths.POSTS, count, users, categories);
   await generateComments(MockFilesPaths.COMMENTS, count, users, posts);
   exit(`SUCCESS`);
 };

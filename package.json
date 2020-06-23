@@ -6,12 +6,14 @@
   "scripts": {
     "test": "npm run eslint",
     "eslint": "eslint --ext .js \"src/**\"",
-    "start": "node ./src/service/service.js",
-    "server": "cross-env COMMAND=\"--server\" npm start",
-    "server:watch": "npx nodemon --exec \"npm run server\" -w ./src -w ./mockData",
-    "front-server": "node ./src/express/server.js",
+    "start": "node -r ./envs/config.js ./src/service/service.js",
     "lint:pug": "pug-lint ./src",
-    "front-server:watch": "npx nodemon --exec \"npm run front-server\" -w ./src -w ./mockData -e"
+    "backend": "cross-env COMMAND=\"--server\" npm start",
+    "frontend": "node -r ./envs/config.js ./src/express/server.js",
+    "backend:watch": "npx nodemon --exec \"npm run backend\" -w ./src -w ./mockData",
+    "frontend:watch": "npx nodemon --exec \"npm run frontend\" -w ./src -w ./mockData -e",
+    "all": "npm-run-all -p backend frontend",
+    "all:watch": "npm-run-all -p backend:watch frontend:watch"
   },
   "repository": {
     "type": "git",
@@ -28,12 +30,15 @@
     "eslint": "6.8.0",
     "eslint-config-htmlacademy": "0.5.2",
     "nodemon": "2.0.4",
+    "npm-run-all": "^4.1.5",
     "pug-lint": "2.6.0"
   },
   "dependencies": {
     "axios": "^0.19.2",
+    "body-parser": "^1.19.0",
     "chalk": "4.0.0",
     "dayjs": "1.8.28",
+    "dotenv": "^8.2.0",
     "express": "4.17.1",
     "nanoid": "3.1.9",
     "pug": "3.0.0"

@@ -10,7 +10,7 @@ const routers = require(`./router`);
 require(`dayjs/locale/ru`);
 dayjs.locale(`ru`);
 
-const DEFAULT_PORT = process.env.PORT || 8080;
+const DEFAULT_PORT = process.env.FRONTEND_PORT;
 
 const app = express();
 
@@ -24,8 +24,8 @@ Object.entries(routers).forEach(([key, router]) => app.use(key, router));
 app.use((err, req, res, next) => {
   logger.error(err.message);
   res
-    .status(HttpCodes.HTTP_SERVER_ERROR_CODE)
-    .render(`pages/error/${HttpCodes.HTTP_SERVER_ERROR_CODE}`);
+    .status(HttpCodes.INTERNAL_SERVER_ERROR)
+    .render(`pages/error/${HttpCodes.INTERNAL_SERVER_ERROR}`);
   next(err);
 });
 
