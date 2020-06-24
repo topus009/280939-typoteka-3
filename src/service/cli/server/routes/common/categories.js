@@ -2,6 +2,7 @@
 
 const {Router} = require(`express`);
 const {HttpCodes} = require(`../../../../../config/constants`);
+const {validate, rules} = require(`../../validation`);
 
 const router = (Api) => {
   const categoriesRouter = new Router();
@@ -17,9 +18,8 @@ const router = (Api) => {
     res.status(HttpCodes.OK).json(data);
   });
 
-  categoriesRouter.post(`/`, (req, res) => {
-    const body = req.body;
-    const data = Api.categories.add(body);
+  categoriesRouter.post(`/`, rules.category(), validate, (req, res) => {
+    const data = Api.categories.add(req.body);
     res.status(HttpCodes.OK).json(data);
   });
 

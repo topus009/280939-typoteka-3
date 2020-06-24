@@ -2,6 +2,7 @@
 
 const {Router} = require(`express`);
 const {HttpCodes} = require(`../../../../../config/constants`);
+const {validate, rules} = require(`../../validation`);
 
 const router = (Api) => {
   const commentsRouter = new Router();
@@ -23,10 +24,9 @@ const router = (Api) => {
     res.status(HttpCodes.OK).json(data);
   });
 
-  commentsRouter.post(`/post/:postId`, (req, res) => {
+  commentsRouter.post(`/post/:postId`, rules.comment(), validate, (req, res) => {
     const {postId} = req.params;
-    const body = req.body;
-    const data = Api.comments.add(postId, body);
+    const data = Api.comments.add(postId, req.body);
     res.status(HttpCodes.OK).json(data);
   });
 

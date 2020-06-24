@@ -2,6 +2,7 @@
 
 const {Router} = require(`express`);
 const {HttpCodes} = require(`../../../../../config/constants`);
+const {validate, rules} = require(`../../validation`);
 
 const router = (Api) => {
   const postsRouter = new Router();
@@ -23,9 +24,8 @@ const router = (Api) => {
     res.status(HttpCodes.OK).json(data);
   });
 
-  postsRouter.post(`/`, (req, res) => {
-    const body = req.body;
-    const data = Api.posts.add(body);
+  postsRouter.post(`/`, rules.post(), validate, (req, res) => {
+    const data = Api.posts.add(req.body);
     res.status(HttpCodes.OK).json(data);
   });
 
@@ -35,10 +35,9 @@ const router = (Api) => {
     res.status(HttpCodes.OK).json(data);
   });
 
-  postsRouter.put(`/:id`, (req, res) => {
+  postsRouter.put(`/:id`, rules.post(), validate, (req, res) => {
     const {id} = req.params;
-    const body = req.body;
-    const data = Api.posts.edit(id, body);
+    const data = Api.posts.edit(id, req.body);
     res.status(HttpCodes.OK).json(data);
   });
 
