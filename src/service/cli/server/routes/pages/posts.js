@@ -10,11 +10,11 @@ const router = (Api) => {
   postsPageRouter.get(`/post/:id`, (req, res) => {
     const {id} = req.params;
 
+    const post = Api.posts.findById(id);
     const categories = Api.categories.getAll();
     const users = Api.users.getAll();
     const currentUser = Api.users.getUserByName(MY_NAME);
     const categoriesCount = Api.categories.getCategoriesCount();
-    const post = Api.posts.findById(id);
     const comments = Api.comments.getCommentsByPostId(id);
 
     const data = {

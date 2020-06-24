@@ -1,0 +1,26 @@
+include ../../common/index.pug
+
+mixin backLink
+  a.error__link.text.text--big(href='/') Вернуться на главную
+
++layout('Типотека')
+  +body({
+    colored: true,
+    noVendor: true,
+  })
+    +header({error})
+    main
+      h1.visually-hidden= `Ошибка ${error.statusCode}`
+      if error.statusCode === 404
+        section.error
+          h2.error__title.title.title--big= `${error.text || 'Похоже ошиблись адресом'}`
+          +backLink
+      else if error.statusCode === 500
+        section.error.error--500
+          h2.error__title.title.title--big Что-то пошло не так
+          p.error__text.text.text--big Причин может быть много: сервер не выдержал нагрузку или в коде ошибка. Попробуйте повторить попытку позже.
+          +backLink
+      else
+        section.error
+          h2.error__title.title.title--big= `${error.text}`
+          +backLink

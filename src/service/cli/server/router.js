@@ -4,7 +4,6 @@ const usersRouter = require(`./routes/common/users`);
 const categoriesRouter = require(`./routes/common/categories`);
 const postsRouter = require(`./routes/common/posts`);
 const commentsRouter = require(`./routes/common/comments`);
-const errorsRouter = require(`./routes/common/errors`);
 
 const mainPageRouter = require(`./routes/pages/main`);
 const myPageRouter = require(`./routes/pages/my`);
@@ -20,8 +19,6 @@ const routes = {
   "pages/main": mainPageRouter,
   "pages/my": myPageRouter,
   "pages/posts": postsPageRouter,
-  // errors
-  "*": errorsRouter,
 };
 
 module.exports = routes;

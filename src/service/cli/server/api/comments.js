@@ -4,12 +4,26 @@ const {nanoid} = require(`nanoid`);
 const dayjs = require(`dayjs`);
 const {
   DATE_FORMAT,
-  MY_NAME
+  MY_NAME,
+  HttpCodes,
 } = require(`../../../../config/constants`);
+const {Err} = require(`../../../../utils/utils`);
 
 const commentsApi = (entityName, DB, Api) => ({
   delete(postId, id) {
-    DB[entityName][postId] = DB[entityName][postId].filter((comment) => comment.id !== id);
+    const post = DB[entityName][postId];
+    const postInDB = DB.posts.find((item) => item.id === postId);
+    if (!post) {
+      if (!postInDB) {
+        throw new Err(HttpCodes.NOT_FOUND, _f(`NO_POST_ID`, {id: postId}));
+      }
+      throw new Err(HttpCodes.NOT_FOUND, _f(`NO_COMMENTS_WITH_POST_ID`, {id: postId}));
+    }
+    const comment = post.find((item) => item.id === id);
+    if (!comment) {
+      throw new Err(HttpCodes.NOT_FOUND, _f(`NO_COMMENT_ID`, {id}));
+    }
+    DB[entityName][postId] = DB[entityName][postId].filter((item) => item.id !== id);
     if (!DB[entityName][postId].length) {
       delete DB[entityName][postId];
     }
@@ -19,6 +33,10 @@ const commentsApi = (entityName, DB, Api) => ({
   add(postId, data) {
     const id = nanoid();
     const {id: userId} = Api.users(`users`, DB, Api).getUserByName(MY_NAME);
+    const post = DB.posts.find((item) => item.id === postId);
+    if (!post) {
+      throw new Err(HttpCodes.NOT_FOUND, _f(`NO_POST_ID`, {id}));
+    }
     if (!DB[entityName][postId]) {
       DB[entityName][postId] = [];
     }
@@ -33,7 +51,13 @@ const commentsApi = (entityName, DB, Api) => ({
 
   findById(postId, id) {
     const comments = DB[entityName][postId];
+    if (!comments) {
+      throw new Err(HttpCodes.NOT_FOUND, _f(`NO_POST_ID`, {id: postId}));
+    }
     const comment = comments.find((item) => item.id === id);
+    if (!comment) {
+      throw new Err(HttpCodes.NOT_FOUND, _f(`NO_COMMENT_ID`, {id}));
+    }
     return comment || null;
   },
 
@@ -42,8 +66,11 @@ const commentsApi = (entityName, DB, Api) => ({
   },
 
   getCommentsByPostId(postId) {
-    const comments = DB[entityName];
-    return comments[postId] || [];
+    const comments = DB[entityName][postId];
+    if (!comments) {
+      throw new Err(HttpCodes.NOT_FOUND, _f(`NO_POST_ID`, {id: postId}));
+    }
+    return comments || [];
   },
 
   getMyComments() {

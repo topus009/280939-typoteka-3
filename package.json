@@ -6,10 +6,10 @@
   "scripts": {
     "test": "npm run eslint",
     "eslint": "eslint --ext .js \"src/**\"",
-    "start": "node -r ./envs/config.js ./src/service/service.js",
+    "start": "node -r ./setup ./src/service/service.js",
     "lint:pug": "pug-lint ./src",
     "backend": "cross-env COMMAND=\"--server\" npm start",
-    "frontend": "node -r ./envs/config.js ./src/express/server.js",
+    "frontend": "node -r ./setup ./src/express/server.js",
     "backend:watch": "npx nodemon --exec \"npm run backend\" -w ./src -w ./mockData",
     "frontend:watch": "npx nodemon --exec \"npm run frontend\" -w ./src -w ./mockData -e",
     "all": "npm-run-all -p backend frontend",
@@ -40,6 +40,8 @@
     "dayjs": "1.8.28",
     "dotenv": "^8.2.0",
     "express": "4.17.1",
+    "express-validator": "^6.6.0",
+    "format-message": "^6.2.3",
     "nanoid": "3.1.9",
     "pug": "3.0.0"
   }

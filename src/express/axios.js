@@ -9,4 +9,12 @@ const BASE_URL = `${process.env.BACKEND_API_HOST}:${process.env.BACKEND_API_PORT
 
 axios.defaults.baseURL = BASE_URL;
 
+axios.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      const err = error.response.data;
+      return Promise.reject(err);
+    }
+);
+
 module.exports = axios;

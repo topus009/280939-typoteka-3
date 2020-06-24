@@ -4,13 +4,19 @@ const {nanoid} = require(`nanoid`);
 const dayjs = require(`dayjs`);
 const {
   DATE_FORMAT,
-  MY_NAME
+  MY_NAME,
+  HttpCodes,
 } = require(`../../../../config/constants`);
+const {Err} = require(`../../../../utils/utils`);
 const {getHighlitedMatches} = require(`./utils`);
 
 const postsApi = (entityName, DB, Api) => ({
   delete(id) {
-    DB[entityName] = DB[entityName].filter((post) => post.id !== id);
+    const post = DB[entityName].find((item) => item.id === id);
+    if (!post) {
+      throw new Err(HttpCodes.NOT_FOUND, _f(`NO_POST_ID`, {id}));
+    }
+    DB[entityName] = DB[entityName].filter((item) => item.id !== id);
     delete DB.comments[id];
     return id;
   },
@@ -29,6 +35,11 @@ const postsApi = (entityName, DB, Api) => ({
 
   edit(id, data) {
     let post;
+
+    const targetPost = DB[entityName].find((item) => item.id === id);
+    if (!targetPost) {
+      throw new Err(HttpCodes.NOT_FOUND, _f(`NO_POST_ID`, {id}));
+    }
 
     DB[entityName] = DB[entityName].map((item) => {
       if (item.id === id) {
@@ -50,11 +61,20 @@ const postsApi = (entityName, DB, Api) => ({
 
   findById(id) {
     const posts = DB[entityName];
-    return posts.find((item) => item.id === id);
+    const post = posts.find((item) => item.id === id);
+    if (!post) {
+      throw new Err(HttpCodes.NOT_FOUND, _f(`NO_POST_ID`, {id}));
+    }
+    return post;
   },
 
   getPostsByCategoryId(id) {
     const posts = DB[entityName];
+    const categories = DB.categories;
+    const category = categories.find((item) => item.id === id);
+    if (!category) {
+      throw new Err(HttpCodes.NOT_FOUND, _f(`NO_CATEGORY_ID`, {id}));
+    }
     return posts.filter((post) => post.categories.includes(id));
   },
 

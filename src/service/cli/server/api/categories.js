@@ -1,11 +1,19 @@
 "use strict";
 
 const {nanoid} = require(`nanoid`);
-const {MY_NAME} = require(`../../../../config/constants`);
+const {
+  MY_NAME,
+  HttpCodes
+} = require(`../../../../config/constants`);
+const {Err} = require(`../../../../utils/utils`);
 
 const categoriesApi = (entityName, DB, Api) => ({
   delete(id) {
-    DB[entityName] = DB[entityName].filter((category) => category.id !== id);
+    const category = DB[entityName].find((item) => item.id === id);
+    if (!category) {
+      throw new Err(HttpCodes.NOT_FOUND, _f(`NO_CATEGORY_ID`, {id}));
+    }
+    DB[entityName] = DB[entityName].filter((item) => item.id !== id);
     return id;
   },
 
@@ -20,7 +28,10 @@ const categoriesApi = (entityName, DB, Api) => ({
 
   findById(id) {
     const category = DB[entityName].find((item) => item.id === id);
-    return category ? category : null;
+    if (!category) {
+      throw new Err(HttpCodes.NOT_FOUND, _f(`NO_CATEGORY_ID`, {id}));
+    }
+    return category;
   },
 
   getAll() {

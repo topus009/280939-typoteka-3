@@ -1,5 +1,5 @@
 mixin logo({type, error})
-  a.header__logo.logo(class=`${error ? `header__logo--${error}` : ''}` href='/')
+  a.header__logo.logo(class=`${error ? `header__logo--${error.statusCode}` : ''}` href='/')
     case type
       when 'admin'
       when 'user-logged'
