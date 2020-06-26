@@ -13,15 +13,15 @@ const apis = {
   comments,
 };
 
-const connectApiWithDB = (api, dataBase, connectedApis) => {
+const connectApiWithDB = (api, database, connectedApis) => {
   Object.keys(api).forEach((apiPath) => {
-    connectedApis[apiPath] = api[apiPath](apiPath, dataBase, api);
+    connectedApis[apiPath] = api[apiPath](apiPath, database, api);
   });
 };
 
 module.exports = async () => {
   const connectedApis = {};
-  const dataBase = await dbConnection();
-  connectApiWithDB(apis, dataBase, connectedApis);
+  const database = await dbConnection();
+  connectApiWithDB(apis, database, connectedApis);
   return connectedApis;
 };
