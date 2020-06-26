@@ -1,73 +1,29 @@
 'use strict';
 
 const {Router} = require(`express`);
-const Api = require(`../api/api`);
+const axios = require(`../axios`);
 
 const mainRouter = new Router();
 
 mainRouter.get(`/`, async (req, res) => {
-  const [
-    users,
-    categories,
-    posts,
-    comments,
-    lastComments,
-    mostPopularPosts,
-    categoriesCount,
-  ] = await Promise.all([
-    Api.users.getAll(),
-    Api.categories.getAll(),
-    Api.posts.getAll(),
-    Api.comments.getAll(),
-    Api.comments.getLatestComments(),
-    Api.posts.getHotPosts(),
-    Api.categories.getCategoriesCount(),
-  ]);
-
-  res.render(`pages/main/main`, {
-    posts,
-    categories,
-    comments,
-    users,
-    mostPopularPosts,
-    lastComments,
-    categoriesCount,
-  });
+  const {data} = await axios.get(`/pages/main`);
+  res.render(`pages/main/main`, data);
 });
 
 mainRouter.get(`/search`, async (req, res) => {
-  const query = req.query.query;
-
-  if (query) {
-    const searchResults = await Api.posts.searchByTitle(query);
-    res.render(`pages/main/search`, {searchResults, query});
-  } else {
+  const {query} = req.query;
+  if (!query) {
     res.render(`pages/main/search`);
+  } else {
+    const {data} = await axios.get(`/pages/main/search?query=${query}`);
+    res.render(`pages/main/search`, data);
   }
 });
 
 mainRouter.get(`/category/:id`, async (req, res) => {
   const {id} = req.params;
-
-  const [
-    categories,
-    posts,
-    comments,
-    categoriesCount,
-  ] = await Promise.all([
-    Api.categories.getAll(),
-    Api.posts.getPostsByCategoryId(id),
-    Api.comments.getAll(),
-    Api.categories.getCategoriesCount(),
-  ]);
-
-  res.render(`pages/main/category`, {
-    posts,
-    comments,
-    categories,
-    activeCategoryId: id,
-    categoriesCount,
-  });
+  const {data} = await axios.get(`/pages/main/category/${id}`);
+  res.render(`pages/main/category`, data);
 });
 
 module.exports = mainRouter;

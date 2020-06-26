@@ -3,7 +3,7 @@
 const fs = require(`fs`);
 const path = require(`path`);
 const dayjs = require(`dayjs`);
-const {ExitCodes} = require(`../config/constants`);
+const {ExitCodes, DATE_FORMAT, HttpCodes} = require(`../config/constants`);
 const logger = require(`./logger`);
 
 const getRangomInteger = (min, max, noNeedRoundOff) => {
@@ -64,7 +64,7 @@ const getRandomDate = () => {
   const start = pastDate.valueOf();
   const end = currentDate;
 
-  return dayjs(getRangomInteger(start, end, true)).format(`YYYY-MM-DD HH:mm:ss`);
+  return dayjs(getRangomInteger(start, end, true)).format(DATE_FORMAT);
 };
 
 const getRandomString = (arr) => {
@@ -90,6 +90,14 @@ const getRandomStrings = (arr, maxArrLength) => {
 
 const parseCommandParam = (param) => parseInt(param[0], 10);
 
+class Err extends Error {
+  constructor(statusCode, message) {
+    super(message || `Какая-то ошибка`);
+    this.statusCode = statusCode || HttpCodes.INTERNAL_SERVER_ERROR;
+    this.text = message;
+  }
+}
+
 module.exports = {
   getRangomInteger,
   shuffle,
@@ -101,4 +109,5 @@ module.exports = {
   getRandomString,
   getRandomStrings,
   parseCommandParam,
+  Err,
 };

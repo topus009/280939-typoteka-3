@@ -4,13 +4,15 @@ const express = require(`express`);
 const dayjs = require(`dayjs`);
 const path = require(`path`);
 const {HttpCodes} = require(`../config/constants`);
+const {Err} = require(`../utils/utils`);
 const logger = require(`../utils/logger`);
 const routers = require(`./router`);
+require(`../../setup/localization.setup`);
 
 require(`dayjs/locale/ru`);
 dayjs.locale(`ru`);
 
-const DEFAULT_PORT = process.env.PORT || 8080;
+const DEFAULT_PORT = process.env.FRONTEND_PORT;
 
 const app = express();
 
@@ -21,12 +23,16 @@ app.use(express.static(path.resolve(__dirname, `public`)));
 
 Object.entries(routers).forEach(([key, router]) => app.use(key, router));
 
-app.use((err, req, res, next) => {
-  logger.error(err.message);
+app.use((req, res, next) => {
+  next(new Err(HttpCodes.NOT_FOUND, _f(`NO_ROUTE_IN_APP`)));
+});
+
+app.use((error, req, res, next) => {
+  logger.error(error.text);
   res
-    .status(HttpCodes.HTTP_SERVER_ERROR_CODE)
-    .render(`pages/error/${HttpCodes.HTTP_SERVER_ERROR_CODE}`);
-  next(err);
+    .status(error.statusCode)
+    .render(`pages/errors/error`, {error});
+  next(error);
 });
 
 app.listen(DEFAULT_PORT, () => {

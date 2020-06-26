@@ -1,0 +1,826 @@
+{
+	"info": {
+		"_postman_id": "167ff16a-e917-43ec-b4b8-976e112068f7",
+		"name": "typoteka",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "PAGES",
+			"item": [
+				{
+					"name": "PAGES / MY",
+					"item": [
+						{
+							"name": "/pages/my/comments",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/pages/my/comments",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"pages",
+										"my",
+										"comments"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/pages/my/categories",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/pages/my/categories",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"pages",
+										"my",
+										"categories"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/pages/my/posts",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/pages/my/posts",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"pages",
+										"my",
+										"posts"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "PAGES / POSTS",
+					"item": [
+						{
+							"name": "/pages/posts/post/:postId",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/pages/posts/post/aubvMpPyU9Un-NBgMsuK3",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"pages",
+										"posts",
+										"post",
+										"aubvMpPyU9Un-NBgMsuK3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/pages/posts/new",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/pages/posts/new",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"pages",
+										"posts",
+										"new"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "PAGES / MAIN",
+					"item": [
+						{
+							"name": "/pages/main",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/pages/main",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"pages",
+										"main"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/pages/main/search",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/pages/main/search?query=senior",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"pages",
+										"main",
+										"search"
+									],
+									"query": [
+										{
+											"key": "query",
+											"value": "senior"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/pages/main/category/:id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/pages/main/category/SDpXgowr6RMhWHYqtYcTK",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"pages",
+										"main",
+										"category",
+										"SDpXgowr6RMhWHYqtYcTK"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "COMMON",
+			"item": [
+				{
+					"name": "COMMON / CATEGORIES",
+					"item": [
+						{
+							"name": "/common/categories/categories/my",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/common/categories/categories/my",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"common",
+										"categories",
+										"categories",
+										"my"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/common/categories",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/common/categories",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"common",
+										"categories"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/common/categories/:id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/common/categories/SDpXgowr6RMhWHYqtYcTK",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"common",
+										"categories",
+										"SDpXgowr6RMhWHYqtYcTK"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/common/categories/categories/count",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/common/categories/categories/count",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"common",
+										"categories",
+										"categories",
+										"count"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/common/categories",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "label",
+											"value": "12345",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/common/categories",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"common",
+										"categories"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/common/categories/:id",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/common/categories/SDpXgowr6RMhWHYqtYcTK",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"common",
+										"categories",
+										"SDpXgowr6RMhWHYqtYcTK"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "COMMON / COMMENTS",
+					"item": [
+						{
+							"name": "/common/comments",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/common/comments",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"common",
+										"comments"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/common/comments/post/:postId",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/common/comments/post/wgMujLP0JWpJ4WG_ut-Sw",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"common",
+										"comments",
+										"post",
+										"wgMujLP0JWpJ4WG_ut-Sw"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/common/comments/post/:postId/:id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/common/comments/post/wgMujLP0JWpJ4WG_ut-Sw/BxuX-GTjVM3EGTvC_w1tA",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"common",
+										"comments",
+										"post",
+										"wgMujLP0JWpJ4WG_ut-Sw",
+										"BxuX-GTjVM3EGTvC_w1tA"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/common/comments/comments/my",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/common/comments/comments/my",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"common",
+										"comments",
+										"comments",
+										"my"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/common/comments/comments/latest",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/common/comments/comments/latest",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"common",
+										"comments",
+										"comments",
+										"latest"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/common/comments/post/:postid",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "text",
+											"value": "111111",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/common/comments/post/wgMujLP0JWpJ4WG_ut-Sw",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"common",
+										"comments",
+										"post",
+										"wgMujLP0JWpJ4WG_ut-Sw"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/common/comments/post/:postId/:id",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/common/comments/post/wgMujLP0JWpJ4WG_ut-Sw/BxuX-GTjVM3EGTvC_w1tA",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"common",
+										"comments",
+										"post",
+										"wgMujLP0JWpJ4WG_ut-Sw",
+										"BxuX-GTjVM3EGTvC_w1tA"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "COMMON / POSTS",
+					"item": [
+						{
+							"name": "/common/posts",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/common/posts",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"common",
+										"posts"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/common/posts/:postId",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/common/posts/wgMujLP0JWpJ4WG_ut-Sw",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"common",
+										"posts",
+										"wgMujLP0JWpJ4WG_ut-Sw"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/common/posts/categories/:categoryId",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/common/posts/categories/SDpXgowr6RMhWHYqtYcTK",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"common",
+										"posts",
+										"categories",
+										"SDpXgowr6RMhWHYqtYcTK"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/common/posts/posts/my",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/common/posts/posts/my",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"common",
+										"posts",
+										"posts",
+										"my"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/common/posts/posts/search",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/common/posts/posts/search?query=senior",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"common",
+										"posts",
+										"posts",
+										"search"
+									],
+									"query": [
+										{
+											"key": "query",
+											"value": "senior"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/common/posts/posts/hot",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/common/posts/posts/hot",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"common",
+										"posts",
+										"posts",
+										"hot"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/common/posts",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "title",
+											"type": "text"
+										},
+										{
+											"key": "announce",
+											"value": "announce",
+											"type": "text"
+										},
+										{
+											"key": "sentences",
+											"value": "sentences",
+											"type": "text"
+										},
+										{
+											"key": "categories",
+											"value": "SxkBZ8f2OrIgG46t8-S_c",
+											"type": "text"
+										},
+										{
+											"key": "categories",
+											"value": "tsNy1u3BNCbIoS3SZSKqF",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/common/posts",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"common",
+										"posts"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/common/posts/:id",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "11111",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/common/posts/aubvMpPyU9Un-NBgMsuK3",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"common",
+										"posts",
+										"aubvMpPyU9Un-NBgMsuK3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/common/posts/:id",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/common/posts/aubvMpPyU9Un-NBgMsuK3",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"common",
+										"posts",
+										"aubvMpPyU9Un-NBgMsuK3"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "COMMON / USERS",
+					"item": [
+						{
+							"name": "/common/users",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/common/users",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"common",
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/common/users/:id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/common/users/BFnZczYSg-w198ZNT95Cb",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"common",
+										"users",
+										"BFnZczYSg-w198ZNT95Cb"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/common/users/name/:name",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/common/users/name/Topolov%20Sergey",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"common",
+										"users",
+										"name",
+										"Topolov%20Sergey"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "/xyz",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/xyz",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"xyz"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "f6e9f8ec-cb05-4a30-a54f-7d723bcb9076",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "03f5118b-23cd-48e2-9eb1-bf51f9fa5cee",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "06e143a9-0256-4be6-9560-ec44ea9f74ca",
+			"key": "BASE_URL",
+			"value": "http://localhost:3000/api"
+		}
+	],
+	"protocolProfileBehavior": {}
+}

@@ -1,37 +1,23 @@
 'use strict';
 
 const {Router} = require(`express`);
-const Api = require(`../api/api`);
+const axios = require(`../axios`);
 
 const postsRouter = new Router();
 
-postsRouter.get(`/:id`, async (req, res) => {
-  const {id} = req.params;
-  const categories = await Api.categories.getAll();
-  const users = await Api.users.getAll();
-  const currentUser = await Api.users.getUserByName(`Topolov Sergey`);
-  const post = await Api.posts.getPostById(id);
-  const comments = await Api.comments.getCommentsByPostId(post.id);
-  const categoriesCount = await Api.categories.getCategoriesCount();
-
-  res.render(`pages/posts/post`, {
-    currentUser,
-    comments,
-    categories,
-    post,
-    users,
-    categoriesCount,
-  });
+postsRouter.get(`/post/:id`, async (req, res, next) => {
+  try {
+    const {id} = req.params;
+    const {data} = await axios.get(`/pages/posts/post/${id}`);
+    res.render(`pages/posts/post`, data);
+  } catch (error) {
+    next(error);
+  }
 });
 
 postsRouter.get(`/new`, async (req, res) => {
-  const categories = await Api.categories.getAll();
-  const currentDate = await Api.common.getCurrentDate();
-
-  res.render(`pages/posts/new-post`, {
-    categories,
-    currentDate,
-  });
+  const {data} = await axios.get(`/pages/posts/new`);
+  res.render(`pages/posts/new-post`, data);
 });
 
 module.exports = postsRouter;

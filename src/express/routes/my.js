@@ -1,59 +1,23 @@
 'use strict';
 
 const {Router} = require(`express`);
-const Api = require(`../api/api`);
+const axios = require(`../axios`);
 
 const myRouter = new Router();
 
 myRouter.get(`/categories`, async (req, res) => {
-  const [
-    categories,
-    myCategories,
-  ] = await Promise.all([
-    Api.categories.getAll(),
-    Api.categories.getMyCategories(),
-  ]);
-
-  res.render(`pages/my/admin-categories`, {
-    categories,
-    myCategories,
-  });
+  const {data} = await axios.get(`/pages/my/categories`);
+  res.render(`pages/my/admin-categories`, data);
 });
 
 myRouter.get(`/comments`, async (req, res) => {
-  const [
-    comments,
-    posts,
-    myComments,
-    currentUser,
-  ] = await Promise.all([
-    Api.comments.getAll(),
-    Api.posts.getAll(),
-    Api.comments.getMyComments(),
-    Api.users.getUserByName(`Topolov Sergey`),
-  ]);
-
-  res.render(`pages/my/admin-comments`, {
-    currentUser,
-    comments,
-    myComments,
-    posts,
-  });
+  const {data} = await axios.get(`/pages/my/comments`);
+  res.render(`pages/my/admin-comments`, data);
 });
 
-myRouter.get(`/publications`, async (req, res) => {
-  const [
-    posts,
-    myPosts,
-  ] = await Promise.all([
-    Api.posts.getAll(),
-    Api.posts.getMyPosts(),
-  ]);
-
-  res.render(`pages/my/admin-publications`, {
-    posts,
-    myPosts,
-  });
+myRouter.get(`/posts`, async (req, res) => {
+  const {data} = await axios.get(`/pages/my/posts`);
+  res.render(`pages/my/admin-posts`, data);
 });
 
 module.exports = myRouter;

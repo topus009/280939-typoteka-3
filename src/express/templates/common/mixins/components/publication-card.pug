@@ -6,16 +6,16 @@ mixin publicationCard(post, comments = [], categories)
         each categoryData in categories
           if postCategoryId === categoryData.id
             li.preview__breadcrumbs-item
-              a.preview__breadcrumbs-link(href='#')= `${categoryData.label}`
+              a.preview__breadcrumbs-link(href=`/category/${categoryData.id}`)= `${categoryData.label}`
     if hasImage
       .preview__background
         img.preview__background-image(src=`${post.img}` width='460' height='240' srcset=`${post.img}, ${post.imgBig}` alt=`${post.img}`)
     +formattedDate(post.createdDate, {class: 'preview__time'})
     h3.preview__name
-      a.preview__name-link(href=`/posts/${post.id}`)= `${post.title}`
+      a.preview__name-link(href=`/posts/post/${post.id}`)= `${post.title}`
     p.preview__text= `${post.announce}`
     if comments.length
-      a.preview__comment(href='#')
+      a.preview__comment(href=`/posts/post/${post.id}`)
         | Комментарии
         span.preview__cloud
         |

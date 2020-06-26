@@ -17,7 +17,6 @@ const generateData = async (count, users, posts) => {
   const data = {};
 
   for (let i = 0; i <= count; i++) {
-    // postId
     const postId = getRandomString(postsIds);
     if (!data[postId]) {
       data[postId] = [];
