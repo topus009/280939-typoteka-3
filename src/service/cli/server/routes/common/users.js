@@ -3,23 +3,23 @@
 const {Router} = require(`express`);
 const {HttpCodes} = require(`../../../../../config/constants`);
 
-const router = (Api) => {
+const router = (api) => {
   const usersRouter = new Router();
 
   usersRouter.get(`/`, (req, res) => {
-    const data = Api.users.getAll();
+    const data = api.users.getAll();
     res.status(HttpCodes.OK).json(data);
   });
 
   usersRouter.get(`/:id`, (req, res) => {
     const {id} = req.params;
-    const data = Api.users.findById(id);
+    const data = api.users.findById(id);
     res.status(HttpCodes.OK).json(data);
   });
 
   usersRouter.get(`/name/:name`, (req, res) => {
     const {name} = req.params;
-    const data = Api.users.getUserByName(name);
+    const data = api.users.getUserByName(name);
     res.status(HttpCodes.OK).json(data);
   });
 

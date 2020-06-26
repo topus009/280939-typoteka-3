@@ -7,19 +7,19 @@ const {
 } = require(`../../../../config/constants`);
 const {Err} = require(`../../../../utils/utils`);
 
-const categoriesApi = (entityName, DB, Api) => ({
+const categoriesApi = (entityName, dataBase, api) => ({
   delete(id) {
-    const category = DB[entityName].find((item) => item.id === id);
+    const category = dataBase[entityName].find((item) => item.id === id);
     if (!category) {
       throw new Err(HttpCodes.NOT_FOUND, _f(`NO_CATEGORY_ID`, {id}));
     }
-    DB[entityName] = DB[entityName].filter((item) => item.id !== id);
+    dataBase[entityName] = dataBase[entityName].filter((item) => item.id !== id);
     return id;
   },
 
   add(data) {
     const id = nanoid();
-    DB[entityName].push({
+    dataBase[entityName].push({
       id,
       ...data,
     });
@@ -27,7 +27,7 @@ const categoriesApi = (entityName, DB, Api) => ({
   },
 
   findById(id) {
-    const category = DB[entityName].find((item) => item.id === id);
+    const category = dataBase[entityName].find((item) => item.id === id);
     if (!category) {
       throw new Err(HttpCodes.NOT_FOUND, _f(`NO_CATEGORY_ID`, {id}));
     }
@@ -35,12 +35,12 @@ const categoriesApi = (entityName, DB, Api) => ({
   },
 
   getAll() {
-    return DB[entityName];
+    return dataBase[entityName];
   },
 
   getMyCategories() {
-    const posts = DB.posts;
-    const currentUser = Api.users(`users`, DB, Api).getUserByName(MY_NAME);
+    const posts = dataBase.posts;
+    const currentUser = api.users(`users`, dataBase, api).getUserByName(MY_NAME);
     const myCategories = new Set();
 
     posts.forEach((post) => {
@@ -52,7 +52,7 @@ const categoriesApi = (entityName, DB, Api) => ({
   },
 
   getCategoriesCount() {
-    const posts = DB.posts;
+    const posts = dataBase.posts;
     const categoriesCount = {};
 
     posts.forEach((post) => {

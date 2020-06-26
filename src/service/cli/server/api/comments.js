@@ -9,10 +9,10 @@ const {
 } = require(`../../../../config/constants`);
 const {Err} = require(`../../../../utils/utils`);
 
-const commentsApi = (entityName, DB, Api) => ({
+const commentsApi = (entityName, dataBase, api) => ({
   delete(postId, id) {
-    const post = DB[entityName][postId];
-    const postInDB = DB.posts.find((item) => item.id === postId);
+    const post = dataBase[entityName][postId];
+    const postInDB = dataBase.posts.find((item) => item.id === postId);
     if (!post) {
       if (!postInDB) {
         throw new Err(HttpCodes.NOT_FOUND, _f(`NO_POST_ID`, {id: postId}));
@@ -23,24 +23,24 @@ const commentsApi = (entityName, DB, Api) => ({
     if (!comment) {
       throw new Err(HttpCodes.NOT_FOUND, _f(`NO_COMMENT_ID`, {id}));
     }
-    DB[entityName][postId] = DB[entityName][postId].filter((item) => item.id !== id);
-    if (!DB[entityName][postId].length) {
-      delete DB[entityName][postId];
+    dataBase[entityName][postId] = dataBase[entityName][postId].filter((item) => item.id !== id);
+    if (!dataBase[entityName][postId].length) {
+      delete dataBase[entityName][postId];
     }
     return id;
   },
 
   add(postId, data) {
     const id = nanoid();
-    const {id: userId} = Api.users(`users`, DB, Api).getUserByName(MY_NAME);
-    const post = DB.posts.find((item) => item.id === postId);
+    const {id: userId} = api.users(`users`, dataBase, api).getUserByName(MY_NAME);
+    const post = dataBase.posts.find((item) => item.id === postId);
     if (!post) {
       throw new Err(HttpCodes.NOT_FOUND, _f(`NO_POST_ID`, {id}));
     }
-    if (!DB[entityName][postId]) {
-      DB[entityName][postId] = [];
+    if (!dataBase[entityName][postId]) {
+      dataBase[entityName][postId] = [];
     }
-    DB[entityName][postId].push({
+    dataBase[entityName][postId].push({
       id,
       userId,
       createdDate: dayjs().format(DATE_FORMAT),
@@ -50,7 +50,7 @@ const commentsApi = (entityName, DB, Api) => ({
   },
 
   findById(postId, id) {
-    const comments = DB[entityName][postId];
+    const comments = dataBase[entityName][postId];
     if (!comments) {
       throw new Err(HttpCodes.NOT_FOUND, _f(`NO_POST_ID`, {id: postId}));
     }
@@ -62,11 +62,11 @@ const commentsApi = (entityName, DB, Api) => ({
   },
 
   getAll() {
-    return DB[entityName];
+    return dataBase[entityName];
   },
 
   getCommentsByPostId(postId) {
-    const comments = DB[entityName][postId];
+    const comments = dataBase[entityName][postId];
     if (!comments) {
       throw new Err(HttpCodes.NOT_FOUND, _f(`NO_POST_ID`, {id: postId}));
     }
@@ -74,8 +74,8 @@ const commentsApi = (entityName, DB, Api) => ({
   },
 
   getMyComments() {
-    const comments = DB[entityName];
-    const currentUser = Api.users(`users`, DB, Api).getUserByName(MY_NAME);
+    const comments = dataBase[entityName];
+    const currentUser = api.users(`users`, dataBase, api).getUserByName(MY_NAME);
 
     const myComments = {};
 
@@ -95,7 +95,7 @@ const commentsApi = (entityName, DB, Api) => ({
 
   getLatestComments() {
     const MAX_LATEST_COUNT = 3;
-    const comments = DB[entityName];
+    const comments = dataBase[entityName];
 
     const formatDate = (value) => dayjs(value).valueOf();
 

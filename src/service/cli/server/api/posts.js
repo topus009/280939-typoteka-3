@@ -10,21 +10,21 @@ const {
 const {Err} = require(`../../../../utils/utils`);
 const {getHighlitedMatches} = require(`./utils`);
 
-const postsApi = (entityName, DB, Api) => ({
+const postsApi = (entityName, dataBase, api) => ({
   delete(id) {
-    const post = DB[entityName].find((item) => item.id === id);
+    const post = dataBase[entityName].find((item) => item.id === id);
     if (!post) {
       throw new Err(HttpCodes.NOT_FOUND, _f(`NO_POST_ID`, {id}));
     }
-    DB[entityName] = DB[entityName].filter((item) => item.id !== id);
-    delete DB.comments[id];
+    dataBase[entityName] = dataBase[entityName].filter((item) => item.id !== id);
+    delete dataBase.comments[id];
     return id;
   },
 
   add(data) {
     const id = nanoid();
-    const {id: userId} = Api.users(`users`, DB, Api).getUserByName(MY_NAME);
-    DB[entityName].push({
+    const {id: userId} = api.users(`users`, dataBase, api).getUserByName(MY_NAME);
+    dataBase[entityName].push({
       id,
       userId,
       createdDate: dayjs().format(DATE_FORMAT),
@@ -36,12 +36,12 @@ const postsApi = (entityName, DB, Api) => ({
   edit(id, data) {
     let post;
 
-    const targetPost = DB[entityName].find((item) => item.id === id);
+    const targetPost = dataBase[entityName].find((item) => item.id === id);
     if (!targetPost) {
       throw new Err(HttpCodes.NOT_FOUND, _f(`NO_POST_ID`, {id}));
     }
 
-    DB[entityName] = DB[entityName].map((item) => {
+    dataBase[entityName] = dataBase[entityName].map((item) => {
       if (item.id === id) {
         post = {
           ...item,
@@ -56,11 +56,11 @@ const postsApi = (entityName, DB, Api) => ({
   },
 
   getAll() {
-    return DB[entityName];
+    return dataBase[entityName];
   },
 
   findById(id) {
-    const posts = DB[entityName];
+    const posts = dataBase[entityName];
     const post = posts.find((item) => item.id === id);
     if (!post) {
       throw new Err(HttpCodes.NOT_FOUND, _f(`NO_POST_ID`, {id}));
@@ -69,8 +69,8 @@ const postsApi = (entityName, DB, Api) => ({
   },
 
   getPostsByCategoryId(id) {
-    const posts = DB[entityName];
-    const categories = DB.categories;
+    const posts = dataBase[entityName];
+    const categories = dataBase.categories;
     const category = categories.find((item) => item.id === id);
     if (!category) {
       throw new Err(HttpCodes.NOT_FOUND, _f(`NO_CATEGORY_ID`, {id}));
@@ -79,8 +79,8 @@ const postsApi = (entityName, DB, Api) => ({
   },
 
   getMyPosts() {
-    const posts = DB[entityName];
-    const currentUser = Api.users(`users`, DB, Api).getUserByName(MY_NAME);
+    const posts = dataBase[entityName];
+    const currentUser = api.users(`users`, dataBase, api).getUserByName(MY_NAME);
 
     const myPosts = [];
 
@@ -93,7 +93,7 @@ const postsApi = (entityName, DB, Api) => ({
   },
 
   searchByTitle(query) {
-    const posts = DB[entityName];
+    const posts = dataBase[entityName];
     const results = [];
 
     posts.forEach((post) => {
@@ -111,8 +111,8 @@ const postsApi = (entityName, DB, Api) => ({
   getHotPosts() {
     const MAX_HOT_COUNT = 4;
 
-    const posts = DB[entityName];
-    const comments = DB.comments;
+    const posts = dataBase[entityName];
+    const comments = dataBase.comments;
 
     const getCommentsCount = (id, commentsData) => {
       if (commentsData[id]) {

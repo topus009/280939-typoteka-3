@@ -5,10 +5,10 @@ const {HttpCodes, MY_NAME} = require(`../../../../../config/constants`);
 
 const myPageRouter = new Router();
 
-const router = (Api) => {
+const router = (api) => {
   myPageRouter.get(`/categories`, (req, res) => {
-    const categories = Api.categories.getAll();
-    const myCategories = Api.categories.getMyCategories();
+    const categories = api.categories.getAll();
+    const myCategories = api.categories.getMyCategories();
 
     const data = {
       categories,
@@ -19,10 +19,10 @@ const router = (Api) => {
   });
 
   myPageRouter.get(`/comments`, (req, res) => {
-    const comments = Api.comments.getAll();
-    const posts = Api.posts.getAll();
-    const myComments = Api.comments.getMyComments();
-    const currentUser = Api.users.getUserByName(MY_NAME);
+    const comments = api.comments.getAll();
+    const posts = api.posts.getAll();
+    const myComments = api.comments.getMyComments();
+    const currentUser = api.users.getUserByName(MY_NAME);
 
     const data = {
       comments,
@@ -35,8 +35,8 @@ const router = (Api) => {
   });
 
   myPageRouter.get(`/posts`, (req, res) => {
-    const posts = Api.posts.getAll();
-    const myPosts = Api.posts.getMyPosts();
+    const posts = api.posts.getAll();
+    const myPosts = api.posts.getMyPosts();
 
     const data = {
       posts,

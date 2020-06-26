@@ -4,38 +4,38 @@ const {Router} = require(`express`);
 const {HttpCodes} = require(`../../../../../config/constants`);
 const {validate, rules} = require(`../../validation`);
 
-const router = (Api) => {
+const router = (api) => {
   const categoriesRouter = new Router();
 
   categoriesRouter.get(`/`, (req, res) => {
-    const data = Api.categories.getAll();
+    const data = api.categories.getAll();
     res.status(HttpCodes.OK).json(data);
   });
 
   categoriesRouter.get(`/:id`, (req, res) => {
     const {id} = req.params;
-    const data = Api.categories.findById(id);
+    const data = api.categories.findById(id);
     res.status(HttpCodes.OK).json(data);
   });
 
   categoriesRouter.post(`/`, rules.category(), validate, (req, res) => {
-    const data = Api.categories.add(req.body);
+    const data = api.categories.add(req.body);
     res.status(HttpCodes.OK).json(data);
   });
 
   categoriesRouter.delete(`/:id`, (req, res) => {
     const {id} = req.params;
-    const data = Api.categories.delete(id);
+    const data = api.categories.delete(id);
     res.status(HttpCodes.OK).json(data);
   });
 
   categoriesRouter.get(`/categories/my`, (req, res) => {
-    const data = Api.categories.getMyCategories();
+    const data = api.categories.getMyCategories();
     res.status(HttpCodes.OK).json(data);
   });
 
   categoriesRouter.get(`/categories/count`, (req, res) => {
-    const data = Api.categories.getCategoriesCount();
+    const data = api.categories.getCategoriesCount();
     res.status(HttpCodes.OK).json(data);
   });
 

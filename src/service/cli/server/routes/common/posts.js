@@ -4,45 +4,45 @@ const {Router} = require(`express`);
 const {HttpCodes} = require(`../../../../../config/constants`);
 const {validate, rules} = require(`../../validation`);
 
-const router = (Api) => {
+const router = (api) => {
   const postsRouter = new Router();
 
   postsRouter.get(`/`, (req, res) => {
-    const data = Api.posts.getAll();
+    const data = api.posts.getAll();
     res.status(HttpCodes.OK).json(data);
   });
 
   postsRouter.get(`/:id`, (req, res) => {
     const {id} = req.params;
-    const data = Api.posts.findById(id);
+    const data = api.posts.findById(id);
     res.status(HttpCodes.OK).json(data);
   });
 
   postsRouter.get(`/categories/:categoryId`, (req, res) => {
     const {categoryId} = req.params;
-    const data = Api.posts.getPostsByCategoryId(categoryId);
+    const data = api.posts.getPostsByCategoryId(categoryId);
     res.status(HttpCodes.OK).json(data);
   });
 
   postsRouter.post(`/`, rules.post(), validate, (req, res) => {
-    const data = Api.posts.add(req.body);
+    const data = api.posts.add(req.body);
     res.status(HttpCodes.OK).json(data);
   });
 
   postsRouter.delete(`/:id`, (req, res) => {
     const {id} = req.params;
-    const data = Api.posts.delete(id);
+    const data = api.posts.delete(id);
     res.status(HttpCodes.OK).json(data);
   });
 
   postsRouter.put(`/:id`, rules.post(), validate, (req, res) => {
     const {id} = req.params;
-    const data = Api.posts.edit(id, req.body);
+    const data = api.posts.edit(id, req.body);
     res.status(HttpCodes.OK).json(data);
   });
 
   postsRouter.get(`/posts/my`, (req, res) => {
-    const data = Api.posts.getMyPosts();
+    const data = api.posts.getMyPosts();
     res.status(HttpCodes.OK).json(data);
   });
 
@@ -50,13 +50,13 @@ const router = (Api) => {
     const {query} = req.query;
     let data = {};
     if (query) {
-      data = Api.posts.searchByTitle(query);
+      data = api.posts.searchByTitle(query);
     }
     res.status(HttpCodes.OK).json(data);
   });
 
   postsRouter.get(`/posts/hot`, (req, res) => {
-    const data = Api.posts.getHotPosts();
+    const data = api.posts.getHotPosts();
     res.status(HttpCodes.OK).json(data);
   });
 

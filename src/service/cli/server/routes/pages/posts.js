@@ -6,16 +6,16 @@ const {HttpCodes, MY_NAME} = require(`../../../../../config/constants`);
 
 const postsPageRouter = new Router();
 
-const router = (Api) => {
+const router = (api) => {
   postsPageRouter.get(`/post/:id`, (req, res) => {
     const {id} = req.params;
 
-    const post = Api.posts.findById(id);
-    const categories = Api.categories.getAll();
-    const users = Api.users.getAll();
-    const currentUser = Api.users.getUserByName(MY_NAME);
-    const categoriesCount = Api.categories.getCategoriesCount();
-    const comments = Api.comments.getCommentsByPostId(id);
+    const post = api.posts.findById(id);
+    const categories = api.categories.getAll();
+    const users = api.users.getAll();
+    const currentUser = api.users.getUserByName(MY_NAME);
+    const categoriesCount = api.categories.getCategoriesCount();
+    const comments = api.comments.getCommentsByPostId(id);
 
     const data = {
       categories,
@@ -30,7 +30,7 @@ const router = (Api) => {
   });
 
   postsPageRouter.get(`/new`, (req, res) => {
-    const categories = Api.categories.getAll();
+    const categories = api.categories.getAll();
     const currentDate = dayjs().format(`D.MM.YYYY`);
 
     const data = {

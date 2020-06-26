@@ -5,15 +5,15 @@ const {HttpCodes} = require(`../../../../../config/constants`);
 
 const mainPageRouter = new Router();
 
-const router = (Api) => {
+const router = (api) => {
   mainPageRouter.get(`/`, (req, res) => {
-    const users = Api.users.getAll();
-    const categories = Api.categories.getAll();
-    const posts = Api.posts.getAll();
-    const comments = Api.comments.getAll();
-    const lastComments = Api.comments.getLatestComments();
-    const mostPopularPosts = Api.posts.getHotPosts();
-    const categoriesCount = Api.categories.getCategoriesCount();
+    const users = api.users.getAll();
+    const categories = api.categories.getAll();
+    const posts = api.posts.getAll();
+    const comments = api.comments.getAll();
+    const lastComments = api.comments.getLatestComments();
+    const mostPopularPosts = api.posts.getHotPosts();
+    const categoriesCount = api.categories.getCategoriesCount();
 
     const data = {
       users,
@@ -31,7 +31,7 @@ const router = (Api) => {
   mainPageRouter.get(`/search`, (req, res) => {
     const {query} = req.query;
 
-    const searchResults = Api.posts.searchByTitle(query);
+    const searchResults = api.posts.searchByTitle(query);
 
     const data = {
       query,
@@ -44,10 +44,10 @@ const router = (Api) => {
   mainPageRouter.get(`/category/:id`, (req, res) => {
     const {id} = req.params;
 
-    const posts = Api.posts.getPostsByCategoryId(id);
-    const categories = Api.categories.getAll();
-    const categoriesCount = Api.categories.getCategoriesCount();
-    const comments = Api.comments.getAll();
+    const posts = api.posts.getPostsByCategoryId(id);
+    const categories = api.categories.getAll();
+    const categoriesCount = api.categories.getCategoriesCount();
+    const comments = api.comments.getAll();
 
     const data = {
       categories,
