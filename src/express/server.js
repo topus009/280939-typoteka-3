@@ -5,12 +5,15 @@ const dayjs = require(`dayjs`);
 const path = require(`path`);
 const {HttpCodes} = require(`../config/constants`);
 const {Err} = require(`../utils/utils`);
-const logger = require(`../utils/logger`);
+const {createLogger, LoggerNames} = require(`../utils/logger`);
 const routers = require(`./router`);
 require(`../../setup/localization.setup`);
 
 require(`dayjs/locale/ru`);
 dayjs.locale(`ru`);
+
+const log = createLogger(LoggerNames.FRONTEND);
+const logApi = createLogger(LoggerNames.FRONTEND_API);
 
 const DEFAULT_PORT = process.env.FRONTEND_PORT;
 
@@ -21,6 +24,12 @@ app.set(`view engine`, `pug`);
 
 app.use(express.static(path.resolve(__dirname, `public`)));
 
+app.all(`*`, (req, res, next) => {
+  const {method, url} = req;
+  logApi.debug(`${method} ${url}`);
+  next();
+});
+
 Object.entries(routers).forEach(([key, router]) => app.use(key, router));
 
 app.use((req, res, next) => {
@@ -28,13 +37,19 @@ app.use((req, res, next) => {
 });
 
 app.use((error, req, res, next) => {
-  logger.error(error.text);
+  const {text, statusCode} = error;
+  const {method, url} = req;
+  logApi.error(`${method} ${url} - statusCode - ${statusCode}, text - ${text}`);
   res
-    .status(error.statusCode)
+    .status(statusCode)
     .render(`pages/errors/error`, {error});
-  next(error);
+  next();
 });
 
-app.listen(DEFAULT_PORT, () => {
-  logger.success(`Сервер запущен на порту: ${DEFAULT_PORT}`);
+app.listen(DEFAULT_PORT, (error) => {
+  if (error) {
+    log.error(error);
+  } else {
+    log.info(`Server running on port: ${DEFAULT_PORT}`);
+  }
 });

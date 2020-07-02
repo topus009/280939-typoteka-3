@@ -4,7 +4,9 @@ const fs = require(`fs`);
 const path = require(`path`);
 const dayjs = require(`dayjs`);
 const {ExitCodes, DATE_FORMAT, HttpCodes} = require(`../config/constants`);
-const logger = require(`./logger`);
+const {createLogger, LoggerNames} = require(`./logger`);
+
+const log = createLogger(LoggerNames.COMMON);
 
 const getRangomInteger = (min, max, noNeedRoundOff) => {
   if (!noNeedRoundOff) {
@@ -29,7 +31,7 @@ const shuffle = (someArray) => {
 const readDirAsync = (folderPath) =>
   fs.promises.readdir(folderPath, (err, files) => {
     if (err) {
-      logger.error(err);
+      log.error(err);
     }
     return files;
   });
@@ -46,10 +48,10 @@ const writeToFileAsync = async (pathToFile, name, content) => {
   const filePath = path.join(pathToFile, name);
   try {
     await fs.promises.writeFile(filePath, content, `utf8`);
-    logger.log(`Файл ${name} был создан!`);
-    logger.log(`Расположение: ${path.resolve(filePath)}`);
+    log.info(`File ${name} was created!`);
+    log.info(`Destination: ${path.resolve(filePath)}`);
   } catch (err) {
-    logger.error(err);
+    log.error(err);
   }
 };
 
@@ -92,7 +94,7 @@ const parseCommandParam = (param) => parseInt(param[0], 10);
 
 class Err extends Error {
   constructor(statusCode, message) {
-    super(message || `Какая-то ошибка`);
+    super(message || `Unknown error`);
     this.statusCode = statusCode || HttpCodes.INTERNAL_SERVER_ERROR;
     this.text = message;
   }
