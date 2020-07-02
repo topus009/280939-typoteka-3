@@ -3,15 +3,15 @@
 const ch = require(`chalk`);
 
 const message = `
-Программа запускает ${ch.cyan(`http-сервер`)} и формирует файл с данными для API.
+The program starts ${ch.cyan(`http-server`)} and generates a data file for the API.
 
-    Гайд:
+  Guide:
     ${ch.green(`service.js`)} <${ch.yellow(`command`)}>
-    Команды:
-    ${ch.green(`--version`)}:            выводит номер версии
-    ${ch.green(`--help`)}:               печатает этот текст
-    ${ch.green(`--generate`)} <${ch.yellow(`count`)}>    формирует файл ${ch.yellow(`mocks.json`)}
-    ${ch.green(`--server`)} <${ch.yellow(`port`)}>    запуск http-сервера на указанном порту
+    Commands:
+    ${ch.green(`--version`)}:            displays the version number
+    ${ch.green(`--help`)}:               prints this text
+    ${ch.green(`--generate`)} <${ch.yellow(`count`)}>    creates a file ${ch.yellow(`mocks.json`)}
+    ${ch.green(`--server`)} <${ch.yellow(`port`)}>    start http-server on the specified port
 `;
 
 module.exports = {

@@ -15,5 +15,9 @@ node_modules/
 build/
 
 jscpd-report.html
+tests-cache/
+coverage/
 
 .env.development
+.env.test
+logs

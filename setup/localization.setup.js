@@ -3,9 +3,9 @@
 const formatMessage = require(`format-message`);
 
 formatMessage.setup({
-  locale: `ru`,
+  locale: `en`,
   translations: {
-    ru: require(`./locales/ru.json`)
+    en: require(`./locales/en.json`)
   },
 });
 
