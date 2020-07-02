@@ -2,3 +2,5 @@
 **/templates
 *.md
 **/testing
+**/tests-cache
+**/coverage
