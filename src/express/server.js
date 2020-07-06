@@ -4,7 +4,7 @@ const express = require(`express`);
 const dayjs = require(`dayjs`);
 const path = require(`path`);
 const {HttpCodes} = require(`../config/constants`);
-const {Err} = require(`../utils/utils`);
+const {CustomError} = require(`../utils/utils`);
 const {createLogger, LoggerNames} = require(`../utils/logger`);
 const routers = require(`./router`);
 require(`../../setup/localization.setup`);
@@ -24,7 +24,7 @@ app.set(`view engine`, `pug`);
 
 app.use(express.static(path.resolve(__dirname, `public`)));
 
-app.all(`*`, (req, res, next) => {
+app.use((req, res, next) => {
   const {method, url} = req;
   logApi.debug(`${method} ${url}`);
   next();
@@ -33,17 +33,16 @@ app.all(`*`, (req, res, next) => {
 Object.entries(routers).forEach(([key, router]) => app.use(key, router));
 
 app.use((req, res, next) => {
-  next(new Err(HttpCodes.NOT_FOUND, _f(`NO_ROUTE_IN_APP`)));
+  next(new CustomError(HttpCodes.NOT_FOUND, _f(`NO_ROUTE_IN_APP`)));
 });
 
-app.use((error, req, res, next) => {
+app.use((error, req, res) => {
   const {text, statusCode} = error;
   const {method, url} = req;
   logApi.error(`${method} ${url} - statusCode - ${statusCode}, text - ${text}`);
   res
     .status(statusCode)
     .render(`pages/errors/error`, {error});
-  next();
 });
 
 app.listen(DEFAULT_PORT, (error) => {

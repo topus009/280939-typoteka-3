@@ -24,7 +24,7 @@ const LoggerNames = {
   COMMON: `COMMON`,
 };
 
-const shoultWriteToFile = () => {
+const shouldWriteToFile = () => {
   const {NODE_ENV, TESTING} = process.env;
   if (NODE_ENV !== `development`) {
     return true;
@@ -43,7 +43,7 @@ const logger = pino({
     messageFormat: `[31m[{ENV}][39m - [36m{msg}[39m`,
     ignore: `ENV`
   },
-}, shoultWriteToFile() && getLogFilePath(LogFilePaths));
+}, shouldWriteToFile() && getLogFilePath(LogFilePaths));
 
 const createLogger = (name, options = {}) => logger.child({
   ...options,

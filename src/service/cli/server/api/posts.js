@@ -7,14 +7,14 @@ const {
   MY_NAME,
   HttpCodes,
 } = require(`../../../../config/constants`);
-const {Err} = require(`../../../../utils/utils`);
+const {CustomError} = require(`../../../../utils/utils`);
 const {getHighlitedMatches} = require(`./utils`);
 
 const postsApi = (entityName, database, api) => ({
   delete(id) {
     const post = database[entityName].find((item) => item.id === id);
     if (!post) {
-      throw new Err(HttpCodes.NOT_FOUND, _f(`NO_POST_ID`, {id}));
+      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_POST_ID`, {id}));
     }
     database[entityName] = database[entityName].filter((item) => item.id !== id);
     delete database.comments[id];
@@ -38,7 +38,7 @@ const postsApi = (entityName, database, api) => ({
 
     const targetPost = database[entityName].find((item) => item.id === id);
     if (!targetPost) {
-      throw new Err(HttpCodes.NOT_FOUND, _f(`NO_POST_ID`, {id}));
+      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_POST_ID`, {id}));
     }
 
     database[entityName] = database[entityName].map((item) => {
@@ -63,7 +63,7 @@ const postsApi = (entityName, database, api) => ({
     const posts = database[entityName];
     const post = posts.find((item) => item.id === id);
     if (!post) {
-      throw new Err(HttpCodes.NOT_FOUND, _f(`NO_POST_ID`, {id}));
+      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_POST_ID`, {id}));
     }
     return post;
   },
@@ -73,7 +73,7 @@ const postsApi = (entityName, database, api) => ({
     const categories = database.categories;
     const category = categories.find((item) => item.id === id);
     if (!category) {
-      throw new Err(HttpCodes.NOT_FOUND, _f(`NO_CATEGORY_ID`, {id}));
+      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_CATEGORY_ID`, {id}));
     }
     return posts.filter((post) => post.categories.includes(id));
   },

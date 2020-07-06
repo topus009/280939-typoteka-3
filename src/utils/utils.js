@@ -92,7 +92,7 @@ const getRandomStrings = (arr, maxArrLength) => {
 
 const parseCommandParam = (param) => parseInt(param[0], 10);
 
-class Err extends Error {
+class CustomError extends Error {
   constructor(statusCode, message) {
     super(message || `Unknown error`);
     this.statusCode = statusCode || HttpCodes.INTERNAL_SERVER_ERROR;
@@ -111,5 +111,5 @@ module.exports = {
   getRandomString,
   getRandomStrings,
   parseCommandParam,
-  Err,
+  CustomError,
 };

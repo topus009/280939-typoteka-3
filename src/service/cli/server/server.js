@@ -3,7 +3,7 @@
 const express = require(`express`);
 const bodyParser = require(`body-parser`);
 const {HttpCodes, BACKEND_API_PREFIX} = require(`../../../config/constants`);
-const {Err} = require(`../../../utils/utils`);
+const {CustomError} = require(`../../../utils/utils`);
 const {createLogger, LoggerNames} = require(`../../../utils/logger`);
 const router = require(`./router`);
 const api = require(`./api`);
@@ -22,7 +22,7 @@ const createServer = async () => {
 
   const connectedApi = await api();
 
-  app.all(`*`, (req, res, next) => {
+  app.use((req, res, next) => {
     const {method, url} = req;
     logApi.debug(`${method} ${url}`);
     next();
@@ -33,15 +33,14 @@ const createServer = async () => {
   });
 
   app.use((req, res, next) => {
-    next(new Err(HttpCodes.NOT_FOUND, _f(`NO_ROUTE_IN_API`)));
+    next(new CustomError(HttpCodes.NOT_FOUND, _f(`NO_ROUTE_IN_API`)));
   });
 
-  app.use((error, req, res, next) => {
+  app.use((error, req, res) => {
     const {text, statusCode} = error;
     const {method, url} = req;
     logApi.error(`${method} ${url} - statusCode - ${statusCode}, text - ${text}`);
     res.status(statusCode).json(error);
-    next();
   });
 
   return app;

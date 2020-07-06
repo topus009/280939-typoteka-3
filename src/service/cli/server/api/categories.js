@@ -5,13 +5,13 @@ const {
   MY_NAME,
   HttpCodes
 } = require(`../../../../config/constants`);
-const {Err} = require(`../../../../utils/utils`);
+const {CustomError} = require(`../../../../utils/utils`);
 
 const categoriesApi = (entityName, database, api) => ({
   delete(id) {
     const category = database[entityName].find((item) => item.id === id);
     if (!category) {
-      throw new Err(HttpCodes.NOT_FOUND, _f(`NO_CATEGORY_ID`, {id}));
+      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_CATEGORY_ID`, {id}));
     }
     database[entityName] = database[entityName].filter((item) => item.id !== id);
     return id;
@@ -29,7 +29,7 @@ const categoriesApi = (entityName, database, api) => ({
   findById(id) {
     const category = database[entityName].find((item) => item.id === id);
     if (!category) {
-      throw new Err(HttpCodes.NOT_FOUND, _f(`NO_CATEGORY_ID`, {id}));
+      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_CATEGORY_ID`, {id}));
     }
     return category;
   },
