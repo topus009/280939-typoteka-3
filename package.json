@@ -4,16 +4,23 @@
   "description": "«Типотека»",
   "main": "./src/service/service.js",
   "scripts": {
-    "test": "npm run eslint",
     "eslint": "eslint --ext .js \"src/**\"",
-    "start": "node -r ./setup ./src/service/service.js",
     "lint:pug": "pug-lint ./src",
+    "test:rest": "cross-env LOG_LEVEL=debug TESTING=true jest .e2e.js --forceExit",
+    "start": "node -r ./setup ./src/service/service.js",
     "backend": "cross-env COMMAND=\"--server\" npm start",
     "frontend": "node -r ./setup ./src/express/server.js",
     "backend:watch": "npx nodemon --exec \"npm run backend\" -w ./src -w ./mockData",
     "frontend:watch": "npx nodemon --exec \"npm run frontend\" -w ./src -w ./mockData -e",
     "all": "npm-run-all -p backend frontend",
-    "all:watch": "npm-run-all -p backend:watch frontend:watch"
+    "all:watch": "npm-run-all -p backend:watch frontend:watch",
+    "start:debug": "cross-env LOG_LEVEL=debug npm start",
+    "backend:debug": "cross-env LOG_LEVEL=debug npm run backend",
+    "frontend:debug": "cross-env LOG_LEVEL=debug npm run frontend",
+    "backend:watch:debug": "cross-env LOG_LEVEL=debug npm run backend:watch",
+    "frontend:watch:debug": "cross-env LOG_LEVEL=debug npm run frontend:watch",
+    "all:debug": "cross-env LOG_LEVEL=debug npm run all",
+    "all:watch:debug": "cross-env LOG_LEVEL=debug npm run all:watch"
   },
   "repository": {
     "type": "git",
@@ -29,20 +36,25 @@
     "cross-env": "7.0.2",
     "eslint": "6.8.0",
     "eslint-config-htmlacademy": "0.5.2",
+    "jest": "26.1.0",
+    "jest-extended": "^0.11.5",
     "nodemon": "2.0.4",
-    "npm-run-all": "^4.1.5",
-    "pug-lint": "2.6.0"
+    "npm-run-all": "4.1.5",
+    "pino-pretty": "^4.0.0",
+    "pug-lint": "2.6.0",
+    "supertest": "4.0.2"
   },
   "dependencies": {
-    "axios": "^0.19.2",
-    "body-parser": "^1.19.0",
+    "axios": "0.19.2",
+    "body-parser": "1.19.0",
     "chalk": "4.0.0",
     "dayjs": "1.8.28",
-    "dotenv": "^8.2.0",
+    "dotenv": "8.2.0",
     "express": "4.17.1",
-    "express-validator": "^6.6.0",
-    "format-message": "^6.2.3",
+    "express-validator": "6.6.0",
+    "format-message": "6.2.3",
     "nanoid": "3.1.9",
+    "pino": "^6.3.2",
     "pug": "3.0.0"
   }
 }

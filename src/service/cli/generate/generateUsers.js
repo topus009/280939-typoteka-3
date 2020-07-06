@@ -22,7 +22,7 @@ const generateData = async (count) => {
       };
     });
 
-  // добавление меня любимого
+  // add myself
   data.push({
     "id": `vdf45y45dfbvd`,
     "name": MY_NAME,

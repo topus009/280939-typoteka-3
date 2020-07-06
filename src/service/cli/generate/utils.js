@@ -1,7 +1,7 @@
 'use strict';
 
 const path = require(`path`);
-const logger = require(`../../../utils/logger`);
+const {createLogger, LoggerNames} = require(`../../../utils/logger`);
 const {
   PATH_TO_FILES,
   DEFAULT_GENERATE_COUNT,
@@ -14,14 +14,16 @@ const {
   exit,
 } = require(`../../../utils/utils`);
 
+const log = createLogger(LoggerNames.COMMON);
+
 const getUserCount = (input) => {
   const parsedCount = parseCommandParam(input);
 
   if (isNaN(parsedCount)) {
-    logger.error(`Вы не указали параметры или они не валидны. Будет создана 1 запись.`);
+    log.error(`You did not specify parameters or they are not valid. 1 record will be created`);
     return DEFAULT_GENERATE_COUNT;
   } else if (parsedCount > GENERATE_MAX_ITEMS_ALLOWED) {
-    logger.error(`Возможно создать не больше ${GENERATE_MAX_ITEMS_ALLOWED} записей`);
+    log.error(`It is possible to create no more than ${GENERATE_MAX_ITEMS_ALLOWED} records`);
     exit(`ERROR`);
   }
 
@@ -40,7 +42,7 @@ const getSamples = async () => {
         samples[fileName] = await readFileAsync(path.join(PATH_TO_FILES, `${fileName}.${fileType}`));
       } catch (error) {
         if (error) {
-          logger.error(error);
+          log.error(error);
         }
       }
     }

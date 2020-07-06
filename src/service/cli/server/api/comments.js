@@ -7,7 +7,7 @@ const {
   MY_NAME,
   HttpCodes,
 } = require(`../../../../config/constants`);
-const {Err} = require(`../../../../utils/utils`);
+const {CustomError} = require(`../../../../utils/utils`);
 
 const commentsApi = (entityName, database, api) => ({
   delete(postId, id) {
@@ -15,13 +15,13 @@ const commentsApi = (entityName, database, api) => ({
     const postInDB = database.posts.find((item) => item.id === postId);
     if (!post) {
       if (!postInDB) {
-        throw new Err(HttpCodes.NOT_FOUND, _f(`NO_POST_ID`, {id: postId}));
+        throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_POST_ID`, {id: postId}));
       }
-      throw new Err(HttpCodes.NOT_FOUND, _f(`NO_COMMENTS_WITH_POST_ID`, {id: postId}));
+      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_COMMENTS_WITH_POST_ID`, {id: postId}));
     }
     const comment = post.find((item) => item.id === id);
     if (!comment) {
-      throw new Err(HttpCodes.NOT_FOUND, _f(`NO_COMMENT_ID`, {id}));
+      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_COMMENT_ID`, {id}));
     }
     database[entityName][postId] = database[entityName][postId].filter((item) => item.id !== id);
     if (!database[entityName][postId].length) {
@@ -35,7 +35,7 @@ const commentsApi = (entityName, database, api) => ({
     const {id: userId} = api.users(`users`, database, api).getUserByName(MY_NAME);
     const post = database.posts.find((item) => item.id === postId);
     if (!post) {
-      throw new Err(HttpCodes.NOT_FOUND, _f(`NO_POST_ID`, {id}));
+      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_POST_ID`, {id}));
     }
     if (!database[entityName][postId]) {
       database[entityName][postId] = [];
@@ -52,11 +52,11 @@ const commentsApi = (entityName, database, api) => ({
   findById(postId, id) {
     const comments = database[entityName][postId];
     if (!comments) {
-      throw new Err(HttpCodes.NOT_FOUND, _f(`NO_POST_ID`, {id: postId}));
+      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_POST_ID`, {id: postId}));
     }
     const comment = comments.find((item) => item.id === id);
     if (!comment) {
-      throw new Err(HttpCodes.NOT_FOUND, _f(`NO_COMMENT_ID`, {id}));
+      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_COMMENT_ID`, {id}));
     }
     return comment || null;
   },
@@ -68,7 +68,7 @@ const commentsApi = (entityName, database, api) => ({
   getCommentsByPostId(postId) {
     const comments = database[entityName][postId];
     if (!comments) {
-      throw new Err(HttpCodes.NOT_FOUND, _f(`NO_POST_ID`, {id: postId}));
+      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_POST_ID`, {id: postId}));
     }
     return comments || [];
   },

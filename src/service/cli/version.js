@@ -1,10 +1,12 @@
 'use strict';
 
-const logger = require(`../../utils/logger`);
+const {createLogger, LoggerNames} = require(`../../utils/logger`);
+
+const log = createLogger(LoggerNames.BACKEND);
 
 module.exports = {
   name: `--version`,
   run() {
-    logger.log(process.version);
+    log.info(process.version);
   }
 };

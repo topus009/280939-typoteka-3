@@ -1,6 +1,6 @@
 "use strict";
 
-const dbConnection = require(`../db/db`);
+const dbConnection = require(`../database/database`);
 const users = require(`./users`);
 const categories = require(`./categories`);
 const posts = require(`./posts`);
