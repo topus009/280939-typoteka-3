@@ -23,6 +23,12 @@ const router = (api) => {
     res.status(HttpCodes.OK).json(data);
   });
 
+  categoriesRouter.put(`/:id`, rules.category(), validate, (req, res) => {
+    const {id} = req.params;
+    const data = api.categories.edit(id, req.body);
+    res.status(HttpCodes.OK).json(data);
+  });
+
   categoriesRouter.delete(`/:id`, (req, res) => {
     const {id} = req.params;
     const data = api.categories.delete(id);
@@ -30,7 +36,7 @@ const router = (api) => {
   });
 
   categoriesRouter.get(`/categories/my`, (req, res) => {
-    const data = api.categories.getMyCategories();
+    const data = api.categories.getAll();
     res.status(HttpCodes.OK).json(data);
   });
 

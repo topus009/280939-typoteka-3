@@ -29,13 +29,28 @@ const router = (api) => {
     res.status(HttpCodes.OK).json(data);
   });
 
-  postsPageRouter.get(`/new`, (req, res) => {
+  postsPageRouter.get(`/post/:id/edit`, (req, res) => {
+    const {id} = req.params;
+    const post = api.posts.findById(id);
     const categories = api.categories.getAll();
-    const currentDate = dayjs().format(`D.MM.YYYY`);
 
     const data = {
       categories,
-      currentDate,
+      post
+    };
+
+    res.status(HttpCodes.OK).json(data);
+  });
+
+  postsPageRouter.get(`/new`, (req, res) => {
+    const categories = api.categories.getAll();
+
+    const data = {
+      categories,
+      isNew: true,
+      post: {
+        createdDate: dayjs().format(`DD.MM.YYYY`)
+      }
     };
 
     res.status(HttpCodes.OK).json(data);

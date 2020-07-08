@@ -1,13 +1,10 @@
 "use strict";
 
 const {nanoid} = require(`nanoid`);
-const {
-  MY_NAME,
-  HttpCodes
-} = require(`../../../../config/constants`);
+const {HttpCodes} = require(`../../../../config/constants`);
 const {CustomError} = require(`../../../../utils/utils`);
 
-const categoriesApi = (entityName, database, api) => ({
+const categoriesApi = (entityName, database) => ({
   delete(id) {
     const category = database[entityName].find((item) => item.id === id);
     if (!category) {
@@ -26,6 +23,20 @@ const categoriesApi = (entityName, database, api) => ({
     return id;
   },
 
+  edit(id, data) {
+    database[entityName] = database[entityName].map((item) => {
+      if (item.id === id) {
+        return {
+          ...item,
+          ...data
+        };
+      } else {
+        return item;
+      }
+    });
+    return id;
+  },
+
   findById(id) {
     const category = database[entityName].find((item) => item.id === id);
     if (!category) {
@@ -36,19 +47,6 @@ const categoriesApi = (entityName, database, api) => ({
 
   getAll() {
     return database[entityName];
-  },
-
-  getMyCategories() {
-    const posts = database.posts;
-    const currentUser = api.users(`users`, database, api).getUserByName(MY_NAME);
-    const myCategories = new Set();
-
-    posts.forEach((post) => {
-      if (post.userId === currentUser.id) {
-        post.categories.forEach((categoryId) => myCategories.add(categoryId));
-      }
-    });
-    return [...myCategories];
   },
 
   getCategoriesCount() {

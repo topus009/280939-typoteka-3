@@ -1,6 +1,7 @@
 'use strict';
 
 const {body} = require(`express-validator`);
+const path = require(`path`);
 
 const category = () => ([
   body(`label`)
@@ -14,10 +15,22 @@ const comment = () => ([
     .withMessage(`Comment must be at least 20 characters`)
 ]);
 
+const validExtensions = [`.png`, `.jpg`, `.jpeg`];
+
 const post = () => ([
   body(`title`)
     .isLength({min: 30, max: 250})
     .withMessage(`The title must contain a minimum of 30 characters and a maximum of 250`),
+  body(`file`)
+    .custom((file) => {
+      if (!file) {
+        return true;
+      } else {
+        const ext = path.extname(file.originalname);
+        return validExtensions.includes(ext);
+      }
+    })
+    .withMessage(`Only png,jpg,jpeg files supported`),
   body(`categories`)
     .toArray()
     .isArray({min: 1})

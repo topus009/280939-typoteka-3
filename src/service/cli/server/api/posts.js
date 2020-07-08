@@ -4,13 +4,12 @@ const {nanoid} = require(`nanoid`);
 const dayjs = require(`dayjs`);
 const {
   DATE_FORMAT,
-  MY_NAME,
   HttpCodes,
 } = require(`../../../../config/constants`);
 const {CustomError} = require(`../../../../utils/utils`);
 const {getHighlitedMatches} = require(`./utils`);
 
-const postsApi = (entityName, database, api) => ({
+const postsApi = (entityName, database) => ({
   delete(id) {
     const post = database[entityName].find((item) => item.id === id);
     if (!post) {
@@ -23,12 +22,14 @@ const postsApi = (entityName, database, api) => ({
 
   add(data) {
     const id = nanoid();
-    const {id: userId} = api.users(`users`, database, api).getUserByName(MY_NAME);
+    const createdDate = data.createdDate ? dayjs(data.createdDate).format(DATE_FORMAT) : dayjs().format(DATE_FORMAT);
+
+    const categories = !Array.isArray(data.categories) ? [data.categories] : data.categories;
     database[entityName].push({
       id,
-      userId,
-      createdDate: dayjs().format(DATE_FORMAT),
       ...data,
+      createdDate,
+      categories,
     });
     return id;
   },
@@ -43,9 +44,13 @@ const postsApi = (entityName, database, api) => ({
 
     database[entityName] = database[entityName].map((item) => {
       if (item.id === id) {
+
+        const categories = !Array.isArray(data.categories) ? [data.categories] : data.categories;
+
         post = {
           ...item,
-          ...data
+          ...data,
+          categories,
         };
         return post;
       } else {
@@ -65,7 +70,10 @@ const postsApi = (entityName, database, api) => ({
     if (!post) {
       throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_POST_ID`, {id}));
     }
-    return post;
+    return {
+      ...post,
+      createdDate: dayjs(post.createdDate).format(`DD.MM.YYYY`)
+    };
   },
 
   getPostsByCategoryId(id) {
@@ -76,20 +84,6 @@ const postsApi = (entityName, database, api) => ({
       throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_CATEGORY_ID`, {id}));
     }
     return posts.filter((post) => post.categories.includes(id));
-  },
-
-  getMyPosts() {
-    const posts = database[entityName];
-    const currentUser = api.users(`users`, database, api).getUserByName(MY_NAME);
-
-    const myPosts = [];
-
-    posts.forEach((post) => {
-      if (post.userId === currentUser.id) {
-        myPosts.push(post.id);
-      }
-    });
-    return myPosts;
   },
 
   searchByTitle(query) {

@@ -1,7 +1,10 @@
 'use strict';
 
+const path = require(`path`);
+const fsFromises = require(`fs`).promises;
 const {Router} = require(`express`);
 const {HttpCodes} = require(`../../../../../config/constants`);
+const {isFileExistsAsync} = require(`../../../../../utils/utils`);
 const {validate, rules} = require(`../../validation`);
 
 const router = (api) => {
@@ -24,7 +27,14 @@ const router = (api) => {
     res.status(HttpCodes.OK).json(data);
   });
 
-  postsRouter.post(`/`, rules.post(), validate, (req, res) => {
+  postsRouter.post(`/`, rules.post(), validate, async (req, res) => {
+    if (req.body.file) {
+      const {file} = req.body;
+      const backendImgPath = `img/posts/${file.filename}`;
+      await fsFromises.rename(file.path, path.join(process.cwd(), `./src/express/public/${backendImgPath}`));
+      delete req.body.file;
+      req.body.img = backendImgPath;
+    }
     const data = api.posts.add(req.body);
     res.status(HttpCodes.OK).json(data);
   });
@@ -35,14 +45,30 @@ const router = (api) => {
     res.status(HttpCodes.OK).json(data);
   });
 
-  postsRouter.put(`/:id`, rules.post(), validate, (req, res) => {
+  postsRouter.put(`/:id`, rules.post(), validate, async (req, res) => {
     const {id} = req.params;
+    if (req.body.file) {
+      const {file} = req.body;
+      const backendImgPath = `img/posts/${file.filename}`;
+      const pathToDataBase = path.join(process.cwd(), `./src/express/public/`);
+      const prevPost = api.posts.findById(id);
+      if (prevPost.img) {
+        const pathToPrevFile = `${pathToDataBase}${prevPost.img}`;
+        const isExists = await isFileExistsAsync(pathToPrevFile);
+        if (isExists) {
+          await fsFromises.unlink(pathToPrevFile);
+        }
+      }
+      await fsFromises.rename(file.path, `${pathToDataBase}${backendImgPath}`);
+      delete req.body.file;
+      req.body.img = backendImgPath;
+    }
     const data = api.posts.edit(id, req.body);
     res.status(HttpCodes.OK).json(data);
   });
 
   postsRouter.get(`/posts/my`, (req, res) => {
-    const data = api.posts.getMyPosts();
+    const data = api.posts.getAll();
     res.status(HttpCodes.OK).json(data);
   });
 
