@@ -3,3 +3,9 @@ mixin formattedDate(value, componentAttrs = {})
   - dateTime = valueArr.join('T');
   - textTime =  valueArr.join(', ');
   time(datetime=`${dateTime}`)&attributes(componentAttrs)= `${textTime}`
+
+mixin getError(errors, field)
+  if errors
+    each error in errors
+      if error[field]
+        p.comments__error= `${error[field]}`

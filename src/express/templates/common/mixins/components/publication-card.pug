@@ -1,6 +1,6 @@
 mixin publicationCard(post, comments = [], categories)
-  - hasImage = post.img && post.imgBig
-  li.preview__item(class=`${!hasImage && 'preview__item--noimage'}`)
+  - hasImage = post.img
+  li.preview__item(class=`${!hasImage ? 'preview__item--noimage' : ''}`)
     ul.preview__breadcrumbs
       each postCategoryId in post.categories
         each categoryData in categories
@@ -9,7 +9,7 @@ mixin publicationCard(post, comments = [], categories)
               a.preview__breadcrumbs-link(href=`/category/${categoryData.id}`)= `${categoryData.label}`
     if hasImage
       .preview__background
-        img.preview__background-image(src=`${post.img}` width='460' height='240' srcset=`${post.img}, ${post.imgBig}` alt=`${post.img}`)
+        img.preview__background-image(src=`${post.img}` width='460' height='240' alt=`${post.img}`)
     +formattedDate(post.createdDate, {class: 'preview__time'})
     h3.preview__name
       a.preview__name-link(href=`/posts/post/${post.id}`)= `${post.title}`

@@ -13,7 +13,5 @@ include ../../common/index.pug
       section.main-page__notes.notes
         h1.notes__title Мои записи
         ul.notes__list
-          each postId in myPosts
-            each postData in posts
-              if postId === postData.id
-                +adminPost(postData)
+          each postData in posts
+            +adminPost(postData)

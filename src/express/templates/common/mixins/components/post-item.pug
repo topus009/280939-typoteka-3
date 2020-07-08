@@ -1,4 +1,4 @@
-mixin postItem({post, categories, comments, currentUser, users, categoriesCount})
+mixin postItem({post, categories, comments, currentUser, users, categoriesCount, errors})
   section.post
     h1.visually-hidden Пост
     section.post__content
@@ -20,4 +20,4 @@ mixin postItem({post, categories, comments, currentUser, users, categoriesCount}
           h3= `${post.title}`
           p= `${post.announce}`
           p= `${post.sentences}`
-    +postCommentsList({currentUser, comments, users})
+    +postCommentsList({currentUser, comments, users, postId: post.id, errors})

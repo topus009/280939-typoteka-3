@@ -19,7 +19,7 @@ include ../../common/index.pug
           h1 Поиск
           //- add class fixes long list
           .search.search-page__form(class=`${searchFormClass}`)
-            form(action=`/search` method='get')
+            form(action=`/search` method='GET')
               label
                 input(name='query' type='text' placeholder='Что ищем?' value=`${query || ''}`)
               button.search__button.button.button--transparent(type='submit') Найти

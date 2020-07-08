@@ -1,0 +1,33 @@
+include ../../common/index.pug
+
+- pageTitle = isNew ? 'Новая публикация' : 'Редактировать публикацию'
+- saveBtnLabel = isNew ? 'Опубликовать' : 'Сохранить'
+- action = isNew ? '/posts/new' : `/posts/post/${post.id}/edit`
+
++layout(pageTitle)
+  +body({
+    bodyAttrs: {style: "height: 1050px"},
+    noFooter: true
+  })
+    +header({
+      type: 'admin'
+    })
+    main
+      section.modal.modal--flex
+        .popup.popup--new-publication.popup--flex
+          .new-publication
+            form(action=`${action}` method='POST' enctype='multipart/form-data')
+              .new-publication__header
+                h1= `${pageTitle}`
+                +dateField(post)
+                button.new-publication__button.button.button--colored(type='submit')= `${saveBtnLabel}`
+              button.popup__button.button.button--popup-close(type='button' aria-label='Закрыть окно') Закрыть окно
+              .new-publication__form.form
+                .form__wrapper.form__wrapper--intro
+                  +titleField(post, errors)
+                  +imageField(post, errors)
+                  +categoriesField(post, categories)
+                .form__wrapper.form__wrapper--text
+                  +announceField(post, errors)
+                  +sentencesField(post, errors)
+        .modal__overlay
