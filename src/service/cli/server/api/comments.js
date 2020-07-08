@@ -42,9 +42,9 @@ const commentsApi = (entityName, database, api) => ({
     }
     database[entityName][postId].push({
       id,
+      ...data,
       userId,
       createdDate: dayjs().format(DATE_FORMAT),
-      ...data,
     });
     return id;
   },
@@ -66,10 +66,11 @@ const commentsApi = (entityName, database, api) => ({
   },
 
   getCommentsByPostId(postId) {
-    const comments = database[entityName][postId];
-    if (!comments) {
+    const postInDB = database.posts.find((item) => item.id === postId);
+    if (!postInDB) {
       throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_POST_ID`, {id: postId}));
     }
+    const comments = database[entityName][postId];
     return comments || [];
   },
 

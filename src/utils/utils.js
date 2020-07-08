@@ -100,6 +100,8 @@ class CustomError extends Error {
   }
 }
 
+const isFileExistsAsync = async (filePath) => !!(await fs.promises.stat(filePath).catch(() => false));
+
 module.exports = {
   getRangomInteger,
   shuffle,
@@ -112,4 +114,5 @@ module.exports = {
   getRandomStrings,
   parseCommandParam,
   CustomError,
+  isFileExistsAsync,
 };

@@ -9,12 +9,10 @@ const {
 } = require(`../../../utils/utils`);
 const {getSamples} = require(`./utils`);
 
-const generateMockData = async (count, users, categories) => {
+const generateMockData = async (count, categories) => {
   const samples = await getSamples();
 
   let imageCount = 1;
-
-  const usersIds = users.map((user) => user.id);
 
   const data = Array(count)
     .fill({})
@@ -25,7 +23,6 @@ const generateMockData = async (count, users, categories) => {
       const content = {
         id: nanoid(),
         title: getRandomString(samples.titles),
-        userId: getRandomString(usersIds),
         createdDate: getRandomDate(),
         announce: sentences.slice(0, 5).join(` `),
         sentences: sentences.join(` `),
@@ -33,8 +30,7 @@ const generateMockData = async (count, users, categories) => {
       };
 
       if (imageCount % 5 !== 0) {
-        content.img = `img/sea@1x.jpg`;
-        content.imgBig = `img/sea@2x.jpg 2x`;
+        content.img = `img/posts/sea@1x.jpg`;
       }
 
       imageCount++;
@@ -44,8 +40,8 @@ const generateMockData = async (count, users, categories) => {
   return data;
 };
 
-const generatePosts = async (fileName, count, users, categories) => {
-  const data = await generateMockData(count, users, categories);
+const generatePosts = async (fileName, count, categories) => {
+  const data = await generateMockData(count, categories);
   await writeToFileAsync(``, fileName, JSON.stringify(data));
   return data;
 };

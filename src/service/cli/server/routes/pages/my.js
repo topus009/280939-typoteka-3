@@ -8,14 +8,8 @@ const myPageRouter = new Router();
 const router = (api) => {
   myPageRouter.get(`/categories`, (req, res) => {
     const categories = api.categories.getAll();
-    const myCategories = api.categories.getMyCategories();
 
-    const data = {
-      categories,
-      myCategories,
-    };
-
-    res.status(HttpCodes.OK).json(data);
+    res.status(HttpCodes.OK).json({categories});
   });
 
   myPageRouter.get(`/comments`, (req, res) => {
@@ -36,14 +30,8 @@ const router = (api) => {
 
   myPageRouter.get(`/posts`, (req, res) => {
     const posts = api.posts.getAll();
-    const myPosts = api.posts.getMyPosts();
 
-    const data = {
-      posts,
-      myPosts,
-    };
-
-    res.status(HttpCodes.OK).json(data);
+    res.status(HttpCodes.OK).json({posts});
   });
 
   return myPageRouter;

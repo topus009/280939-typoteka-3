@@ -36,11 +36,17 @@ const createServer = async () => {
     next(new CustomError(HttpCodes.NOT_FOUND, _f(`NO_ROUTE_IN_API`)));
   });
 
-  app.use((error, req, res) => {
+  app.use((error, req, res, next) => {
     const {text, statusCode} = error;
     const {method, url} = req;
-    logApi.error(`${method} ${url} - statusCode - ${statusCode}, text - ${text}`);
-    res.status(statusCode).json(error);
+
+    const formattedText = Array.isArray(text) ? JSON.stringify(text) : text;
+
+    logApi.error(`${method} ${url} - statusCode - ${statusCode}, text - ${formattedText}`);
+    res
+      .status(statusCode)
+      .json(error);
+    next(error);
   });
 
   return app;
