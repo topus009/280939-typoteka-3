@@ -17,7 +17,7 @@ module.exports = async () => {
   const store = {
     users: null,
     categories: null,
-    posts: null,
+    articles: null,
     comments: null,
   };
 

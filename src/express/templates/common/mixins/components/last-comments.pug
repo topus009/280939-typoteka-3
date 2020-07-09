@@ -13,4 +13,4 @@ mixin lastComments(lastComments, users)
               if comment.userId === user.id
                 img.last__list-image(src=`${user.avatarSmall}` width='20' height='20' alt='Аватар пользователя')
                 b.last__list-name= `${user.name}`
-            a.last__list-link(href=`/posts/post/${comment.postId}`)= `${comment.text}`
+            a.last__list-link(href=`/articles/article/${comment.articleId}`)= `${comment.text}`

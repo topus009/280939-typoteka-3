@@ -50,11 +50,11 @@ const categoriesApi = (entityName, database) => ({
   },
 
   getCategoriesCount() {
-    const posts = database.posts;
+    const articles = database.articles;
     const categoriesCount = {};
 
-    posts.forEach((post) => {
-      post.categories.forEach((id) => {
+    articles.forEach((article) => {
+      article.categories.forEach((id) => {
         if (!categoriesCount[id]) {
           categoriesCount[id] = [];
           categoriesCount[id].push(null);

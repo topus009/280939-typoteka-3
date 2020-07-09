@@ -17,7 +17,7 @@ const comment = () => ([
 
 const validExtensions = [`.png`, `.jpg`, `.jpeg`];
 
-const post = () => ([
+const article = () => ([
   body(`title`)
     .isLength({min: 30, max: 250})
     .withMessage(`The title must contain a minimum of 30 characters and a maximum of 250`),
@@ -46,7 +46,7 @@ const post = () => ([
 const rules = {
   category,
   comment,
-  post,
+  article,
 };
 
 module.exports = rules;

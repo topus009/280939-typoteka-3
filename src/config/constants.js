@@ -24,12 +24,12 @@ const HttpCodes = {
   INTERNAL_SERVER_ERROR: 500,
 };
 const PATH_TO_FILES = path.join(process.cwd(), `data`);
-const PATH_TO_MOCKDATA = path.join(process.cwd(), `mockData`);
+const PATH_TO_MOCKDATA = path.join(process.cwd(), `mocks`);
 
 const MockFilesPaths = {
   USERS: `${PATH_TO_MOCKDATA}/users.json`,
   CATEGORIES: `${PATH_TO_MOCKDATA}/categories.json`,
-  POSTS: `${PATH_TO_MOCKDATA}/mocks.json`,
+  ARTICLES: `${PATH_TO_MOCKDATA}/articles.json`,
   COMMENTS: `${PATH_TO_MOCKDATA}/comments.json`,
 };
 

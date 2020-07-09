@@ -50,19 +50,19 @@
 							"response": []
 						},
 						{
-							"name": "/pages/my/posts",
+							"name": "/pages/my/articles",
 							"request": {
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/pages/my/posts",
+									"raw": "{{BASE_URL}}/pages/my/articles",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
 										"pages",
 										"my",
-										"posts"
+										"articles"
 									]
 								}
 							},
@@ -73,22 +73,22 @@
 					"_postman_isSubFolder": true
 				},
 				{
-					"name": "PAGES / POSTS",
+					"name": "PAGES / ARTICLES",
 					"item": [
 						{
-							"name": "/pages/posts/post/:postId",
+							"name": "/pages/articles/article/:articleId",
 							"request": {
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/pages/posts/post/aubvMpPyU9Un-NBgMsuK3",
+									"raw": "{{BASE_URL}}/pages/articles/article/aubvMpPyU9Un-NBgMsuK3",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
 										"pages",
-										"posts",
-										"post",
+										"articles",
+										"article",
 										"aubvMpPyU9Un-NBgMsuK3"
 									]
 								}
@@ -96,18 +96,18 @@
 							"response": []
 						},
 						{
-							"name": "/pages/posts/new",
+							"name": "/pages/articles/new",
 							"request": {
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/pages/posts/new",
+									"raw": "{{BASE_URL}}/pages/articles/new",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
 										"pages",
-										"posts",
+										"articles",
 										"new"
 									]
 								}
@@ -192,23 +192,22 @@
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "COMMON",
+			"name": "API",
 			"item": [
 				{
-					"name": "COMMON / CATEGORIES",
+					"name": "API / CATEGORIES",
 					"item": [
 						{
-							"name": "/common/categories/categories/my",
+							"name": "/categories/categories/my",
 							"request": {
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/common/categories/categories/my",
+									"raw": "{{BASE_URL}}/categories/categories/my",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
-										"common",
 										"categories",
 										"categories",
 										"my"
@@ -218,17 +217,16 @@
 							"response": []
 						},
 						{
-							"name": "/common/categories",
+							"name": "/categories",
 							"request": {
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/common/categories",
+									"raw": "{{BASE_URL}}/categories",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
-										"common",
 										"categories"
 									]
 								}
@@ -236,17 +234,16 @@
 							"response": []
 						},
 						{
-							"name": "/common/categories/:id",
+							"name": "/categories/:id",
 							"request": {
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/common/categories/SDpXgowr6RMhWHYqtYcTK",
+									"raw": "{{BASE_URL}}/categories/SDpXgowr6RMhWHYqtYcTK",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
-										"common",
 										"categories",
 										"SDpXgowr6RMhWHYqtYcTK"
 									]
@@ -255,17 +252,16 @@
 							"response": []
 						},
 						{
-							"name": "/common/categories/categories/count",
+							"name": "/categories/categories/count",
 							"request": {
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/common/categories/categories/count",
+									"raw": "{{BASE_URL}}/categories/categories/count",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
-										"common",
 										"categories",
 										"categories",
 										"count"
@@ -275,7 +271,7 @@
 							"response": []
 						},
 						{
-							"name": "/common/categories",
+							"name": "/categories",
 							"request": {
 								"method": "POST",
 								"header": [],
@@ -290,12 +286,11 @@
 									]
 								},
 								"url": {
-									"raw": "{{BASE_URL}}/common/categories",
+									"raw": "{{BASE_URL}}/categories",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
-										"common",
 										"categories"
 									]
 								}
@@ -303,17 +298,43 @@
 							"response": []
 						},
 						{
-							"name": "/common/categories/:id",
+							"name": "/categories/:id",
 							"request": {
-								"method": "DELETE",
+								"method": "PUT",
 								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "label",
+											"value": "12345",
+											"type": "text"
+										}
+									]
+								},
 								"url": {
-									"raw": "{{BASE_URL}}/common/categories/SDpXgowr6RMhWHYqtYcTK",
+									"raw": "{{BASE_URL}}/categories",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
-										"common",
+										"categories"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/categories/:id",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/categories/SDpXgowr6RMhWHYqtYcTK",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
 										"categories",
 										"SDpXgowr6RMhWHYqtYcTK"
 									]
@@ -326,20 +347,19 @@
 					"_postman_isSubFolder": true
 				},
 				{
-					"name": "COMMON / COMMENTS",
+					"name": "API / COMMENTS",
 					"item": [
 						{
-							"name": "/common/comments",
+							"name": "/comments",
 							"request": {
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/common/comments",
+									"raw": "{{BASE_URL}}/comments",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
-										"common",
 										"comments"
 									]
 								}
@@ -347,39 +367,37 @@
 							"response": []
 						},
 						{
-							"name": "/common/comments/post/:postId",
+							"name": "/comments/article/:articleId",
 							"request": {
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/common/comments/post/wgMujLP0JWpJ4WG_ut-Sw",
+									"raw": "{{BASE_URL}}/comments/article/7FV50HcIoXezYaKM3pNcT",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
-										"common",
 										"comments",
-										"post",
-										"wgMujLP0JWpJ4WG_ut-Sw"
+										"article",
+										"7FV50HcIoXezYaKM3pNcT"
 									]
 								}
 							},
 							"response": []
 						},
 						{
-							"name": "/common/comments/post/:postId/:id",
+							"name": "/comments/article/:articleId/:id",
 							"request": {
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/common/comments/post/wgMujLP0JWpJ4WG_ut-Sw/BxuX-GTjVM3EGTvC_w1tA",
+									"raw": "{{BASE_URL}}/comments/article/wgMujLP0JWpJ4WG_ut-Sw/BxuX-GTjVM3EGTvC_w1tA",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
-										"common",
 										"comments",
-										"post",
+										"article",
 										"wgMujLP0JWpJ4WG_ut-Sw",
 										"BxuX-GTjVM3EGTvC_w1tA"
 									]
@@ -388,17 +406,16 @@
 							"response": []
 						},
 						{
-							"name": "/common/comments/comments/my",
+							"name": "/comments/comments/my",
 							"request": {
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/common/comments/comments/my",
+									"raw": "{{BASE_URL}}/comments/comments/my",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
-										"common",
 										"comments",
 										"comments",
 										"my"
@@ -408,17 +425,16 @@
 							"response": []
 						},
 						{
-							"name": "/common/comments/comments/latest",
+							"name": "/comments/comments/latest",
 							"request": {
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/common/comments/comments/latest",
+									"raw": "{{BASE_URL}}/comments/comments/latest",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
-										"common",
 										"comments",
 										"comments",
 										"latest"
@@ -428,7 +444,7 @@
 							"response": []
 						},
 						{
-							"name": "/common/comments/post/:postid",
+							"name": "/comments/article/:articleId",
 							"request": {
 								"method": "POST",
 								"header": [],
@@ -443,14 +459,13 @@
 									]
 								},
 								"url": {
-									"raw": "{{BASE_URL}}/common/comments/post/wgMujLP0JWpJ4WG_ut-Sw",
+									"raw": "{{BASE_URL}}/comments/article/wgMujLP0JWpJ4WG_ut-Sw",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
-										"common",
 										"comments",
-										"post",
+										"article",
 										"wgMujLP0JWpJ4WG_ut-Sw"
 									]
 								}
@@ -458,21 +473,20 @@
 							"response": []
 						},
 						{
-							"name": "/common/comments/post/:postId/:id",
+							"name": "/comments/article/:articleId/:id",
 							"request": {
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/common/comments/post/wgMujLP0JWpJ4WG_ut-Sw/BxuX-GTjVM3EGTvC_w1tA",
+									"raw": "{{BASE_URL}}/comments/article/_sN86ThBFJk1vy-KfJ1Px/RpXz-tdzWL83Mx86jRNiD",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
-										"common",
 										"comments",
-										"post",
-										"wgMujLP0JWpJ4WG_ut-Sw",
-										"BxuX-GTjVM3EGTvC_w1tA"
+										"article",
+										"_sN86ThBFJk1vy-KfJ1Px",
+										"RpXz-tdzWL83Mx86jRNiD"
 									]
 								}
 							},
@@ -483,58 +497,55 @@
 					"_postman_isSubFolder": true
 				},
 				{
-					"name": "COMMON / POSTS",
+					"name": "API / ARTICLES",
 					"item": [
 						{
-							"name": "/common/posts",
+							"name": "/articles",
 							"request": {
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/common/posts",
+									"raw": "{{BASE_URL}}/articles",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
-										"common",
-										"posts"
+										"articles"
 									]
 								}
 							},
 							"response": []
 						},
 						{
-							"name": "/common/posts/:postId",
+							"name": "/articles/:articleId",
 							"request": {
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/common/posts/wgMujLP0JWpJ4WG_ut-Sw",
+									"raw": "{{BASE_URL}}/articles/MRB5vGaO3ZNxDOgrE8o8g",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
-										"common",
-										"posts",
-										"wgMujLP0JWpJ4WG_ut-Sw"
+										"articles",
+										"MRB5vGaO3ZNxDOgrE8o8g"
 									]
 								}
 							},
 							"response": []
 						},
 						{
-							"name": "/common/posts/categories/:categoryId",
+							"name": "/articles/categories/:categoryId",
 							"request": {
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/common/posts/categories/SDpXgowr6RMhWHYqtYcTK",
+									"raw": "{{BASE_URL}}/articles/categories/SDpXgowr6RMhWHYqtYcTK",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
-										"common",
-										"posts",
+										"articles",
 										"categories",
 										"SDpXgowr6RMhWHYqtYcTK"
 									]
@@ -543,19 +554,18 @@
 							"response": []
 						},
 						{
-							"name": "/common/posts/posts/my",
+							"name": "/articles/articles/my",
 							"request": {
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/common/posts/posts/my",
+									"raw": "{{BASE_URL}}/articles/articles/my",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
-										"common",
-										"posts",
-										"posts",
+										"articles",
+										"articles",
 										"my"
 									]
 								}
@@ -563,19 +573,18 @@
 							"response": []
 						},
 						{
-							"name": "/common/posts/posts/search",
+							"name": "/articles/articles/search",
 							"request": {
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/common/posts/posts/search?query=senior",
+									"raw": "{{BASE_URL}}/articles/articles/search?query=senior",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
-										"common",
-										"posts",
-										"posts",
+										"articles",
+										"articles",
 										"search"
 									],
 									"query": [
@@ -589,19 +598,18 @@
 							"response": []
 						},
 						{
-							"name": "/common/posts/posts/hot",
+							"name": "/articles/articles/hot",
 							"request": {
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/common/posts/posts/hot",
+									"raw": "{{BASE_URL}}/articles/articles/hot",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
-										"common",
-										"posts",
-										"posts",
+										"articles",
+										"articles",
 										"hot"
 									]
 								}
@@ -609,7 +617,7 @@
 							"response": []
 						},
 						{
-							"name": "/common/posts",
+							"name": "/articles",
 							"request": {
 								"method": "POST",
 								"header": [],
@@ -618,17 +626,17 @@
 									"urlencoded": [
 										{
 											"key": "title",
-											"value": "title",
+											"value": "ascascascascascascascascsacasc",
 											"type": "text"
 										},
 										{
 											"key": "announce",
-											"value": "announce",
+											"value": "ascascascascascascascascsacasc",
 											"type": "text"
 										},
 										{
 											"key": "sentences",
-											"value": "sentences",
+											"value": "scascascasc",
 											"type": "text"
 										},
 										{
@@ -641,23 +649,25 @@
 											"value": "tsNy1u3BNCbIoS3SZSKqF",
 											"type": "text"
 										}
-									]
+									],
+									"options": {
+										"urlencoded": {}
+									}
 								},
 								"url": {
-									"raw": "{{BASE_URL}}/common/posts",
+									"raw": "{{BASE_URL}}/articles",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
-										"common",
-										"posts"
+										"articles"
 									]
 								}
 							},
 							"response": []
 						},
 						{
-							"name": "/common/posts/:id",
+							"name": "/articles/:id",
 							"request": {
 								"method": "PUT",
 								"header": [],
@@ -672,13 +682,12 @@
 									]
 								},
 								"url": {
-									"raw": "{{BASE_URL}}/common/posts/aubvMpPyU9Un-NBgMsuK3",
+									"raw": "{{BASE_URL}}/articles/aubvMpPyU9Un-NBgMsuK3",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
-										"common",
-										"posts",
+										"articles",
 										"aubvMpPyU9Un-NBgMsuK3"
 									]
 								}
@@ -686,18 +695,17 @@
 							"response": []
 						},
 						{
-							"name": "/common/posts/:id",
+							"name": "/articles/:id",
 							"request": {
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/common/posts/aubvMpPyU9Un-NBgMsuK3",
+									"raw": "{{BASE_URL}}/articles/aubvMpPyU9Un-NBgMsuK3",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
-										"common",
-										"posts",
+										"articles",
 										"aubvMpPyU9Un-NBgMsuK3"
 									]
 								}
@@ -709,20 +717,19 @@
 					"_postman_isSubFolder": true
 				},
 				{
-					"name": "COMMON / USERS",
+					"name": "API / USERS",
 					"item": [
 						{
-							"name": "/common/users",
+							"name": "/users",
 							"request": {
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/common/users",
+									"raw": "{{BASE_URL}}/users",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
-										"common",
 										"users"
 									]
 								}
@@ -730,17 +737,16 @@
 							"response": []
 						},
 						{
-							"name": "/common/users/:id",
+							"name": "/users/:id",
 							"request": {
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/common/users/BFnZczYSg-w198ZNT95Cb",
+									"raw": "{{BASE_URL}}/users/BFnZczYSg-w198ZNT95Cb",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
-										"common",
 										"users",
 										"BFnZczYSg-w198ZNT95Cb"
 									]
@@ -749,17 +755,16 @@
 							"response": []
 						},
 						{
-							"name": "/common/users/name/:name",
+							"name": "/users/name/:name",
 							"request": {
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/common/users/name/Topolov%20Sergey",
+									"raw": "{{BASE_URL}}/users/name/Topolov%20Sergey",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
-										"common",
 										"users",
 										"name",
 										"Topolov%20Sergey"
@@ -817,7 +822,7 @@
 	],
 	"variable": [
 		{
-			"id": "06e143a9-0256-4be6-9560-ec44ea9f74ca",
+			"id": "6e33c6bf-e899-44ae-a11b-1c80c9e48e23",
 			"key": "BASE_URL",
 			"value": "http://localhost:3000/api"
 		}

@@ -12,27 +12,27 @@ const router = (api) => {
     res.status(HttpCodes.OK).json(data);
   });
 
-  commentsRouter.get(`/post/:postId`, (req, res) => {
-    const {postId} = req.params;
-    const data = api.comments.getCommentsByPostId(postId);
+  commentsRouter.get(`/article/:articleId`, (req, res) => {
+    const {articleId} = req.params;
+    const data = api.comments.getCommentsByArticleId(articleId);
     res.status(HttpCodes.OK).json(data);
   });
 
-  commentsRouter.get(`/post/:postId/:id`, (req, res) => {
-    const {postId, id} = req.params;
-    const data = api.comments.findById(postId, id);
+  commentsRouter.get(`/article/:articleId/:id`, (req, res) => {
+    const {articleId, id} = req.params;
+    const data = api.comments.findById(articleId, id);
     res.status(HttpCodes.OK).json(data);
   });
 
-  commentsRouter.post(`/post/:postId`, rules.comment(), validate, (req, res) => {
-    const {postId} = req.params;
-    const data = api.comments.add(postId, req.body);
+  commentsRouter.post(`/article/:articleId`, rules.comment(), validate, (req, res) => {
+    const {articleId} = req.params;
+    const data = api.comments.add(articleId, req.body);
     res.status(HttpCodes.OK).json(data);
   });
 
-  commentsRouter.delete(`/post/:postId/:id`, (req, res) => {
-    const {postId, id} = req.params;
-    const data = api.comments.delete(postId, id);
+  commentsRouter.delete(`/article/:articleId/:id`, (req, res) => {
+    const {articleId, id} = req.params;
+    const data = api.comments.delete(articleId, id);
     res.status(HttpCodes.OK).json(data);
   });
 

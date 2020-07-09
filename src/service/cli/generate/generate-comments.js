@@ -8,20 +8,20 @@ const {
 } = require(`../../../utils/utils`);
 const {getSamples} = require(`./utils`);
 
-const generateData = async (count, users, posts) => {
+const generateData = async (count, users, articles) => {
   const samples = await getSamples();
 
   const usersIds = users.map((user) => user.id);
-  const postsIds = posts.map((post) => post.id);
+  const articlesIds = articles.map((article) => article.id);
 
   const data = {};
 
   for (let i = 0; i <= count; i++) {
-    const postId = getRandomString(postsIds);
-    if (!data[postId]) {
-      data[postId] = [];
+    const articleId = getRandomString(articlesIds);
+    if (!data[articleId]) {
+      data[articleId] = [];
     }
-    data[postId].push({
+    data[articleId].push({
       id: nanoid(),
       userId: getRandomString(usersIds),
       text: getRandomString(samples.comments),
@@ -32,8 +32,8 @@ const generateData = async (count, users, posts) => {
   return data;
 };
 
-const generateComments = async (fileName, count, users, posts) => {
-  const data = await generateData(count * 3, users, posts);
+const generateComments = async (fileName, count, users, articles) => {
+  const data = await generateData(count * 3, users, articles);
   await writeToFileAsync(``, fileName, JSON.stringify(data));
   return data;
 };

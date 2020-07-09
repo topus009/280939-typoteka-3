@@ -10,37 +10,37 @@ const {
 const {CustomError} = require(`../../../../utils/utils`);
 
 const commentsApi = (entityName, database, api) => ({
-  delete(postId, id) {
-    const post = database[entityName][postId];
-    const postInDB = database.posts.find((item) => item.id === postId);
-    if (!post) {
-      if (!postInDB) {
-        throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_POST_ID`, {id: postId}));
+  delete(articleId, id) {
+    const article = database[entityName][articleId];
+    const articleInDB = database.articles.find((item) => item.id === articleId);
+    if (!article) {
+      if (!articleInDB) {
+        throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_ARTICLE_ID`, {id: articleId}));
       }
-      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_COMMENTS_WITH_POST_ID`, {id: postId}));
+      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_COMMENTS_WITH_ARTICLE_ID`, {id: articleId}));
     }
-    const comment = post.find((item) => item.id === id);
+    const comment = article.find((item) => item.id === id);
     if (!comment) {
       throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_COMMENT_ID`, {id}));
     }
-    database[entityName][postId] = database[entityName][postId].filter((item) => item.id !== id);
-    if (!database[entityName][postId].length) {
-      delete database[entityName][postId];
+    database[entityName][articleId] = database[entityName][articleId].filter((item) => item.id !== id);
+    if (!database[entityName][articleId].length) {
+      delete database[entityName][articleId];
     }
     return id;
   },
 
-  add(postId, data) {
+  add(articleId, data) {
     const id = nanoid();
     const {id: userId} = api.users(`users`, database, api).getUserByName(MY_NAME);
-    const post = database.posts.find((item) => item.id === postId);
-    if (!post) {
-      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_POST_ID`, {id}));
+    const article = database.articles.find((item) => item.id === articleId);
+    if (!article) {
+      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_ARTICLE_ID`, {id}));
     }
-    if (!database[entityName][postId]) {
-      database[entityName][postId] = [];
+    if (!database[entityName][articleId]) {
+      database[entityName][articleId] = [];
     }
-    database[entityName][postId].push({
+    database[entityName][articleId].push({
       id,
       ...data,
       userId,
@@ -49,10 +49,10 @@ const commentsApi = (entityName, database, api) => ({
     return id;
   },
 
-  findById(postId, id) {
-    const comments = database[entityName][postId];
+  findById(articleId, id) {
+    const comments = database[entityName][articleId];
     if (!comments) {
-      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_POST_ID`, {id: postId}));
+      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_ARTICLE_ID`, {id: articleId}));
     }
     const comment = comments.find((item) => item.id === id);
     if (!comment) {
@@ -65,12 +65,12 @@ const commentsApi = (entityName, database, api) => ({
     return database[entityName];
   },
 
-  getCommentsByPostId(postId) {
-    const postInDB = database.posts.find((item) => item.id === postId);
-    if (!postInDB) {
-      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_POST_ID`, {id: postId}));
+  getCommentsByArticleId(articleId) {
+    const articleInDB = database.articles.find((item) => item.id === articleId);
+    if (!articleInDB) {
+      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_ARTICLE_ID`, {id: articleId}));
     }
-    const comments = database[entityName][postId];
+    const comments = database[entityName][articleId];
     return comments || [];
   },
 
@@ -80,14 +80,14 @@ const commentsApi = (entityName, database, api) => ({
 
     const myComments = {};
 
-    Object.keys(comments).forEach((postId) => {
-      const postComments = comments[postId];
-      for (const comment of postComments) {
+    Object.keys(comments).forEach((articleId) => {
+      const articleComments = comments[articleId];
+      for (const comment of articleComments) {
         if (comment.userId === currentUser.id) {
-          if (!myComments[postId]) {
-            myComments[postId] = [];
+          if (!myComments[articleId]) {
+            myComments[articleId] = [];
           }
-          myComments[postId].push(comment);
+          myComments[articleId].push(comment);
         }
       }
     });
@@ -102,8 +102,8 @@ const commentsApi = (entityName, database, api) => ({
 
     const sortedCommentsByLatesDate =
       Object.keys(comments)
-        .reduce((commentsAcc, postId) => {
-          const preparedComments = comments[postId].map((item) => ({...item, postId}));
+        .reduce((commentsAcc, articleId) => {
+          const preparedComments = comments[articleId].map((item) => ({...item, articleId}));
           return [...commentsAcc, ...preparedComments];
         }, [])
         .sort((a, b) => (formatDate(b.createdDate) - formatDate(a.createdDate)))

@@ -4,23 +4,23 @@ const {Router} = require(`express`);
 const dayjs = require(`dayjs`);
 const {HttpCodes, MY_NAME} = require(`../../../../../config/constants`);
 
-const postsPageRouter = new Router();
+const articlesPageRouter = new Router();
 
 const router = (api) => {
-  postsPageRouter.get(`/post/:id`, (req, res) => {
+  articlesPageRouter.get(`/article/:id`, (req, res) => {
     const {id} = req.params;
 
-    const post = api.posts.findById(id);
+    const article = api.articles.findById(id);
     const categories = api.categories.getAll();
     const users = api.users.getAll();
     const currentUser = api.users.getUserByName(MY_NAME);
     const categoriesCount = api.categories.getCategoriesCount();
-    const comments = api.comments.getCommentsByPostId(id);
+    const comments = api.comments.getCommentsByArticleId(id);
 
     const data = {
       categories,
       currentUser,
-      post,
+      article,
       users,
       categoriesCount,
       comments,
@@ -29,26 +29,26 @@ const router = (api) => {
     res.status(HttpCodes.OK).json(data);
   });
 
-  postsPageRouter.get(`/post/:id/edit`, (req, res) => {
+  articlesPageRouter.get(`/article/:id/edit`, (req, res) => {
     const {id} = req.params;
-    const post = api.posts.findById(id);
+    const article = api.articles.findById(id);
     const categories = api.categories.getAll();
 
     const data = {
       categories,
-      post
+      article
     };
 
     res.status(HttpCodes.OK).json(data);
   });
 
-  postsPageRouter.get(`/new`, (req, res) => {
+  articlesPageRouter.get(`/new`, (req, res) => {
     const categories = api.categories.getAll();
 
     const data = {
       categories,
       isNew: true,
-      post: {
+      article: {
         createdDate: dayjs().format(`DD.MM.YYYY`)
       }
     };
@@ -56,7 +56,7 @@ const router = (api) => {
     res.status(HttpCodes.OK).json(data);
   });
 
-  return postsPageRouter;
+  return articlesPageRouter;
 };
 
 module.exports = router;

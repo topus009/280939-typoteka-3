@@ -9,19 +9,19 @@ const router = (api) => {
   mainPageRouter.get(`/`, (req, res) => {
     const users = api.users.getAll();
     const categories = api.categories.getAll();
-    const posts = api.posts.getAll();
+    const articles = api.articles.getAll();
     const comments = api.comments.getAll();
     const lastComments = api.comments.getLatestComments();
-    const mostPopularPosts = api.posts.getHotPosts();
+    const mostPopularArticles = api.articles.getHotArticles();
     const categoriesCount = api.categories.getCategoriesCount();
 
     const data = {
       users,
       categories,
-      posts,
+      articles,
       comments,
       lastComments,
-      mostPopularPosts,
+      mostPopularArticles,
       categoriesCount,
     };
 
@@ -31,7 +31,7 @@ const router = (api) => {
   mainPageRouter.get(`/search`, (req, res) => {
     const {query} = req.query;
 
-    const searchResults = api.posts.searchByTitle(query);
+    const searchResults = api.articles.searchByTitle(query);
 
     const data = {
       query,
@@ -44,14 +44,14 @@ const router = (api) => {
   mainPageRouter.get(`/category/:id`, (req, res) => {
     const {id} = req.params;
 
-    const posts = api.posts.getPostsByCategoryId(id);
+    const articles = api.articles.getArticlesByCategoryId(id);
     const categories = api.categories.getAll();
     const categoriesCount = api.categories.getCategoriesCount();
     const comments = api.comments.getAll();
 
     const data = {
       categories,
-      posts,
+      articles,
       comments,
       categoriesCount,
       activeCategoryId: id,

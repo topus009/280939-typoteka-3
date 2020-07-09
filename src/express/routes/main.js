@@ -15,7 +15,7 @@ mainRouter.get(`/search`, async (req, res) => {
   if (!query) {
     res.render(`pages/main/search`);
   } else {
-    const {data} = await axios.get(`/pages/main/search?query=${query}`);
+    const {data} = await axios.get(`/pages/main/search`, {params: {query}});
     res.render(`pages/main/search`, data);
   }
 });

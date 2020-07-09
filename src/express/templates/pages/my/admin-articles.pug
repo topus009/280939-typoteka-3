@@ -13,5 +13,5 @@ include ../../common/index.pug
       section.main-page__notes.notes
         h1.notes__title Мои записи
         ul.notes__list
-          each postData in posts
-            +adminPost(postData)
+          each articleData in articles
+            +adminArticle(articleData)

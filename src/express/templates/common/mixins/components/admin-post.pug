@@ -1,6 +1,0 @@
-mixin adminPost(post)
-  li.notes__list-item
-    +formattedDate(post.createdDate, {class: 'notes__item-time'})
-    a.notes__item-text(href=`/posts/post/${post.id}`)= `${post.title}`
-    button.notes__button.button.button--close-item(type='button')
-      span.visually-hidden Закрыть строку списка

@@ -14,13 +14,13 @@ const router = (api) => {
 
   myPageRouter.get(`/comments`, (req, res) => {
     const comments = api.comments.getAll();
-    const posts = api.posts.getAll();
+    const articles = api.articles.getAll();
     const myComments = api.comments.getMyComments();
     const currentUser = api.users.getUserByName(MY_NAME);
 
     const data = {
       comments,
-      posts,
+      articles,
       myComments,
       currentUser,
     };
@@ -28,10 +28,10 @@ const router = (api) => {
     res.status(HttpCodes.OK).json(data);
   });
 
-  myPageRouter.get(`/posts`, (req, res) => {
-    const posts = api.posts.getAll();
+  myPageRouter.get(`/articles`, (req, res) => {
+    const articles = api.articles.getAll();
 
-    res.status(HttpCodes.OK).json({posts});
+    res.status(HttpCodes.OK).json({articles});
   });
 
   return myPageRouter;

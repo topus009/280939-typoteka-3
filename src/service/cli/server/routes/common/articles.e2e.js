@@ -1,8 +1,8 @@
 'use strict';
 
 const supertest = require(`supertest`);
-const posts = require(`../../../../../../mockData/mocks.json`);
-const categories = require(`../../../../../../mockData/categories.json`);
+const articles = require(`../../../../../../mocks/articles.json`);
+const categories = require(`../../../../../../mocks/categories.json`);
 const {createServer} = require(`../../server`);
 
 let server;
@@ -14,7 +14,7 @@ beforeAll(async (done) => {
   done();
 });
 
-const apiPrefix = `/api/common/posts`;
+const apiPrefix = `/api/articles`;
 
 describe(`Testing end-points (${apiPrefix}...)`, () => {
   test(`GET / - return 200`, async () => {
@@ -22,7 +22,7 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
     expect(res.statusCode).toBe(200);
   });
   test(`GET /:id - correct - return 200`, async () => {
-    const {id} = posts[0];
+    const {id} = articles[0];
     const res = await request.get(`${apiPrefix}/${id}`);
     expect(res.statusCode).toBe(200);
   });
@@ -54,7 +54,7 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
     expect(res.statusCode).toBe(400);
   });
   test(`DELETE /:id - correct - return 200`, async () => {
-    const {id} = posts[0];
+    const {id} = articles[0];
     const res = await request.delete(`${apiPrefix}/${id}`);
     expect(res.statusCode).toBe(200);
   });
@@ -63,16 +63,16 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
     expect(res.statusCode).toBe(404);
   });
   test(`PUT /:id - correct - return 200`, async () => {
-    const {id} = posts[1];
-    const newPost = {
+    const {id} = articles[1];
+    const newArticle = {
       title: `aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa`,
       announce: `aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa`,
       sentences: `aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa`,
       categories: [`xxxxxxxx`, `xxxxxxxx`],
     };
-    const res = await request.put(`${apiPrefix}/${id}`).send(newPost);
+    const res = await request.put(`${apiPrefix}/${id}`).send(newArticle);
     expect(res.statusCode).toBe(200);
-    expect(res.body).toEqual({...posts[1], ...newPost});
+    expect(res.body).toEqual({...articles[1], ...newArticle});
   });
   test(`PUT /:id - wrong - return 400`, async () => {
     const res = await request.put(`${apiPrefix}/xxx`).send({
@@ -84,16 +84,16 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
     const res = await request.get(`${apiPrefix}/categories/xxx`);
     expect(res.statusCode).toBe(404);
   });
-  test(`GET /posts/my - return 200`, async () => {
-    const res = await request.get(`${apiPrefix}/posts/my`);
+  test(`GET /articles/my - return 200`, async () => {
+    const res = await request.get(`${apiPrefix}/articles/my`);
     expect(res.statusCode).toBe(200);
   });
-  test(`GET /posts/search - return 200`, async () => {
-    const res = await request.get(`${apiPrefix}/posts/search`);
+  test(`GET /articles/search - return 200`, async () => {
+    const res = await request.get(`${apiPrefix}/articles/search`);
     expect(res.statusCode).toBe(200);
   });
-  test(`GET /posts/hot - return 200`, async () => {
-    const res = await request.get(`${apiPrefix}/posts/hot`);
+  test(`GET /articles/hot - return 200`, async () => {
+    const res = await request.get(`${apiPrefix}/articles/hot`);
     expect(res.statusCode).toBe(200);
   });
 });

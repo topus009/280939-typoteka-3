@@ -8,52 +8,52 @@ const {isFileExistsAsync} = require(`../../../../../utils/utils`);
 const {validate, rules} = require(`../../validation`);
 
 const router = (api) => {
-  const postsRouter = new Router();
+  const articlesRouter = new Router();
 
-  postsRouter.get(`/`, (req, res) => {
-    const data = api.posts.getAll();
+  articlesRouter.get(`/`, (req, res) => {
+    const data = api.articles.getAll();
     res.status(HttpCodes.OK).json(data);
   });
 
-  postsRouter.get(`/:id`, (req, res) => {
+  articlesRouter.get(`/:id`, (req, res) => {
     const {id} = req.params;
-    const data = api.posts.findById(id);
+    const data = api.articles.findById(id);
     res.status(HttpCodes.OK).json(data);
   });
 
-  postsRouter.get(`/categories/:categoryId`, (req, res) => {
+  articlesRouter.get(`/categories/:categoryId`, (req, res) => {
     const {categoryId} = req.params;
-    const data = api.posts.getPostsByCategoryId(categoryId);
+    const data = api.articles.getArticlesByCategoryId(categoryId);
     res.status(HttpCodes.OK).json(data);
   });
 
-  postsRouter.post(`/`, rules.post(), validate, async (req, res) => {
+  articlesRouter.post(`/`, rules.article(), validate, async (req, res) => {
     if (req.body.file) {
       const {file} = req.body;
-      const backendImgPath = `img/posts/${file.filename}`;
+      const backendImgPath = `img/articles/${file.filename}`;
       await fsFromises.rename(file.path, path.join(process.cwd(), `./src/express/public/${backendImgPath}`));
       delete req.body.file;
       req.body.img = backendImgPath;
     }
-    const data = api.posts.add(req.body);
+    const data = api.articles.add(req.body);
     res.status(HttpCodes.OK).json(data);
   });
 
-  postsRouter.delete(`/:id`, (req, res) => {
+  articlesRouter.delete(`/:id`, (req, res) => {
     const {id} = req.params;
-    const data = api.posts.delete(id);
+    const data = api.articles.delete(id);
     res.status(HttpCodes.OK).json(data);
   });
 
-  postsRouter.put(`/:id`, rules.post(), validate, async (req, res) => {
+  articlesRouter.put(`/:id`, rules.article(), validate, async (req, res) => {
     const {id} = req.params;
     if (req.body.file) {
       const {file} = req.body;
-      const backendImgPath = `img/posts/${file.filename}`;
+      const backendImgPath = `img/articles/${file.filename}`;
       const pathToDataBase = path.join(process.cwd(), `./src/express/public/`);
-      const prevPost = api.posts.findById(id);
-      if (prevPost.img) {
-        const pathToPrevFile = `${pathToDataBase}${prevPost.img}`;
+      const prevArticle = api.articles.findById(id);
+      if (prevArticle.img) {
+        const pathToPrevFile = `${pathToDataBase}${prevArticle.img}`;
         const isExists = await isFileExistsAsync(pathToPrevFile);
         if (isExists) {
           await fsFromises.unlink(pathToPrevFile);
@@ -63,30 +63,30 @@ const router = (api) => {
       delete req.body.file;
       req.body.img = backendImgPath;
     }
-    const data = api.posts.edit(id, req.body);
+    const data = api.articles.edit(id, req.body);
     res.status(HttpCodes.OK).json(data);
   });
 
-  postsRouter.get(`/posts/my`, (req, res) => {
-    const data = api.posts.getAll();
+  articlesRouter.get(`/articles/my`, (req, res) => {
+    const data = api.articles.getAll();
     res.status(HttpCodes.OK).json(data);
   });
 
-  postsRouter.get(`/posts/search`, (req, res) => {
+  articlesRouter.get(`/articles/search`, (req, res) => {
     const {query} = req.query;
     let data = {};
     if (query) {
-      data = api.posts.searchByTitle(query);
+      data = api.articles.searchByTitle(query);
     }
     res.status(HttpCodes.OK).json(data);
   });
 
-  postsRouter.get(`/posts/hot`, (req, res) => {
-    const data = api.posts.getHotPosts();
+  articlesRouter.get(`/articles/hot`, (req, res) => {
+    const data = api.articles.getHotArticles();
     res.status(HttpCodes.OK).json(data);
   });
 
-  return postsRouter;
+  return articlesRouter;
 };
 
 module.exports = router;

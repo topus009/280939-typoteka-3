@@ -1,7 +1,7 @@
 'use strict';
 
 const supertest = require(`supertest`);
-const categories = require(`../../../../../../mockData/categories.json`);
+const categories = require(`../../../../../../mocks/categories.json`);
 const {createServer} = require(`../../server`);
 
 let server;
@@ -13,7 +13,7 @@ beforeAll(async (done) => {
   done();
 });
 
-const apiPrefix = `/api/common/categories`;
+const apiPrefix = `/api/categories`;
 
 describe(`Testing end-points (${apiPrefix}...)`, () => {
   test(`GET / - return 200`, async () => {

@@ -30,7 +30,7 @@ const generateMockData = async (count, categories) => {
       };
 
       if (imageCount % 5 !== 0) {
-        content.img = `img/posts/sea@1x.jpg`;
+        content.img = `img/articles/sea@1x.jpg`;
       }
 
       imageCount++;
@@ -40,10 +40,10 @@ const generateMockData = async (count, categories) => {
   return data;
 };
 
-const generatePosts = async (fileName, count, categories) => {
+const generateArticles = async (fileName, count, categories) => {
   const data = await generateMockData(count, categories);
   await writeToFileAsync(``, fileName, JSON.stringify(data));
   return data;
 };
 
-module.exports = generatePosts;
+module.exports = generateArticles;

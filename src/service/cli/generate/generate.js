@@ -2,18 +2,18 @@
 
 const {MockFilesPaths} = require(`../../../config/constants`);
 const {exit} = require(`../../../utils/utils`);
-const generateUsers = require(`./generateUsers`);
-const generateCategories = require(`./generateCategories`);
-const generatePosts = require(`./generatePosts`);
-const generateComments = require(`./generateComments`);
+const generateUsers = require(`./generate-users`);
+const generateCategories = require(`./generate-categories`);
+const generateArticles = require(`./generate-articles`);
+const generateComments = require(`./generate-comments`);
 const {getUserCount} = require(`./utils`);
 
 const run = async (input) => {
   const count = getUserCount(input);
   const users = await generateUsers(MockFilesPaths.USERS);
   const categories = await generateCategories(MockFilesPaths.CATEGORIES);
-  const posts = await generatePosts(MockFilesPaths.POSTS, count, categories);
-  await generateComments(MockFilesPaths.COMMENTS, count, users, posts);
+  const articles = await generateArticles(MockFilesPaths.ARTICLES, count, categories);
+  await generateComments(MockFilesPaths.COMMENTS, count, users, articles);
   exit(`SUCCESS`);
 };
 

@@ -1,4 +1,4 @@
 // ***********************************************
-COMMON / POSTS;
-`http://localhost:3000/api/common/posts/wgMujLP0JWpJ4WG_ut-Sw`;
+API / ARTICLES;
+`http://localhost:3000/api/articles/wgMujLP0JWpJ4WG_ut-Sw`;
 // ***********************************************

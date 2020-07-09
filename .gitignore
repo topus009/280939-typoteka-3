@@ -21,4 +21,4 @@ coverage/
 .env.development
 .env.test
 logs/logs
-logs/testLogs
+logs/test-logs

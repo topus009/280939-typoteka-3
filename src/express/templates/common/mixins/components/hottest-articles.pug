@@ -1,0 +1,17 @@
+mixin hottestArticles(articles, mostPopularArticles)
+  section.main-page__hot.hot
+    h2.hot__name
+      | Самое обсуждаемое&nbsp;
+      span.hot__icon.hot__icon--fire
+    if mostPopularArticles.length === 0
+      p.hot__empty Здесь пока ничего нет...
+    else
+      ul.hot__list
+        each popularArticle in mostPopularArticles
+          - id = popularArticle[0]
+          - count = popularArticle[1]
+          each articleData in articles
+            if id === articleData.id
+              li.hot__list-item
+                a.hot__list-link(href=`/articles/article/${articleData.id}`)= `${articleData.title}`
+                  sup.hot__link-sup= ` ${count}`

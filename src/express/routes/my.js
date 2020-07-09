@@ -14,7 +14,7 @@ myRouter.post(`/categories`, async (req, res, next) => {
   try {
     const {id, label} = req.body;
     let method = id ? `put` : `post`;
-    let path = id ? `/common/categories/${id}` : `/common/categories`;
+    let path = id ? `/categories/${id}` : `/categories`;
     const apiReq = await axios[method](path, {label});
     if (apiReq.status === 200) {
       res.redirect(`/my/categories`);
@@ -34,9 +34,9 @@ myRouter.get(`/comments`, async (req, res) => {
   res.render(`pages/my/admin-comments`, data);
 });
 
-myRouter.get(`/posts`, async (req, res) => {
-  const {data} = await axios.get(`/pages/my/posts`);
-  res.render(`pages/my/admin-posts`, data);
+myRouter.get(`/articles`, async (req, res) => {
+  const {data} = await axios.get(`/pages/my/articles`);
+  res.render(`pages/my/admin-articles`, data);
 });
 
 module.exports = myRouter;

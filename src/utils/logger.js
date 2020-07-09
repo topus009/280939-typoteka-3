@@ -5,7 +5,7 @@ const pino = require(`pino`);
 
 const LogFilePaths = {
   log: `logs`,
-  test: `testLogs`,
+  test: `test-logs`,
 };
 
 const getLogFilePath = (filePaths) => {

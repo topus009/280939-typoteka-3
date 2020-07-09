@@ -6,12 +6,13 @@
   "scripts": {
     "eslint": "eslint --ext .js \"src/**\"",
     "lint:pug": "pug-lint ./src",
+    "generate": "npm run start -- --generate",
     "test:rest": "cross-env LOG_LEVEL=debug TESTING=true jest .e2e.js --forceExit",
     "start": "node -r ./setup ./src/service/service.js",
     "backend": "cross-env COMMAND=\"--server\" npm start",
     "frontend": "node -r ./setup ./src/express/server.js",
-    "backend:watch": "npx nodemon --exec \"npm run backend\" -w ./src -w ./mockData",
-    "frontend:watch": "npx nodemon --exec \"npm run frontend\" -w ./src -w ./mockData -e",
+    "backend:watch": "npx nodemon --exec \"npm run backend\" -w ./src -w ./mocks",
+    "frontend:watch": "npx nodemon --exec \"npm run frontend\" -w ./src -w ./mocks -e",
     "all": "npm-run-all -p backend frontend",
     "all:watch": "npm-run-all -p backend:watch frontend:watch",
     "start:debug": "cross-env LOG_LEVEL=debug npm start",
@@ -37,10 +38,10 @@
     "eslint": "6.8.0",
     "eslint-config-htmlacademy": "0.5.2",
     "jest": "26.1.0",
-    "jest-extended": "^0.11.5",
+    "jest-extended": "0.11.5",
     "nodemon": "2.0.4",
     "npm-run-all": "4.1.5",
-    "pino-pretty": "^4.0.0",
+    "pino-pretty": "4.0.0",
     "pug-lint": "2.6.0",
     "supertest": "4.0.2"
   },
@@ -53,9 +54,9 @@
     "express": "4.17.1",
     "express-validator": "6.6.0",
     "format-message": "6.2.3",
-    "multer": "^1.4.2",
+    "multer": "1.4.2",
     "nanoid": "3.1.9",
-    "pino": "^6.3.2",
+    "pino": "6.3.2",
     "pug": "3.0.0"
   }
 }

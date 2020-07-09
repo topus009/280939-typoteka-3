@@ -3,13 +3,13 @@
 const dbConnection = require(`../database/database`);
 const users = require(`./users`);
 const categories = require(`./categories`);
-const posts = require(`./posts`);
+const articles = require(`./articles`);
 const comments = require(`./comments`);
 
 const apis = {
   users,
   categories,
-  posts,
+  articles,
   comments,
 };
 

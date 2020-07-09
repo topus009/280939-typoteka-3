@@ -2,7 +2,7 @@ include ../../common/index.pug
 
 - pageTitle = isNew ? 'Новая публикация' : 'Редактировать публикацию'
 - saveBtnLabel = isNew ? 'Опубликовать' : 'Сохранить'
-- action = isNew ? '/posts/new' : `/posts/post/${post.id}/edit`
+- action = isNew ? '/articles/new' : `/articles/article/${article.id}/edit`
 
 +layout(pageTitle)
   +body({
@@ -19,15 +19,15 @@ include ../../common/index.pug
             form(action=`${action}` method='POST' enctype='multipart/form-data')
               .new-publication__header
                 h1= `${pageTitle}`
-                +dateField(post)
+                +dateField(article)
                 button.new-publication__button.button.button--colored(type='submit')= `${saveBtnLabel}`
               button.popup__button.button.button--popup-close(type='button' aria-label='Закрыть окно') Закрыть окно
               .new-publication__form.form
                 .form__wrapper.form__wrapper--intro
-                  +titleField(post, errors)
-                  +imageField(post, errors)
-                  +categoriesField(post, categories)
+                  +titleField(article, errors)
+                  +imageField(article, errors)
+                  +categoriesField(article, categories)
                 .form__wrapper.form__wrapper--text
-                  +announceField(post, errors)
-                  +sentencesField(post, errors)
+                  +announceField(article, errors)
+                  +sentencesField(article, errors)
         .modal__overlay

@@ -1,0 +1,9 @@
+include ../../common/index.pug
+
++layout('article-page')
+  +body({noVendor: true})
+    +header({
+      type: 'user'
+    })
+    main
+      +articleItem({article, categories, currentUser, comments, users, categoriesCount, errors})

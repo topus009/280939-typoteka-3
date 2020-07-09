@@ -9,11 +9,11 @@ const {
 const {CustomError} = require(`../../../../utils/utils`);
 const {getHighlitedMatches} = require(`./utils`);
 
-const postsApi = (entityName, database) => ({
+const articlesApi = (entityName, database) => ({
   delete(id) {
-    const post = database[entityName].find((item) => item.id === id);
-    if (!post) {
-      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_POST_ID`, {id}));
+    const article = database[entityName].find((item) => item.id === id);
+    if (!article) {
+      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_ARTICLE_ID`, {id}));
     }
     database[entityName] = database[entityName].filter((item) => item.id !== id);
     delete database.comments[id];
@@ -35,11 +35,11 @@ const postsApi = (entityName, database) => ({
   },
 
   edit(id, data) {
-    let post;
+    let article;
 
-    const targetPost = database[entityName].find((item) => item.id === id);
-    if (!targetPost) {
-      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_POST_ID`, {id}));
+    const targetArticle = database[entityName].find((item) => item.id === id);
+    if (!targetArticle) {
+      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_ARTICLE_ID`, {id}));
     }
 
     database[entityName] = database[entityName].map((item) => {
@@ -47,17 +47,17 @@ const postsApi = (entityName, database) => ({
 
         const categories = !Array.isArray(data.categories) ? [data.categories] : data.categories;
 
-        post = {
+        article = {
           ...item,
           ...data,
           categories,
         };
-        return post;
+        return article;
       } else {
         return item;
       }
     });
-    return post;
+    return article;
   },
 
   getAll() {
@@ -65,36 +65,36 @@ const postsApi = (entityName, database) => ({
   },
 
   findById(id) {
-    const posts = database[entityName];
-    const post = posts.find((item) => item.id === id);
-    if (!post) {
-      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_POST_ID`, {id}));
+    const articles = database[entityName];
+    const article = articles.find((item) => item.id === id);
+    if (!article) {
+      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_ARTICLE_ID`, {id}));
     }
     return {
-      ...post,
-      createdDate: dayjs(post.createdDate).format(`DD.MM.YYYY`)
+      ...article,
+      createdDate: dayjs(article.createdDate).format(`DD.MM.YYYY`)
     };
   },
 
-  getPostsByCategoryId(id) {
-    const posts = database[entityName];
+  getArticlesByCategoryId(id) {
+    const articles = database[entityName];
     const categories = database.categories;
     const category = categories.find((item) => item.id === id);
     if (!category) {
       throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_CATEGORY_ID`, {id}));
     }
-    return posts.filter((post) => post.categories.includes(id));
+    return articles.filter((article) => article.categories.includes(id));
   },
 
   searchByTitle(query) {
-    const posts = database[entityName];
+    const articles = database[entityName];
     const results = [];
 
-    posts.forEach((post) => {
-      const formattedMatch = getHighlitedMatches(query, post.title);
+    articles.forEach((article) => {
+      const formattedMatch = getHighlitedMatches(query, article.title);
       if (formattedMatch) {
         results.push({
-          ...post,
+          ...article,
           title: formattedMatch
         });
       }
@@ -102,10 +102,10 @@ const postsApi = (entityName, database) => ({
     return results;
   },
 
-  getHotPosts() {
+  getHotArticles() {
     const MAX_HOT_COUNT = 4;
 
-    const posts = database[entityName];
+    const articles = database[entityName];
     const comments = database.comments;
 
     const getCommentsCount = (id, commentsData) => {
@@ -114,15 +114,15 @@ const postsApi = (entityName, database) => ({
       }
       return 0;
     };
-    const sortedPostsByCommentsCount =
-      posts
+    const sortedArticlesByCommentsCount =
+      articles
         .sort((a, b) => (getCommentsCount(b.id, comments)) - getCommentsCount(a.id, comments))
         .slice(0, MAX_HOT_COUNT);
-    const postsCount = sortedPostsByCommentsCount.map((post) => {
-      return [post.id, comments[post.id].length];
+    const articlesCount = sortedArticlesByCommentsCount.map((article) => {
+      return [article.id, comments[article.id].length];
     });
-    return postsCount;
+    return articlesCount;
   },
 });
 
-module.exports = postsApi;
+module.exports = articlesApi;

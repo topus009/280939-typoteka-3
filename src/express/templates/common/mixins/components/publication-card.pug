@@ -1,21 +1,21 @@
-mixin publicationCard(post, comments = [], categories)
-  - hasImage = post.img
+mixin publicationCard(article, comments = [], categories)
+  - hasImage = article.img
   li.preview__item(class=`${!hasImage ? 'preview__item--noimage' : ''}`)
     ul.preview__breadcrumbs
-      each postCategoryId in post.categories
+      each articleCategoryId in article.categories
         each categoryData in categories
-          if postCategoryId === categoryData.id
+          if articleCategoryId === categoryData.id
             li.preview__breadcrumbs-item
               a.preview__breadcrumbs-link(href=`/category/${categoryData.id}`)= `${categoryData.label}`
     if hasImage
       .preview__background
-        img.preview__background-image(src=`${post.img}` width='460' height='240' alt=`${post.img}`)
-    +formattedDate(post.createdDate, {class: 'preview__time'})
+        img.preview__background-image(src=`${article.img}` width='460' height='240' alt=`${article.img}`)
+    +formattedDate(article.createdDate, {class: 'preview__time'})
     h3.preview__name
-      a.preview__name-link(href=`/posts/post/${post.id}`)= `${post.title}`
-    p.preview__text= `${post.announce}`
+      a.preview__name-link(href=`/articles/article/${article.id}`)= `${article.title}`
+    p.preview__text= `${article.announce}`
     if comments.length
-      a.preview__comment(href=`/posts/post/${post.id}`)
+      a.preview__comment(href=`/articles/article/${article.id}`)
         | Комментарии
         span.preview__cloud
         |

@@ -10,7 +10,7 @@ The program starts ${ch.cyan(`http-server`)} and generates a data file for the A
     Commands:
     ${ch.green(`--version`)}:            displays the version number
     ${ch.green(`--help`)}:               prints this text
-    ${ch.green(`--generate`)} <${ch.yellow(`count`)}>    creates a file ${ch.yellow(`mocks.json`)}
+    ${ch.green(`--generate`)} <${ch.yellow(`count`)}>    creates files ${ch.yellow(`.json`)} in ${ch.yellow(`mocks `)} folder
     ${ch.green(`--server`)} <${ch.yellow(`port`)}>    start http-server on the specified port
 `;
 
