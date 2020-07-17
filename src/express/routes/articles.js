@@ -33,13 +33,13 @@ articlesRouter.post(`/article/:id`, async (req, res, next) => {
   }
 });
 
-articlesRouter.get(`/article/:id/edit`, async (req, res) => {
+articlesRouter.get(`/article/edit/:id`, async (req, res) => {
   const {id} = req.params;
-  const {data} = await axios.get(`/pages/articles/article/${id}/edit`);
+  const {data} = await axios.get(`/pages/articles/article/edit/${id}`);
   res.render(`pages/articles/article-form`, data);
 });
 
-articlesRouter.post(`/article/:id/edit`, articleImgUpload, async (req, res, next) => {
+articlesRouter.post(`/article/edit/:id`, articleImgUpload, async (req, res, next) => {
   const {id} = req.params;
   const articleData = req.body;
   if (req.file) {
@@ -52,7 +52,7 @@ articlesRouter.post(`/article/:id/edit`, articleImgUpload, async (req, res, next
     }
   } catch (error) {
     if (error.statusCode === 400 && Array.isArray(error.text)) {
-      const {data} = await axios.get(`/pages/articles/article/${id}/edit`);
+      const {data} = await axios.get(`/pages/articles/article/edit/${id}`);
       const prevarticleData = {
         ...data,
         article: {
@@ -68,12 +68,12 @@ articlesRouter.post(`/article/:id/edit`, articleImgUpload, async (req, res, next
   }
 });
 
-articlesRouter.get(`/new`, async (req, res) => {
-  const {data} = await axios.get(`/pages/articles/new`);
+articlesRouter.get(`/add`, async (req, res) => {
+  const {data} = await axios.get(`/pages/articles/add`);
   res.render(`pages/articles/article-form`, data);
 });
 
-articlesRouter.post(`/new`, articleImgUpload, async (req, res, next) => {
+articlesRouter.post(`/add`, articleImgUpload, async (req, res, next) => {
   const articleData = req.body;
   if (req.file) {
     articleData.file = req.file;
@@ -85,7 +85,7 @@ articlesRouter.post(`/new`, articleImgUpload, async (req, res, next) => {
     }
   } catch (error) {
     if (error.statusCode === 400 && Array.isArray(error.text)) {
-      const {data} = await axios.get(`/pages/articles/new`);
+      const {data} = await axios.get(`/pages/articles/add`);
       const prevarticleData = {
         ...data,
         article: {

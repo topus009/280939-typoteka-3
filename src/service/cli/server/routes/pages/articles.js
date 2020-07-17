@@ -29,7 +29,7 @@ const router = (api) => {
     res.status(HttpCodes.OK).json(data);
   });
 
-  articlesPageRouter.get(`/article/:id/edit`, (req, res) => {
+  articlesPageRouter.get(`/article/edit/:id`, (req, res) => {
     const {id} = req.params;
     const article = api.articles.findById(id);
     const categories = api.categories.getAll();
@@ -42,7 +42,7 @@ const router = (api) => {
     res.status(HttpCodes.OK).json(data);
   });
 
-  articlesPageRouter.get(`/new`, (req, res) => {
+  articlesPageRouter.get(`/add`, (req, res) => {
     const categories = api.categories.getAll();
 
     const data = {

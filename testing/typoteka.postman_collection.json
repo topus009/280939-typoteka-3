@@ -96,12 +96,12 @@
 							"response": []
 						},
 						{
-							"name": "/pages/articles/new",
+							"name": "/pages/articles/add",
 							"request": {
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/pages/articles/new",
+									"raw": "{{BASE_URL}}/pages/articles/add",
 									"host": [
 										"{{BASE_URL}}"
 									],

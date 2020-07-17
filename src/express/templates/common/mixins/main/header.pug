@@ -13,7 +13,7 @@ mixin logo({type, error})
 mixin headerContent({type})
   case type
     when 'admin'
-      a.button.button--colored.header__button-new(href='/articles/new') Новая запись
+      a.button.button--colored.header__button-new(href='/articles/add') Новая запись
       +navigationMenu()
     when 'user'
       //- убирать класс линки в зависимости от урла

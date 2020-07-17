@@ -2,7 +2,7 @@ include ../../common/index.pug
 
 - pageTitle = isNew ? 'Новая публикация' : 'Редактировать публикацию'
 - saveBtnLabel = isNew ? 'Опубликовать' : 'Сохранить'
-- action = isNew ? '/articles/new' : `/articles/article/${article.id}/edit`
+- action = isNew ? '/articles/add' : `/articles/article/edit/${article.id}`
 
 +layout(pageTitle)
   +body({

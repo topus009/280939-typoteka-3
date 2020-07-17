@@ -9,7 +9,7 @@ PAGES / MY
 `http://localhost:3000/api/pages/my/articles`
 PAGES / ARTICLES
 `http://localhost:3000/api/pages/articles/article/aubvMpPyU9Un-NBgMsuK3`
-`http://localhost:3000/api/pages/articles/new`
+`http://localhost:3000/api/pages/articles/add`
 // *********************************************
 API / CATEGORIES
 `http://localhost:3000/api/categories`
