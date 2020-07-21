@@ -9,7 +9,7 @@ Nulla ut erat id mauris vulputate elementum.
 Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo.
 Duis at velit eu est congue elementum.
 Nulla facilisi.
-Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae	 Nulla dapibus dolor vel est.
+Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae Nulla dapibus dolor vel est.
 Proin eu mi.
 Phasellus id sapien in sapien iaculis congue.
 Morbi quis tortor id nulla ultrices aliquet.
