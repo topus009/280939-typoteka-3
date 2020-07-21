@@ -10,7 +10,7 @@ const usersApi = (entityName, database) => ({
 
   findById(id) {
     const users = database[entityName];
-    const user = users.find((item) => item.id === id);
+    const user = users.find((item) => item.id === +id);
     if (!user) {
       throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_USER_ID`, {id}));
     }

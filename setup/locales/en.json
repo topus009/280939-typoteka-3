@@ -3,7 +3,6 @@
   "NO_ROUTE_IN_APP": "There is no such route in the application",
   "NO_CATEGORY_ID": "Category with ID «{id}» does not exist",
   "NO_ARTICLE_ID": "Article with ID «{id}» does not exist",
-  "NO_COMMENTS_WITH_ARTICLE_ID": "Article with ID «{id}» has no comments",
   "NO_COMMENT_ID": "Comment with ID «{id}» does not exist",
   "NO_USER_ID": "User with ID «{id}» does not exist",
   "NO_USER_WITH_NAME": "The user with the name «{name}» does not exist"

@@ -19,8 +19,8 @@ const router = (api) => {
   });
 
   commentsRouter.get(`/article/:articleId/:id`, (req, res) => {
-    const {articleId, id} = req.params;
-    const data = api.comments.findById(articleId, id);
+    const {id} = req.params;
+    const data = api.comments.findById(id);
     res.status(HttpCodes.OK).json(data);
   });
 
@@ -31,8 +31,8 @@ const router = (api) => {
   });
 
   commentsRouter.delete(`/article/:articleId/:id`, (req, res) => {
-    const {articleId, id} = req.params;
-    const data = api.comments.delete(articleId, id);
+    const {id} = req.params;
+    const data = api.comments.delete(id);
     res.status(HttpCodes.OK).json(data);
   });
 

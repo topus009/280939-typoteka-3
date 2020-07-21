@@ -25,8 +25,7 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
       label: `xxxxxx`
     });
     expect(res.statusCode).toBe(200);
-    expect(res.body).toHaveLength(21);
-    expect(res.body).toBeString();
+    expect(Number(res.body)).toBeNumber();
   });
   test(`POST / - wrong - return 400`, async () => {
     const res = await request.post(`${apiPrefix}/`).send({
@@ -47,8 +46,7 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
     const {id} = categories[0];
     const res = await request.delete(`${apiPrefix}/${id}`);
     expect(res.statusCode).toBe(200);
-    expect(res.body).toHaveLength(21);
-    expect(res.body).toBeString();
+    expect(Number(res.body)).toBeNumber();
   });
   test(`DELETE / - wrong - return 404`, async () => {
     const res = await request.delete(`${apiPrefix}/xxx`);

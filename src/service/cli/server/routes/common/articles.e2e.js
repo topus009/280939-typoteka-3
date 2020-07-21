@@ -40,11 +40,10 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
       title: `aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa`,
       announce: `aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa`,
       sentences: `aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa`,
-      categories: [`xxxxxxxx`, `xxxxxxxx`],
+      categories: [1, 2],
     });
     expect(res.statusCode).toBe(200);
-    expect(res.body).toHaveLength(21);
-    expect(res.body).toBeString();
+    expect(Number(res.body)).toBeNumber();
   });
   test(`POST / - wrong - return 400`, async () => {
     const res = await request.post(`${apiPrefix}/`).send({
@@ -68,7 +67,7 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
       title: `aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa`,
       announce: `aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa`,
       sentences: `aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa`,
-      categories: [`xxxxxxxx`, `xxxxxxxx`],
+      categories: [1, 2],
     };
     const res = await request.put(`${apiPrefix}/${id}`).send(newArticle);
     expect(res.statusCode).toBe(200);

@@ -1,6 +1,5 @@
 "use strict";
 
-const {nanoid} = require(`nanoid`);
 const dayjs = require(`dayjs`);
 const {
   DATE_FORMAT,
@@ -10,51 +9,34 @@ const {
 const {CustomError} = require(`../../../../utils/utils`);
 
 const commentsApi = (entityName, database, api) => ({
-  delete(articleId, id) {
-    const article = database[entityName][articleId];
-    const articleInDB = database.articles.find((item) => item.id === articleId);
-    if (!article) {
-      if (!articleInDB) {
-        throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_ARTICLE_ID`, {id: articleId}));
-      }
-      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_COMMENTS_WITH_ARTICLE_ID`, {id: articleId}));
-    }
-    const comment = article.find((item) => item.id === id);
-    if (!comment) {
+  delete(id) {
+    const prevCommentsLength = database[entityName].length;
+    database[entityName] = database[entityName].filter((item) => item.id !== +id);
+    if (prevCommentsLength === database[entityName].length) {
       throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_COMMENT_ID`, {id}));
-    }
-    database[entityName][articleId] = database[entityName][articleId].filter((item) => item.id !== id);
-    if (!database[entityName][articleId].length) {
-      delete database[entityName][articleId];
     }
     return id;
   },
 
   add(articleId, data) {
-    const id = nanoid();
+    const id = database[entityName].length + 1;
     const {id: userId} = api.users(`users`, database, api).getUserByName(MY_NAME);
-    const article = database.articles.find((item) => item.id === articleId);
+    const article = database.articles.find((item) => item.id === +articleId);
     if (!article) {
       throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_ARTICLE_ID`, {id}));
     }
-    if (!database[entityName][articleId]) {
-      database[entityName][articleId] = [];
-    }
-    database[entityName][articleId].push({
+    database[entityName].push({
       id,
       ...data,
+      articleId: +articleId,
       userId,
       createdDate: dayjs().format(DATE_FORMAT),
     });
     return id;
   },
 
-  findById(articleId, id) {
-    const comments = database[entityName][articleId];
-    if (!comments) {
-      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_ARTICLE_ID`, {id: articleId}));
-    }
-    const comment = comments.find((item) => item.id === id);
+  findById(id) {
+    const comment = database[entityName].find((item) => item.id === +id);
     if (!comment) {
       throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_COMMENT_ID`, {id}));
     }
@@ -66,32 +48,18 @@ const commentsApi = (entityName, database, api) => ({
   },
 
   getCommentsByArticleId(articleId) {
-    const articleInDB = database.articles.find((item) => item.id === articleId);
+    const articleInDB = database.articles.find((item) => item.id === +articleId);
     if (!articleInDB) {
       throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_ARTICLE_ID`, {id: articleId}));
     }
-    const comments = database[entityName][articleId];
+    const comments = database[entityName].filter((comment) => comment.articleId === +articleId);
     return comments || [];
   },
 
   getMyComments() {
     const comments = database[entityName];
     const currentUser = api.users(`users`, database, api).getUserByName(MY_NAME);
-
-    const myComments = {};
-
-    Object.keys(comments).forEach((articleId) => {
-      const articleComments = comments[articleId];
-      for (const comment of articleComments) {
-        if (comment.userId === currentUser.id) {
-          if (!myComments[articleId]) {
-            myComments[articleId] = [];
-          }
-          myComments[articleId].push(comment);
-        }
-      }
-    });
-    return myComments;
+    return comments.filter((comment) => comment.userId === currentUser.id);
   },
 
   getLatestComments() {
@@ -101,11 +69,7 @@ const commentsApi = (entityName, database, api) => ({
     const formatDate = (value) => dayjs(value).valueOf();
 
     const sortedCommentsByLatesDate =
-      Object.keys(comments)
-        .reduce((commentsAcc, articleId) => {
-          const preparedComments = comments[articleId].map((item) => ({...item, articleId}));
-          return [...commentsAcc, ...preparedComments];
-        }, [])
+      comments
         .sort((a, b) => (formatDate(b.createdDate) - formatDate(a.createdDate)))
         .slice(0, MAX_LATEST_COUNT);
     return sortedCommentsByLatesDate;

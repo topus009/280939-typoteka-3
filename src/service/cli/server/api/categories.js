@@ -1,21 +1,20 @@
 "use strict";
 
-const {nanoid} = require(`nanoid`);
 const {HttpCodes} = require(`../../../../config/constants`);
 const {CustomError} = require(`../../../../utils/utils`);
 
 const categoriesApi = (entityName, database) => ({
   delete(id) {
-    const category = database[entityName].find((item) => item.id === id);
+    const category = database[entityName].find((item) => item.id === +id);
     if (!category) {
       throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_CATEGORY_ID`, {id}));
     }
-    database[entityName] = database[entityName].filter((item) => item.id !== id);
+    database[entityName] = database[entityName].filter((item) => item.id !== +id);
     return id;
   },
 
   add(data) {
-    const id = nanoid();
+    const id = database[entityName].length + 1;
     database[entityName].push({
       id,
       ...data,
@@ -25,7 +24,7 @@ const categoriesApi = (entityName, database) => ({
 
   edit(id, data) {
     database[entityName] = database[entityName].map((item) => {
-      if (item.id === id) {
+      if (item.id === +id) {
         return {
           ...item,
           ...data
@@ -38,7 +37,7 @@ const categoriesApi = (entityName, database) => ({
   },
 
   findById(id) {
-    const category = database[entityName].find((item) => item.id === id);
+    const category = database[entityName].find((item) => item.id === +id);
     if (!category) {
       throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_CATEGORY_ID`, {id}));
     }

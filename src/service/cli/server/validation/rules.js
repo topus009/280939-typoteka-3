@@ -10,7 +10,7 @@ const category = () => ([
 ]);
 
 const comment = () => ([
-  body(`text`)
+  body(`comment`)
     .isLength({min: 20})
     .withMessage(`Comment must be at least 20 characters`)
 ]);
