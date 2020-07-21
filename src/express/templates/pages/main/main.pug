@@ -23,8 +23,7 @@ include ../../common/index.pug
           h2.visually-hidden Список превью статей
           ul.preview__list
             each articleData in articles
-              - commentsData = comments[articleData.id]
-              +publicationCard(articleData, commentsData, categories)
+              +publicationCard(articleData, comments, categories)
           //- +articlesPagination()
       else
         .main-page__empty-wrapper

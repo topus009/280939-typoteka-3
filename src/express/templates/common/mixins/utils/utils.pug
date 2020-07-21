@@ -9,3 +9,15 @@ mixin getError(errors, field)
     each error in errors
       if error[field]
         p.comments__error= `${error[field]}`
+
+mixin countComments(articleId, comments)
+  - count = 0;
+  each comment in comments
+    if comment.articleId === articleId
+      - count = +count + 1;
+  if count
+    a.preview__comment(href=`/articles/article/${articleId}`)
+      | Комментарии
+      span.preview__cloud
+      |
+      b.preview__comment-count= ` ${count}`

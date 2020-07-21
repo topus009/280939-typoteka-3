@@ -5,9 +5,9 @@ mixin articleCommentsForm(currentUser, articleId, errors)
         .comments__avatar.avatar
           img(src=`${currentUser.avatar}` alt='аватар пользователя')
         label
-          textarea(rows='1' name='text' placeholder='Присоединиться к обсуждению')
+          textarea(rows='1' name='comment' placeholder='Присоединиться к обсуждению')
         button.comments__button.button.button--colored(type='submit') Опубликовать
-      +getError(errors, 'text')
+      +getError(errors, 'comment')
   else
     .comments__footer.comments__footer--visitor
       button.comments__button.button.button--colored(type='submit') Войти
@@ -24,7 +24,7 @@ mixin articleCommentItem({comment, user})
       .comments__head
         p= `${user.name} •`
         +formattedDate(comment.createdDate, {class: 'comments__date'})
-      p.comments__message= `${comment.text}`
+      p.comments__message= `${comment.comment}`
 
 mixin articleCommentsList({currentUser, comments, users, articleId, errors})
   .post__wrapper.post__wrapper--comments

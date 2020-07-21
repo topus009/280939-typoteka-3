@@ -5,6 +5,6 @@ mixin adminComment(article, comment, user)
       b.publication__list-name= `${user.name}`
       +formattedDate(comment.createdDate, {class: 'publication__item-time'})
     a.publication__item-text(href=`/articles/article/${article.id}`)= `${article.title}`
-    p.publication__text-strong= `${comment.text}`
+    p.publication__text-strong= `${comment.comment}`
     button.publication__button.button.button--close-item(type='button')
       span.visually-hidden Закрыть строку списка
