@@ -1,14 +1,13 @@
 'use strict';
 
-const {nanoid} = require(`nanoid`);
 const {writeToFileAsync} = require(`../../../utils/utils`);
 const {getSamples} = require(`./utils`);
 
 const generateData = async () => {
   const samples = await getSamples();
 
-  const data = samples.categories.map((category) => ({
-    id: nanoid(),
+  const data = samples.categories.map((category, id) => ({
+    id: id + 1,
     label: category,
   }));
 

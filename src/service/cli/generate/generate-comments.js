@@ -1,6 +1,5 @@
 'use strict';
 
-const {nanoid} = require(`nanoid`);
 const {
   getRandomDate,
   getRandomString,
@@ -14,17 +13,14 @@ const generateData = async (count, users, articles) => {
   const usersIds = users.map((user) => user.id);
   const articlesIds = articles.map((article) => article.id);
 
-  const data = {};
+  const data = [];
 
-  for (let i = 0; i <= count; i++) {
-    const articleId = getRandomString(articlesIds);
-    if (!data[articleId]) {
-      data[articleId] = [];
-    }
-    data[articleId].push({
-      id: nanoid(),
+  for (let id = 0; id <= count; id++) {
+    data.push({
+      id: id + 1,
+      articleId: getRandomString(articlesIds),
       userId: getRandomString(usersIds),
-      text: getRandomString(samples.comments),
+      comment: getRandomString(samples.comments),
       createdDate: getRandomDate(),
     });
   }

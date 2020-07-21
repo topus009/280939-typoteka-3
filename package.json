@@ -21,7 +21,12 @@
     "backend:watch:debug": "cross-env LOG_LEVEL=debug npm run backend:watch",
     "frontend:watch:debug": "cross-env LOG_LEVEL=debug npm run frontend:watch",
     "all:debug": "cross-env LOG_LEVEL=debug npm run all",
-    "all:watch:debug": "cross-env LOG_LEVEL=debug npm run all:watch"
+    "all:watch:debug": "cross-env LOG_LEVEL=debug npm run all:watch",
+    "db:create": "psql -h localhost -U postgres -f ./sql/schema.sql",
+    "db:fill": "psql -h localhost -U postgres -f ./sql/fill-db.sql",
+    "db:prepare": "npm-run-all -s db:create db:fill",
+    "db:drop": "dropdb -h localhost -U postgres -e typoteka",
+    "generate:fill": "npm-run-all -s generate db:prepare"
   },
   "repository": {
     "type": "git",

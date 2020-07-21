@@ -1,6 +1,5 @@
 'use strict';
 
-const {nanoid} = require(`nanoid`);
 const {
   getRandomDate,
   getRandomString,
@@ -12,16 +11,14 @@ const {getSamples} = require(`./utils`);
 const generateMockData = async (count, categories) => {
   const samples = await getSamples();
 
-  let imageCount = 1;
-
   const data = Array(count)
     .fill({})
-    .map(() => {
+    .map((_, id) => {
       const sentences = getRandomStrings(samples.sentences);
       const categoriesIds = categories.map((category) => category.id);
 
       const content = {
-        id: nanoid(),
+        id: id + 1,
         title: getRandomString(samples.titles),
         createdDate: getRandomDate(),
         announce: sentences.slice(0, 5).join(` `),
@@ -29,11 +26,10 @@ const generateMockData = async (count, categories) => {
         categories: getRandomStrings(categoriesIds, 3).slice(0, 3),
       };
 
-      if (imageCount % 5 !== 0) {
+      if (id % 5 !== 0) {
         content.img = `img/articles/sea@1x.jpg`;
       }
 
-      imageCount++;
       return content;
     });
 

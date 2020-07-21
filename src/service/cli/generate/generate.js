@@ -9,6 +9,9 @@ const generateComments = require(`./generate-comments`);
 const {getUserCount} = require(`./utils`);
 
 const run = async (input) => {
+  if (!input.length && process.env.COUNT) {
+    input = [process.env.COUNT];
+  }
   const count = getUserCount(input);
   const users = await generateUsers(MockFilesPaths.USERS);
   const categories = await generateCategories(MockFilesPaths.CATEGORIES);
