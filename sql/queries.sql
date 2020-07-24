@@ -23,7 +23,7 @@ c.id AS "Идентификатор",
 c.label AS "Наименование категории",
 COUNT(ac.article_category_fk_article_id) AS "Количество публикаций в категории"
 FROM t_category c
-JOIN t_article_t_category ac
+LEFT JOIN t_article_t_category ac
 ON c.id = ac.article_category_fk_category_id
 GROUP BY c.id
 ORDER BY c.id;
@@ -41,9 +41,9 @@ COUNT(c) AS "Количество комментариев",
 (STRING_AGG(ca.label, ',')) AS "Наименование категорий"
 FROM t_article a
 JOIN t_user u ON u.id = 1
-JOIN t_comment c ON c.comment_fk_t_article_id = a.id
-JOIN t_article_t_category aca ON a.id = aca.article_category_fk_article_id
-JOIN t_category ca ON ca.id = aca.article_category_fk_category_id
+LEFT JOIN t_comment c ON c.comment_fk_t_article_id = a.id
+LEFT JOIN t_article_t_category aca ON a.id = aca.article_category_fk_article_id
+LEFT JOIN t_category ca ON ca.id = aca.article_category_fk_category_id
 GROUP BY a.id, u.name
 ORDER BY a.created_date DESC;
 --------------------------------------------------------------------------------
@@ -92,12 +92,12 @@ SELECT
 c.id AS "Идентификатор комментария",
 a.id AS "Идентификатор публикации",
 u.name AS "Имя и фамилия автора",
-c.comment AS "Текст комментария",
-c.created_date AS "ДАТА"
+c.comment AS "Текст комментария"
 FROM t_comment c
 JOIN t_user u ON u.id = c.comment_fk_t_user_id
 JOIN t_article a ON a.id = c.comment_fk_t_article_id
-WHERE a.id = 2;
+WHERE a.id = 2
+ORDER BY c.created_date DESC;
 --------------------------------------------------------------------------------
 -- Обновить заголовок определённой публикации на «Как я встретил Новый год»;
 UPDATE t_article

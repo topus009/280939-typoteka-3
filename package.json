@@ -26,8 +26,7 @@
     "db:fill": "psql -h localhost -U postgres -f ./sql/fill-db.sql",
     "db:prepare": "npm run db:create && npm run db:fill",
     "db:drop": "dropdb --if-exists -h localhost -U postgres -e typoteka",
-    "get:env:dev": "echo \"export $(cat ./setup/envs/.env.development)\"",
-    "db:generate:fill": "npm run get:env:dev && npm run generate && npm run db:prepare"
+    "db:generate:fill": "npm run generate && npm run db:prepare"
   },
   "repository": {
     "type": "git",
