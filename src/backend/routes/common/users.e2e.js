@@ -1,7 +1,7 @@
 'use strict';
 
 const supertest = require(`supertest`);
-const users = require(`../../../../../../mocks/users.json`);
+const users = require(`../../../../mocks/users.json`);
 const {createServer} = require(`../../server`);
 
 let server;

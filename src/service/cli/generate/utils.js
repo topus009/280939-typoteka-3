@@ -5,8 +5,8 @@ const {createLogger, LoggerNames} = require(`../../../utils/logger`);
 const {
   PATH_TO_FILES,
   DEFAULT_GENERATE_COUNT,
-  GENERATE_MAX_ITEMS_ALLOWED
-} = require(`../../../config/constants`);
+  GENERATE_MAX_ITEMS_ALLOWED,
+} = require(`../../../../config/constants`);
 const {
   readDirAsync,
   readFileAsync,

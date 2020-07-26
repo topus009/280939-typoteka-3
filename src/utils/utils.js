@@ -3,7 +3,7 @@
 const fs = require(`fs`);
 const path = require(`path`);
 const dayjs = require(`dayjs`);
-const {ExitCodes, DATE_FORMAT, HttpCodes} = require(`../config/constants`);
+const {ExitCodes, DATE_FORMAT, HttpCodes} = require(`../../config/constants`);
 const {createLogger, LoggerNames} = require(`./logger`);
 
 const log = createLogger(LoggerNames.COMMON);

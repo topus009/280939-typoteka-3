@@ -1,6 +1,6 @@
 'use strict';
 
-const {MockFilesPaths} = require(`../../../config/constants`);
+const {MockFilesPaths} = require(`../../../../config/constants`);
 const {exit} = require(`../../../utils/utils`);
 const generateUsers = require(`./generate-users`);
 const generateCategories = require(`./generate-categories`);

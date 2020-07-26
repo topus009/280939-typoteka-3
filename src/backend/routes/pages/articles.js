@@ -2,7 +2,7 @@
 
 const {Router} = require(`express`);
 const dayjs = require(`dayjs`);
-const {HttpCodes, MY_NAME} = require(`../../../../../config/constants`);
+const {HttpCodes, MY_NAME} = require(`../../../../config/constants`);
 
 const articlesPageRouter = new Router();
 

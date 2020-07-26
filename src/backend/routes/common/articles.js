@@ -3,8 +3,8 @@
 const path = require(`path`);
 const fsFromises = require(`fs`).promises;
 const {Router} = require(`express`);
-const {HttpCodes} = require(`../../../../../config/constants`);
-const {isFileExistsAsync} = require(`../../../../../utils/utils`);
+const {HttpCodes} = require(`../../../../config/constants`);
+const {isFileExistsAsync} = require(`../../../utils/utils`);
 const {validate, rules} = require(`../../validation`);
 
 const router = (api) => {
@@ -31,7 +31,7 @@ const router = (api) => {
     if (req.body.file) {
       const {file} = req.body;
       const backendImgPath = `img/articles/${file.filename}`;
-      await fsFromises.rename(file.path, path.join(process.cwd(), `./src/express/public/${backendImgPath}`));
+      await fsFromises.rename(file.path, path.join(process.cwd(), `./src/frontend/public/${backendImgPath}`));
       delete req.body.file;
       req.body.img = backendImgPath;
     }
@@ -50,7 +50,7 @@ const router = (api) => {
     if (req.body.file) {
       const {file} = req.body;
       const backendImgPath = `img/articles/${file.filename}`;
-      const pathToDataBase = path.join(process.cwd(), `./src/express/public/`);
+      const pathToDataBase = path.join(process.cwd(), `./src/frontend/public/`);
       const prevArticle = api.articles.findById(id);
       if (prevArticle.img) {
         const pathToPrevFile = `${pathToDataBase}${prevArticle.img}`;

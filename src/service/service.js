@@ -4,7 +4,7 @@ const {exit} = require(`../utils/utils`);
 const {
   DEFAULT_COMMAND,
   USER_ARGV_INDEX,
-} = require(`../config/constants`);
+} = require(`../../config/constants`);
 const {cli} = require(`./cli`);
 
 const userArguments = process.argv.slice(USER_ARGV_INDEX);

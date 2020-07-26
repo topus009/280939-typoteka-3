@@ -2,12 +2,12 @@
 
 const express = require(`express`);
 const bodyParser = require(`body-parser`);
-const {HttpCodes, BACKEND_API_PREFIX} = require(`../../../config/constants`);
-const {CustomError} = require(`../../../utils/utils`);
-const {createLogger, LoggerNames} = require(`../../../utils/logger`);
+const {HttpCodes, BACKEND_API_PREFIX} = require(`../../config/constants`);
+const {CustomError} = require(`../utils/utils`);
+const {createLogger, LoggerNames} = require(`../utils/logger`);
 const router = require(`./router`);
 const api = require(`./api`);
-require(`../../../../setup/localization.setup`);
+require(`../../config/localization.setup`);
 
 const log = createLogger(LoggerNames.BACKEND);
 const logApi = createLogger(LoggerNames.BACKEND_API);

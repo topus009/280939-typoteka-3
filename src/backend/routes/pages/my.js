@@ -1,7 +1,7 @@
 'use strict';
 
 const {Router} = require(`express`);
-const {HttpCodes, MY_NAME} = require(`../../../../../config/constants`);
+const {HttpCodes, MY_NAME} = require(`../../../../config/constants`);
 
 const myPageRouter = new Router();
 

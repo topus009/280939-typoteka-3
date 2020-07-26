@@ -1,7 +1,7 @@
 "use strict";
 
-const {readFileAsync} = require(`../../../../utils/utils`);
-const {MockFilesPaths} = require(`../../../../config/constants`);
+const {readFileAsync} = require(`../../utils/utils`);
+const {MockFilesPaths} = require(`../../../config/constants`);
 
 const init = async (store) => {
   for (let key in store) {

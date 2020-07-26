@@ -1,8 +1,8 @@
 'use strict';
 
 const {validationResult} = require(`express-validator`);
-const {CustomError} = require(`../../../../utils/utils`);
-const {HttpCodes} = require(`../../../../config/constants`);
+const {CustomError} = require(`../../utils/utils`);
+const {HttpCodes} = require(`../../../config/constants`);
 
 const getErrorObject = (err, req) => {
   const errObj = {[err.param]: err.msg};

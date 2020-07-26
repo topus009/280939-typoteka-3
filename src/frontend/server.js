@@ -4,11 +4,11 @@ const express = require(`express`);
 const bodyParser = require(`body-parser`);
 const dayjs = require(`dayjs`);
 const path = require(`path`);
-const {HttpCodes} = require(`../config/constants`);
+const {HttpCodes} = require(`../../config/constants`);
 const {CustomError} = require(`../utils/utils`);
 const {createLogger, LoggerNames} = require(`../utils/logger`);
 const routers = require(`./router`);
-require(`../../setup/localization.setup`);
+require(`../../config/localization.setup`);
 
 require(`dayjs/locale/ru`);
 dayjs.locale(`ru`);

@@ -1,7 +1,7 @@
 "use strict";
 
-const {HttpCodes} = require(`../../../../config/constants`);
-const {CustomError} = require(`../../../../utils/utils`);
+const {HttpCodes} = require(`../../../config/constants`);
+const {CustomError} = require(`../../utils/utils`);
 
 const usersApi = (entityName, database) => ({
   getAll() {
