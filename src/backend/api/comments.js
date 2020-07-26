@@ -5,8 +5,8 @@ const {
   DATE_FORMAT,
   MY_NAME,
   HttpCodes,
-} = require(`../../../../config/constants`);
-const {CustomError} = require(`../../../../utils/utils`);
+} = require(`../../../config/constants`);
+const {CustomError} = require(`../../utils/utils`);
 
 const commentsApi = (entityName, database, api) => ({
   delete(id) {

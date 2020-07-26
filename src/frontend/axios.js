@@ -1,7 +1,7 @@
 "use strict";
 
 const axiosInstance = require(`axios`);
-const {BACKEND_API_PREFIX} = require(`../config/constants`);
+const {BACKEND_API_PREFIX} = require(`../../config/constants`);
 const {createLogger, LoggerNames} = require(`../utils/logger`);
 
 const logApi = createLogger(LoggerNames.FRONTEND_API);

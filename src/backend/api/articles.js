@@ -5,8 +5,8 @@ const dayjs = require(`dayjs`);
 const {
   DATE_FORMAT,
   HttpCodes,
-} = require(`../../../../config/constants`);
-const {CustomError} = require(`../../../../utils/utils`);
+} = require(`../../../config/constants`);
+const {CustomError} = require(`../../utils/utils`);
 const {getHighlitedMatches} = require(`./utils`);
 
 const articlesApi = (entityName, database) => ({

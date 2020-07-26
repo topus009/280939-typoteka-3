@@ -4,7 +4,7 @@ const {
   getRandomString,
   writeToFileAsync,
 } = require(`../../../utils/utils`);
-const {MY_NAME} = require(`../../../config/constants`);
+const {MY_NAME} = require(`../../../../config/constants`);
 const {getSamples} = require(`./utils`);
 
 const generateData = async (count) => {
