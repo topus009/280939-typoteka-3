@@ -5,6 +5,7 @@ const users = require(`./users`);
 const categories = require(`./categories`);
 const articles = require(`./articles`);
 const comments = require(`./comments`);
+const {connectToDatabase} = require(`../database/db-connection`);
 
 const apis = {
   users,
@@ -22,6 +23,7 @@ const connectApiWithDB = (api, database, connectedApis) => {
 module.exports = async () => {
   const connectedApis = {};
   const database = await dbConnection();
+  await connectToDatabase();
   connectApiWithDB(apis, database, connectedApis);
   return connectedApis;
 };
