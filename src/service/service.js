@@ -4,6 +4,7 @@ const {exit} = require(`../utils/utils`);
 const {
   DEFAULT_COMMAND,
   USER_ARGV_INDEX,
+  ExitCodes,
 } = require(`../../config/constants`);
 const {cli} = require(`./cli`);
 
@@ -12,7 +13,7 @@ const [userCommand] = userArguments;
 
 if (userArguments.length === 0 && !cli[userCommand] && !process.env.COMMAND) {
   cli[DEFAULT_COMMAND].run();
-  exit(`SUCCESS`);
+  exit(ExitCodes.SUCCESS);
 } else if (process.env.COMMAND && cli[process.env.COMMAND]) {
   cli[process.env.COMMAND].run(userArguments.slice(1));
 } else {

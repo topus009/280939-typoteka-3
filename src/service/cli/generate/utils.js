@@ -6,6 +6,7 @@ const {
   PATH_TO_FILES,
   DEFAULT_GENERATE_COUNT,
   GENERATE_MAX_ITEMS_ALLOWED,
+  ExitCodes,
 } = require(`../../../../config/constants`);
 const {
   readDirAsync,
@@ -24,7 +25,7 @@ const getUserCount = (input) => {
     return DEFAULT_GENERATE_COUNT;
   } else if (parsedCount > GENERATE_MAX_ITEMS_ALLOWED) {
     log.error(`It is possible to create no more than ${GENERATE_MAX_ITEMS_ALLOWED} records`);
-    exit(`ERROR`);
+    exit(ExitCodes.ERROR);
   }
 
   return parsedCount;

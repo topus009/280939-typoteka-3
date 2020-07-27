@@ -2,7 +2,8 @@
 
 const {Sequelize} = require(`sequelize`);
 const {createLogger, LoggerNames} = require(`../../utils/logger`);
-const {ExitCode} = require(`../../../config/constants`);
+const {ExitCodes} = require(`../../../config/constants`);
+const {exit} = require(`../../utils/utils`);
 
 const log = createLogger(LoggerNames.DATABASE);
 
@@ -23,7 +24,7 @@ const connectToDatabase = async () => {
     log.info(`Connection to Database has been established successfully.`);
   } catch (err) {
     log.error(`Unable to connect to the database: ${err}`);
-    process.exit(ExitCode.ERROR);
+    exit(ExitCodes.ERROR);
   }
 };
 

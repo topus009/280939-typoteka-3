@@ -55,8 +55,8 @@ const writeToFileAsync = async (pathToFile, name, content) => {
   }
 };
 
-const exit = (type) => {
-  process.exit(ExitCodes[type] || ExitCodes.SUCCESS);
+const exit = (code) => {
+  process.exit(code || ExitCodes.SUCCESS);
 };
 
 const getRandomDate = () => {
