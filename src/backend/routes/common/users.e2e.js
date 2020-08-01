@@ -26,7 +26,7 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
     expect(res.statusCode).toBe(200);
   });
   test(`GET /:id - wrong - return 404`, async () => {
-    const res = await request.get(`${apiPrefix}/x`);
+    const res = await request.get(`${apiPrefix}/999`);
     expect(res.statusCode).toBe(404);
   });
   test(`GET /name/:name - correct - return 200`, async () => {

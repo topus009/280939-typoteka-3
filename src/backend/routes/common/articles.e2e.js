@@ -27,12 +27,12 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
     expect(res.statusCode).toBe(200);
   });
   test(`GET /:id - wrong - return 404`, async () => {
-    const res = await request.get(`${apiPrefix}/xxx`);
+    const res = await request.get(`${apiPrefix}/999`);
     expect(res.statusCode).toBe(404);
   });
   test(`GET /categories/:categoryId - correct - return 200`, async () => {
-    const {id: categoryId} = categories[0];
-    const res = await request.get(`${apiPrefix}/categories/${categoryId}`);
+    const {id} = categories[1];
+    const res = await request.get(`${apiPrefix}/categories/${id}`);
     expect(res.statusCode).toBe(200);
   });
   test(`POST / - correct - return 200`, async () => {
@@ -58,7 +58,7 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
     expect(res.statusCode).toBe(200);
   });
   test(`DELETE /:id - wrong - return 404`, async () => {
-    const res = await request.delete(`${apiPrefix}/xxx`);
+    const res = await request.delete(`${apiPrefix}/999`);
     expect(res.statusCode).toBe(404);
   });
   test(`PUT /:id - correct - return 200`, async () => {
@@ -74,13 +74,13 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
     expect(res.body).toEqual({...articles[1], ...newArticle});
   });
   test(`PUT /:id - wrong - return 400`, async () => {
-    const res = await request.put(`${apiPrefix}/xxx`).send({
+    const res = await request.put(`${apiPrefix}/999`).send({
       title: `xxx`,
     });
     expect(res.statusCode).toBe(400);
   });
   test(`GET /categories/:categoryId - wrong - return 404`, async () => {
-    const res = await request.get(`${apiPrefix}/categories/xxx`);
+    const res = await request.get(`${apiPrefix}/categories/999`);
     expect(res.statusCode).toBe(404);
   });
   test(`GET /articles/my - return 200`, async () => {
