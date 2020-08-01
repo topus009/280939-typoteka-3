@@ -17,10 +17,10 @@ const generateData = async (count) => {
     .map(() => {
       currentId++;
       return {
-        id: currentId,
-        name: getRandomString(samples.users),
-        avatar: getRandomString(samples.avatars),
-        avatarSmall: getRandomString(samples.avatarsSmall),
+        "id": currentId,
+        "name": getRandomString(samples.users),
+        "avatar": getRandomString(samples.avatars),
+        'avatar_small': getRandomString(samples.avatars_small),
       };
     });
 
@@ -29,7 +29,7 @@ const generateData = async (count) => {
     "id": 1,
     "name": MY_NAME,
     "avatar": `https://avatars0.githubusercontent.com/u/22383491?s=88&u=db063b8130d3a29442c041b5720662aa78d45e78&v=4`,
-    "avatarSmall": `https://avatars0.githubusercontent.com/u/22383491?s=40&v=4`
+    "avatar_small": `https://avatars0.githubusercontent.com/u/22383491?s=40&v=4`
   });
 
   return data;

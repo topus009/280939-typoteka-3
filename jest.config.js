@@ -4,6 +4,9 @@
 // https://jestjs.io/docs/en/configuration.html
 
 module.exports = {
+  // ===== Indicates whether each individual test should be reported during the run
+  verbose: true,
+
   // The directory where Jest should store its cached dependency information
   cacheDirectory: `./tests-cache`,
 
@@ -34,6 +37,17 @@ module.exports = {
     `<rootDir>/config/index.js`,
   ],
 
+  // The root directory that Jest should scan for tests and modules within
+  // rootDir: `src`,
+
+  // A list of paths to directories that Jest should use to search for files in
+  // roots: [
+  //   `<rootDir>`
+  // ],
+
+  // Allows you to use a custom runner instead of Jest's default test runner
+  // runner: `jest-runner`,
+
   // A list of paths to modules that run some code to configure or set up the testing framework before each test
   setupFilesAfterEnv: [
     `jest-extended`,
@@ -43,8 +57,11 @@ module.exports = {
 
   // The glob patterns Jest uses to detect test files
   testMatch: [
-    `**/__tests__/**/*.[jt]s?(x)`,
-    `**/?(*.)+(spec|test|e2e).[tj]s?(x)`
+    `**/*.{test,spec,e2e}.{js,jsx,ts,tsx}`,
+    // `**/users.e2e.js`,
+    // `**/categories.e2e.js`,
+    // `**/articles.e2e.js`,
+    // `**/comments.e2e.js`,
   ],
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
@@ -59,6 +76,17 @@ module.exports = {
     `/markup/`,
     `/testing/`,
   ],
+
+  // Use this configuration option to add custom reporters to Jest
+  reporters: [
+    `default`,
+    [`./node_modules/jest-html-reporter`, {
+      "pageTitle": `Test Report`,
+      "includeFailureMsg": true,
+      "includeConsoleLog": true,
+    }]
+  ],
+
   // All imported modules in your tests should be mocked automatically
   // automock: false,
 
@@ -102,7 +130,7 @@ module.exports = {
   // globals: {},
 
   // The maximum amount of workers used to run your tests. Can be specified as % or a number. E.g. maxWorkers: 10% will use 10% of your CPU amount + 1 as the maximum worker number. maxWorkers: 2 will use a maximum of 2 workers.
-  // maxWorkers: "80%",
+  // maxWorkers: `80%`,
 
   // ===== An array of directory names to be searched recursively up from the requiring module's location
   // moduleDirectories: [
@@ -137,9 +165,6 @@ module.exports = {
   // Run tests from one or more projects
   // projects: undefined,
 
-  // Use this configuration option to add custom reporters to Jest
-  // reporters: undefined,
-
   // ===== Automatically reset mock state between every test
   // resetMocks: false,
 
@@ -151,17 +176,6 @@ module.exports = {
 
   // ===== Automatically restore mock state between every test
   // restoreMocks: false,
-
-  // The root directory that Jest should scan for tests and modules within
-  // rootDir: `src`,
-
-  // A list of paths to directories that Jest should use to search for files in
-  // roots: [
-  //   `<rootDir>`
-  // ],
-
-  // Allows you to use a custom runner instead of Jest's default test runner
-  // runner: "jest-runner",
 
   // A list of paths to snapshot serializer modules Jest should use for snapshot testing
   // snapshotSerializers: [],
@@ -197,9 +211,6 @@ module.exports = {
 
   // An array of regexp pattern strings that are matched against all modules before the module loader will automatically return a mock for them
   // unmockedModulePathPatterns: undefined,
-
-  // ===== Indicates whether each individual test should be reported during the run
-  // verbose: undefined,
 
   // An array of regexp patterns that are matched against all source file paths before re-running tests in watch mode
   // watchPathIgnorePatterns: [],

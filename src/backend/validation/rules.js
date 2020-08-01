@@ -17,11 +17,11 @@ const comment = () => ([
 
 const validExtensions = [`.png`, `.jpg`, `.jpeg`];
 
-const article = () => ([
-  body(`title`)
+const articleValidators = {
+  title: (fieldEl) => fieldEl
     .isLength({min: 30, max: 250})
     .withMessage(`The title must contain a minimum of 30 characters and a maximum of 250`),
-  body(`file`)
+  file: (fieldEl) => fieldEl
     .custom((file) => {
       if (!file) {
         return true;
@@ -31,17 +31,29 @@ const article = () => ([
       }
     })
     .withMessage(`Only png,jpg,jpeg files supported`),
-  body(`categories`)
+  categories: (fieldEl) => fieldEl
     .toArray()
     .isArray({min: 1})
     .withMessage(`At least 1 category must be selected`),
-  body(`announce`)
+  announce: (fieldEl) => fieldEl
     .isLength({min: 30, max: 250})
     .withMessage(`The announcement must contain a minimum of 30 characters and a maximum of 250`),
-  body(`sentences`)
+  sentences: (fieldEl) => fieldEl
     .isLength({max: 1000})
     .withMessage(`Publication text must not exceed 1000 characters`),
-]);
+};
+
+
+const article = (optional) => {
+  const articleFields = {
+    title: optional ? body(`title`).optional() : body(`title`),
+    file: optional ? body(`file`).optional() : body(`file`),
+    categories: optional ? body(`categories`).optional() : body(`categories`),
+    announce: optional ? body(`announce`).optional() : body(`announce`),
+    sentences: optional ? body(`sentences`).optional() : body(`sentences`),
+  };
+  return Object.keys(articleFields).map((field) => articleValidators[field](articleFields[field]));
+};
 
 const rules = {
   category,

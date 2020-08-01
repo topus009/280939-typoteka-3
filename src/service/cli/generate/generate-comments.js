@@ -17,11 +17,11 @@ const generateData = async (count, users, articles) => {
 
   for (let id = 0; id <= count; id++) {
     data.push({
-      id: id + 1,
-      articleId: getRandomString(articlesIds),
-      userId: getRandomString(usersIds),
-      comment: getRandomString(samples.comments),
-      createdDate: getRandomDate(),
+      "id": id + 1,
+      'article_id': getRandomString(articlesIds),
+      'user_id': getRandomString(usersIds),
+      "comment": getRandomString(samples.comments),
+      'created_date': getRandomDate(),
     });
   }
 

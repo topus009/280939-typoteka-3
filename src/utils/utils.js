@@ -102,6 +102,38 @@ class CustomError extends Error {
 
 const isFileExistsAsync = async (filePath) => !!(await fs.promises.stat(filePath).catch(() => false));
 
+const sqlzParse = (data) => JSON.parse(JSON.stringify(data));
+
+const sqlzObjsToArr = (data, key, objKey) => {
+  const parsedData = sqlzParse(data);
+  return parsedData.map((item) => {
+    return ({
+      ...item,
+      [key]: item[key].map((el) => el[objKey])
+    });
+  });
+};
+
+const sqlzExcludeFieldsFromObjs = (data = [], fields = []) => {
+  const parsedData = sqlzParse(data);
+  fields.forEach((field) => {
+    parsedData.forEach((item) => delete item[field]);
+  });
+  return parsedData;
+};
+
+const getHighlitedMatches = (queryString, string) => {
+  let newString = ``;
+  const rgxp = new RegExp(`(\\S*)?(` + queryString + `)(\\S*)?`, `ig`);
+
+  if (queryString.trim().length > 0) {
+    newString = string.replace(rgxp, (match, $1, $2, $3) => {
+      return ($1 || ``) + `<b>` + $2 + `</b>` + ($3 || ``);
+    });
+  }
+  return newString.length !== string.length ? newString : ``;
+};
+
 module.exports = {
   getRangomInteger,
   shuffle,
@@ -115,4 +147,8 @@ module.exports = {
   parseCommandParam,
   CustomError,
   isFileExistsAsync,
+  getHighlitedMatches,
+  sqlzObjsToArr,
+  sqlzExcludeFieldsFromObjs,
+  sqlzParse,
 };
