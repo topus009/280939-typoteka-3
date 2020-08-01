@@ -5,7 +5,7 @@
 -- Dumped from database version 12.3
 -- Dumped by pg_dump version 12.3
 
--- Started on 2020-07-19 21:13:10
+-- Started on 2020-07-29 04:07:04
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -18,9 +18,9 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
-DROP DATABASE IF EXISTS typoteka;
+DROP DATABASE if exists typoteka;
 --
--- TOC entry 2876 (class 1262 OID 19344)
+-- TOC entry 2866 (class 1262 OID 31288)
 -- Name: typoteka; Type: DATABASE; Schema: -; Owner: postgres
 --
 
@@ -47,28 +47,42 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- TOC entry 204 (class 1259 OID 19345)
--- Name: t_article; Type: TABLE; Schema: public; Owner: postgres
+-- TOC entry 207 (class 1259 OID 31378)
+-- Name: articles; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.t_article (
-    id bigint NOT NULL,
-    title character varying(50) NOT NULL,
+CREATE TABLE public.articles (
+    id integer NOT NULL,
+    title text NOT NULL,
+    created_date text NOT NULL,
     announce text NOT NULL,
-    sentences text NOT NULL,
-    img character varying(255),
-    created_date character varying(255)
+    sentences text,
+    img text
 );
 
 
-ALTER TABLE public.t_article OWNER TO postgres;
+ALTER TABLE public.articles OWNER TO postgres;
 
 --
--- TOC entry 205 (class 1259 OID 19351)
--- Name: t_article_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- TOC entry 212 (class 1259 OID 31426)
+-- Name: articles_categories; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE SEQUENCE public.t_article_id_seq
+CREATE TABLE public.articles_categories (
+    article_id integer NOT NULL,
+    category_id integer NOT NULL
+);
+
+
+ALTER TABLE public.articles_categories OWNER TO postgres;
+
+--
+-- TOC entry 206 (class 1259 OID 31376)
+-- Name: articles_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.articles_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -76,387 +90,259 @@ CREATE SEQUENCE public.t_article_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.t_article_id_seq OWNER TO postgres;
+ALTER TABLE public.articles_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2878 (class 0 OID 0)
--- Dependencies: 205
--- Name: t_article_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.t_article_id_seq OWNED BY public.t_article.id;
-
-
---
--- TOC entry 206 (class 1259 OID 19353)
--- Name: t_article_t_category; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.t_article_t_category (
-    article_category_fk_article_id integer NOT NULL,
-    article_category_fk_category_id integer NOT NULL
-);
-
-
-ALTER TABLE public.t_article_t_category OWNER TO postgres;
-
---
--- TOC entry 207 (class 1259 OID 19356)
--- Name: t_category; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.t_category (
-    id bigint NOT NULL,
-    label character varying(255) NOT NULL
-);
-
-
-ALTER TABLE public.t_category OWNER TO postgres;
-
---
--- TOC entry 208 (class 1259 OID 19359)
--- Name: t_category_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.t_category_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.t_category_id_seq OWNER TO postgres;
-
---
--- TOC entry 2879 (class 0 OID 0)
--- Dependencies: 208
--- Name: t_category_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.t_category_id_seq OWNED BY public.t_category.id;
-
-
---
--- TOC entry 209 (class 1259 OID 19361)
--- Name: t_comment; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.t_comment (
-    id bigint NOT NULL,
-    comment text NOT NULL,
-    comment_fk_t_user_id integer,
-    comment_fk_t_article_id integer,
-    created_date character varying(255) NOT NULL
-);
-
-
-ALTER TABLE public.t_comment OWNER TO postgres;
-
---
--- TOC entry 210 (class 1259 OID 19367)
--- Name: t_comment_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.t_comment_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.t_comment_id_seq OWNER TO postgres;
-
---
--- TOC entry 2880 (class 0 OID 0)
--- Dependencies: 210
--- Name: t_comment_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.t_comment_id_seq OWNED BY public.t_comment.id;
-
-
---
--- TOC entry 211 (class 1259 OID 19369)
--- Name: t_user; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.t_user (
-    id bigint NOT NULL,
-    name character varying(50) NOT NULL,
-    avatar character varying(255),
-    avatar_small character varying(255)
-);
-
-
-ALTER TABLE public.t_user OWNER TO postgres;
-
---
--- TOC entry 212 (class 1259 OID 19375)
--- Name: t_user_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.t_user_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.t_user_id_seq OWNER TO postgres;
-
---
--- TOC entry 2881 (class 0 OID 0)
--- Dependencies: 212
--- Name: t_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.t_user_id_seq OWNED BY public.t_user.id;
-
-
---
--- TOC entry 2714 (class 2604 OID 19377)
--- Name: t_article id; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.t_article ALTER COLUMN id SET DEFAULT nextval('public.t_article_id_seq'::regclass);
-
-
---
--- TOC entry 2715 (class 2604 OID 19378)
--- Name: t_category id; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.t_category ALTER COLUMN id SET DEFAULT nextval('public.t_category_id_seq'::regclass);
-
-
---
--- TOC entry 2716 (class 2604 OID 19379)
--- Name: t_comment id; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.t_comment ALTER COLUMN id SET DEFAULT nextval('public.t_comment_id_seq'::regclass);
-
-
---
--- TOC entry 2717 (class 2604 OID 19380)
--- Name: t_user id; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.t_user ALTER COLUMN id SET DEFAULT nextval('public.t_user_id_seq'::regclass);
-
-
---
--- TOC entry 2862 (class 0 OID 19345)
--- Dependencies: 204
--- Data for Name: t_article; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.t_article (id, title, announce, sentences, img, created_date) FROM stdin;
-\.
-
-
---
--- TOC entry 2864 (class 0 OID 19353)
+-- TOC entry 2867 (class 0 OID 0)
 -- Dependencies: 206
--- Data for Name: t_article_t_category; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Name: articles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-COPY public.t_article_t_category (article_category_fk_article_id, article_category_fk_category_id) FROM stdin;
-\.
-
-
---
--- TOC entry 2865 (class 0 OID 19356)
--- Dependencies: 207
--- Data for Name: t_category; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.t_category (id, label) FROM stdin;
-\.
+ALTER SEQUENCE public.articles_id_seq OWNED BY public.articles.id;
 
 
 --
--- TOC entry 2867 (class 0 OID 19361)
--- Dependencies: 209
--- Data for Name: t_comment; Type: TABLE DATA; Schema: public; Owner: postgres
+-- TOC entry 209 (class 1259 OID 31394)
+-- Name: categories; Type: TABLE; Schema: public; Owner: postgres
 --
 
-COPY public.t_comment (id, comment, comment_fk_t_user_id, comment_fk_t_article_id, created_date) FROM stdin;
-\.
+CREATE TABLE public.categories (
+    id integer NOT NULL,
+    label text NOT NULL
+);
 
 
---
--- TOC entry 2869 (class 0 OID 19369)
--- Dependencies: 211
--- Data for Name: t_user; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.t_user (id, name, avatar, avatar_small) FROM stdin;
-\.
-
+ALTER TABLE public.categories OWNER TO postgres;
 
 --
--- TOC entry 2882 (class 0 OID 0)
--- Dependencies: 205
--- Name: t_article_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- TOC entry 208 (class 1259 OID 31392)
+-- Name: categories_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.t_article_id_seq', 2, true);
+CREATE SEQUENCE public.categories_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
 
+
+ALTER TABLE public.categories_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2883 (class 0 OID 0)
+-- TOC entry 2868 (class 0 OID 0)
 -- Dependencies: 208
--- Name: t_category_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: categories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.t_category_id_seq', 72, true);
+ALTER SEQUENCE public.categories_id_seq OWNED BY public.categories.id;
 
 
 --
--- TOC entry 2884 (class 0 OID 0)
+-- TOC entry 211 (class 1259 OID 31407)
+-- Name: comments; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.comments (
+    id integer NOT NULL,
+    comment text NOT NULL,
+    user_id integer NOT NULL,
+    article_id integer NOT NULL,
+    created_date text NOT NULL
+);
+
+
+ALTER TABLE public.comments OWNER TO postgres;
+
+--
+-- TOC entry 210 (class 1259 OID 31405)
+-- Name: comments_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.comments_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.comments_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2869 (class 0 OID 0)
 -- Dependencies: 210
--- Name: t_comment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: comments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.t_comment_id_seq', 34, true);
-
-
---
--- TOC entry 2885 (class 0 OID 0)
--- Dependencies: 212
--- Name: t_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.t_user_id_seq', 66, true);
+ALTER SEQUENCE public.comments_id_seq OWNED BY public.comments.id;
 
 
 --
--- TOC entry 2723 (class 2606 OID 19382)
--- Name: t_article_t_category pk_article_id_category_id; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- TOC entry 205 (class 1259 OID 31367)
+-- Name: users; Type: TABLE; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.t_article_t_category
-    ADD CONSTRAINT pk_article_id_category_id PRIMARY KEY (article_category_fk_article_id, article_category_fk_category_id);
+CREATE TABLE public.users (
+    id integer NOT NULL,
+    name text NOT NULL,
+    avatar text,
+    avatar_small text
+);
 
 
---
--- TOC entry 2719 (class 2606 OID 19384)
--- Name: t_article t_article_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.t_article
-    ADD CONSTRAINT t_article_pkey PRIMARY KEY (id);
-
+ALTER TABLE public.users OWNER TO postgres;
 
 --
--- TOC entry 2725 (class 2606 OID 19386)
--- Name: t_category t_category_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- TOC entry 204 (class 1259 OID 31365)
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.t_category
-    ADD CONSTRAINT t_category_pkey PRIMARY KEY (id);
+CREATE SEQUENCE public.users_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
 
 
---
--- TOC entry 2729 (class 2606 OID 19388)
--- Name: t_comment t_comment_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.t_comment
-    ADD CONSTRAINT t_comment_pkey PRIMARY KEY (id);
-
+ALTER TABLE public.users_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2731 (class 2606 OID 19390)
--- Name: t_user t_user_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- TOC entry 2870 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.t_user
-    ADD CONSTRAINT t_user_pkey PRIMARY KEY (id);
+ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 
 --
--- TOC entry 2720 (class 1259 OID 19391)
--- Name: fki_article_category_fk_article_id; Type: INDEX; Schema: public; Owner: postgres
+-- TOC entry 2716 (class 2604 OID 31381)
+-- Name: articles id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-CREATE INDEX fki_article_category_fk_article_id ON public.t_article_t_category USING btree (article_category_fk_article_id);
-
-
---
--- TOC entry 2721 (class 1259 OID 19424)
--- Name: fki_article_category_fk_t_category_id; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE INDEX fki_article_category_fk_t_category_id ON public.t_article_t_category USING btree (article_category_fk_category_id);
+ALTER TABLE ONLY public.articles ALTER COLUMN id SET DEFAULT nextval('public.articles_id_seq'::regclass);
 
 
 --
--- TOC entry 2726 (class 1259 OID 19392)
--- Name: fki_comment_fk_t_article_id; Type: INDEX; Schema: public; Owner: postgres
+-- TOC entry 2717 (class 2604 OID 31397)
+-- Name: categories id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-CREATE INDEX fki_comment_fk_t_article_id ON public.t_comment USING btree (comment_fk_t_article_id);
-
-
---
--- TOC entry 2727 (class 1259 OID 19393)
--- Name: fki_comment_fk_t_user_id; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE INDEX fki_comment_fk_t_user_id ON public.t_comment USING btree (comment_fk_t_user_id);
+ALTER TABLE ONLY public.categories ALTER COLUMN id SET DEFAULT nextval('public.categories_id_seq'::regclass);
 
 
 --
--- TOC entry 2732 (class 2606 OID 19414)
--- Name: t_article_t_category article_category_fk_t_article_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- TOC entry 2718 (class 2604 OID 31410)
+-- Name: comments id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.t_article_t_category
-    ADD CONSTRAINT article_category_fk_t_article_id FOREIGN KEY (article_category_fk_article_id) REFERENCES public.t_article(id) NOT VALID;
-
-
---
--- TOC entry 2733 (class 2606 OID 19419)
--- Name: t_article_t_category article_category_fk_t_category_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.t_article_t_category
-    ADD CONSTRAINT article_category_fk_t_category_id FOREIGN KEY (article_category_fk_category_id) REFERENCES public.t_category(id) NOT VALID;
+ALTER TABLE ONLY public.comments ALTER COLUMN id SET DEFAULT nextval('public.comments_id_seq'::regclass);
 
 
 --
--- TOC entry 2734 (class 2606 OID 19404)
--- Name: t_comment comment_fk_t_article_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- TOC entry 2715 (class 2604 OID 31370)
+-- Name: users id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.t_comment
-    ADD CONSTRAINT comment_fk_t_article_id FOREIGN KEY (comment_fk_t_article_id) REFERENCES public.t_article(id) ON UPDATE CASCADE ON DELETE CASCADE NOT VALID;
-
-
---
--- TOC entry 2735 (class 2606 OID 19409)
--- Name: t_comment comment_fk_t_user_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.t_comment
-    ADD CONSTRAINT comment_fk_t_user_id FOREIGN KEY (comment_fk_t_user_id) REFERENCES public.t_user(id) ON UPDATE CASCADE ON DELETE RESTRICT NOT VALID;
+ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
 
 
 --
--- TOC entry 2877 (class 0 OID 0)
--- Dependencies: 2876
--- Name: DATABASE typoteka; Type: ACL; Schema: -; Owner: postgres
+-- TOC entry 2730 (class 2606 OID 31430)
+-- Name: articles_categories articles_categories_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-REVOKE CONNECT,TEMPORARY ON DATABASE typoteka FROM PUBLIC;
+ALTER TABLE ONLY public.articles_categories
+    ADD CONSTRAINT articles_categories_pkey PRIMARY KEY (article_id, category_id);
 
 
--- Completed on 2020-07-19 21:13:10
+--
+-- TOC entry 2722 (class 2606 OID 31386)
+-- Name: articles articles_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.articles
+    ADD CONSTRAINT articles_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2724 (class 2606 OID 31404)
+-- Name: categories categories_label_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.categories
+    ADD CONSTRAINT categories_label_key UNIQUE (label);
+
+
+--
+-- TOC entry 2726 (class 2606 OID 31402)
+-- Name: categories categories_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.categories
+    ADD CONSTRAINT categories_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2728 (class 2606 OID 31415)
+-- Name: comments comments_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.comments
+    ADD CONSTRAINT comments_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2720 (class 2606 OID 31375)
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2733 (class 2606 OID 31431)
+-- Name: articles_categories articles_categories_article_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.articles_categories
+    ADD CONSTRAINT articles_categories_article_id_fkey FOREIGN KEY (article_id) REFERENCES public.articles(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- TOC entry 2734 (class 2606 OID 31436)
+-- Name: articles_categories articles_categories_category_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.articles_categories
+    ADD CONSTRAINT articles_categories_category_id_fkey FOREIGN KEY (category_id) REFERENCES public.categories(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- TOC entry 2732 (class 2606 OID 31421)
+-- Name: comments comments_article_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.comments
+    ADD CONSTRAINT comments_article_id_fkey FOREIGN KEY (article_id) REFERENCES public.articles(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- TOC entry 2731 (class 2606 OID 31416)
+-- Name: comments comments_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.comments
+    ADD CONSTRAINT comments_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+-- Completed on 2020-07-29 04:07:04
 
 --
 -- PostgreSQL database dump complete

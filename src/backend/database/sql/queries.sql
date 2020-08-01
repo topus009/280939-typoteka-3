@@ -3,16 +3,16 @@
 SELECT
 id AS "Идентификатор",
 label AS "Наименование категории"
-FROM t_category
+FROM categories
 --------------------------------------------------------------------------------
 -- Получить список категорий для которых создана минимум одна публикация
 -- Идентификатор, Наименование категории);
 SELECT
 c.id AS "Идентификатор",
 c.label AS "Наименование категории"
-FROM t_category c
-JOIN t_article_t_category ac
-ON c.id = ac.article_category_fk_category_id
+FROM categories c
+JOIN articles_categories ac
+ON c.id = ac.category_id
 GROUP BY c.id
 ORDER BY c.id;
 --------------------------------------------------------------------------------
@@ -21,10 +21,10 @@ ORDER BY c.id;
 SELECT
 c.id AS "Идентификатор",
 c.label AS "Наименование категории",
-COUNT(ac.article_category_fk_article_id) AS "Количество публикаций в категории"
-FROM t_category c
-LEFT JOIN t_article_t_category ac
-ON c.id = ac.article_category_fk_category_id
+COUNT(ac.article_id) AS "Количество публикаций в категории"
+FROM categories c
+LEFT JOIN articles_categories ac
+ON c.id = ac.category_id
 GROUP BY c.id
 ORDER BY c.id;
 --------------------------------------------------------------------------------
@@ -39,11 +39,11 @@ a.created_date AS "Дата публикации",
 u.name AS "Имя и фамилия автора",
 COUNT(c) AS "Количество комментариев",
 (STRING_AGG(ca.label, ',')) AS "Наименование категорий"
-FROM t_article a
-JOIN t_user u ON u.id = 1
-LEFT JOIN t_comment c ON c.comment_fk_t_article_id = a.id
-LEFT JOIN t_article_t_category aca ON a.id = aca.article_category_fk_article_id
-LEFT JOIN t_category ca ON ca.id = aca.article_category_fk_category_id
+FROM articles a
+JOIN users u ON u.id = 1
+LEFT JOIN comments c ON c.article_id = a.id
+LEFT JOIN articles_categories aca ON a.id = aca.article_id
+LEFT JOIN categories ca ON ca.id = aca.category_id
 GROUP BY a.id, u.name
 ORDER BY a.created_date DESC;
 --------------------------------------------------------------------------------
@@ -60,11 +60,11 @@ a.img AS "Путь к изображению",
 u.name AS "Имя и фамилия автора",
 COUNT(c) AS "Количество комментариев",
 (STRING_AGG(ca.label, ',')) AS "Наименование категорий"
-FROM t_article a
-JOIN t_user u ON u.id = 1
-JOIN t_comment c ON c.comment_fk_t_article_id = a.id
-JOIN t_article_t_category aca ON a.id = aca.article_category_fk_article_id
-JOIN t_category ca ON ca.id = aca.article_category_fk_category_id
+FROM articles a
+JOIN users u ON u.id = 1
+JOIN comments c ON c.article_id = a.id
+JOIN articles_categories aca ON a.id = aca.article_id
+JOIN categories ca ON ca.id = aca.category_id
 WHERE a.id = 3
 GROUP BY a.id, u.name;
 --------------------------------------------------------------------------------
@@ -76,15 +76,12 @@ a.id AS "Идентификатор публикации",
 u.name AS "Имя и фамилия автора",
 c.comment AS "Текст комментария",
 c.created_date AS "ДАТА"
-FROM t_comment c
-JOIN t_user u ON u.id = c.comment_fk_t_user_id
-JOIN t_article a ON a.id = c.comment_fk_t_article_id
+FROM comments c
+JOIN users u ON u.id = c.user_id
+JOIN articles a ON a.id = c.article_id
 ORDER BY c.created_date DESC
 LIMIT 5;
 --------------------------------------------------------------------------------
--- Получить список комментариев для определённой публикации (Идентификатор
--- комментария, Идентификатор публикации, Имя и фамилия автора, Текст
--- комментария). Сначала новые комментарии;
 -- Получить список комментариев для определённой публикации (Идентификатор
 -- комментария, Идентификатор публикации, Имя и фамилия автора, Текст
 -- комментария). Сначала новые комментарии;
@@ -93,14 +90,14 @@ c.id AS "Идентификатор комментария",
 a.id AS "Идентификатор публикации",
 u.name AS "Имя и фамилия автора",
 c.comment AS "Текст комментария"
-FROM t_comment c
-JOIN t_user u ON u.id = c.comment_fk_t_user_id
-JOIN t_article a ON a.id = c.comment_fk_t_article_id
-WHERE a.id = 2
+FROM comments c
+JOIN users u ON u.id = c.user_id
+JOIN articles a ON a.id = c.article_id
+WHERE a.id = 3
 ORDER BY c.created_date DESC;
 --------------------------------------------------------------------------------
 -- Обновить заголовок определённой публикации на «Как я встретил Новый год»;
-UPDATE t_article
+UPDATE articles
 SET title = 'Как я встретил Новый год'
 WHERE id = 2;
 --------------------------------------------------------------------------------
