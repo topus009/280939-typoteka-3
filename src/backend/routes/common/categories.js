@@ -3,45 +3,60 @@
 const {Router} = require(`express`);
 const {HttpCodes} = require(`../../../../config/constants`);
 const {validate, rules} = require(`../../validation`);
+const {CustomError} = require(`../../../utils/utils`);
 
 const router = (api) => {
   const categoriesRouter = new Router();
 
-  categoriesRouter.get(`/`, (req, res) => {
-    const data = api.categories.getAll();
+  categoriesRouter.get(`/`, async (req, res) => {
+    const data = await api.categories.getAll();
     res.status(HttpCodes.OK).json(data);
   });
 
-  categoriesRouter.get(`/:id`, (req, res) => {
+  categoriesRouter.get(`/:id`, async (req, res, next) => {
+    try {
+      const {id} = req.params;
+      const data = await api.categories.findById(id);
+      if (data instanceof CustomError) {
+        return next(data);
+      }
+      return res.status(HttpCodes.OK).json(data);
+    } catch (error) {
+      return error;
+    }
+  });
+
+  categoriesRouter.post(`/`, rules.category(), validate, async (req, res) => {
+    const data = await api.categories.add(req.body);
+    res.status(HttpCodes.OK).json(data);
+  });
+
+  categoriesRouter.put(`/:id`, rules.category(), validate, async (req, res) => {
     const {id} = req.params;
-    const data = api.categories.findById(id);
+    const data = await api.categories.edit(id, req.body);
     res.status(HttpCodes.OK).json(data);
   });
 
-  categoriesRouter.post(`/`, rules.category(), validate, (req, res) => {
-    const data = api.categories.add(req.body);
-    res.status(HttpCodes.OK).json(data);
-  });
-
-  categoriesRouter.put(`/:id`, rules.category(), validate, (req, res) => {
+  categoriesRouter.delete(`/:id`, async (req, res, next) => {
     const {id} = req.params;
-    const data = api.categories.edit(id, req.body);
+    try {
+      const data = await api.categories.delete(id);
+      if (data instanceof CustomError) {
+        return next(data);
+      }
+      return res.status(HttpCodes.OK).json(data);
+    } catch (error) {
+      return error;
+    }
+  });
+
+  categoriesRouter.get(`/categories/my`, async (req, res) => {
+    const data = await api.categories.getAll();
     res.status(HttpCodes.OK).json(data);
   });
 
-  categoriesRouter.delete(`/:id`, (req, res) => {
-    const {id} = req.params;
-    const data = api.categories.delete(id);
-    res.status(HttpCodes.OK).json(data);
-  });
-
-  categoriesRouter.get(`/categories/my`, (req, res) => {
-    const data = api.categories.getAll();
-    res.status(HttpCodes.OK).json(data);
-  });
-
-  categoriesRouter.get(`/categories/count`, (req, res) => {
-    const data = api.categories.getCategoriesCount();
+  categoriesRouter.get(`/categories/count`, async (req, res) => {
+    const data = await api.categories.getCategoriesCount();
     res.status(HttpCodes.OK).json(data);
   });
 

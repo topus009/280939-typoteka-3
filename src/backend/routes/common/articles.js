@@ -4,27 +4,41 @@ const path = require(`path`);
 const fsFromises = require(`fs`).promises;
 const {Router} = require(`express`);
 const {HttpCodes} = require(`../../../../config/constants`);
-const {isFileExistsAsync} = require(`../../../utils/utils`);
+const {isFileExistsAsync, CustomError} = require(`../../../utils/utils`);
 const {validate, rules} = require(`../../validation`);
 
 const router = (api) => {
   const articlesRouter = new Router();
 
-  articlesRouter.get(`/`, (req, res) => {
-    const data = api.articles.getAll();
+  articlesRouter.get(`/`, async (req, res) => {
+    const data = await api.articles.getAll();
     res.status(HttpCodes.OK).json(data);
   });
 
-  articlesRouter.get(`/:id`, (req, res) => {
-    const {id} = req.params;
-    const data = api.articles.findById(id);
-    res.status(HttpCodes.OK).json(data);
+  articlesRouter.get(`/:id`, async (req, res, next) => {
+    try {
+      const {id} = req.params;
+      const data = await api.articles.findById(id);
+      if (data instanceof CustomError) {
+        return next(data);
+      }
+      return res.status(HttpCodes.OK).json(data);
+    } catch (error) {
+      return error;
+    }
   });
 
-  articlesRouter.get(`/categories/:categoryId`, (req, res) => {
-    const {categoryId} = req.params;
-    const data = api.articles.getArticlesByCategoryId(categoryId);
-    res.status(HttpCodes.OK).json(data);
+  articlesRouter.get(`/categories/:categoryId`, async (req, res, next) => {
+    try {
+      const {categoryId} = req.params;
+      const data = await api.articles.getArticlesByCategoryId(categoryId);
+      if (data instanceof CustomError) {
+        return next(data);
+      }
+      return res.status(HttpCodes.OK).json(data);
+    } catch (error) {
+      return error;
+    }
   });
 
   articlesRouter.post(`/`, rules.article(), validate, async (req, res) => {
@@ -35,54 +49,68 @@ const router = (api) => {
       delete req.body.file;
       req.body.img = backendImgPath;
     }
-    const data = api.articles.add(req.body);
+    const data = await api.articles.add(req.body);
     res.status(HttpCodes.OK).json(data);
   });
 
-  articlesRouter.delete(`/:id`, (req, res) => {
-    const {id} = req.params;
-    const data = api.articles.delete(id);
-    res.status(HttpCodes.OK).json(data);
-  });
-
-  articlesRouter.put(`/:id`, rules.article(), validate, async (req, res) => {
-    const {id} = req.params;
-    if (req.body.file) {
-      const {file} = req.body;
-      const backendImgPath = `img/articles/${file.filename}`;
-      const pathToDataBase = path.join(process.cwd(), `./src/frontend/public/`);
-      const prevArticle = api.articles.findById(id);
-      if (prevArticle.img) {
-        const pathToPrevFile = `${pathToDataBase}${prevArticle.img}`;
-        const isExists = await isFileExistsAsync(pathToPrevFile);
-        if (isExists) {
-          await fsFromises.unlink(pathToPrevFile);
-        }
+  articlesRouter.delete(`/:id`, async (req, res, next) => {
+    try {
+      const {id} = req.params;
+      const data = await api.articles.delete(id);
+      if (data instanceof CustomError) {
+        return next(data);
       }
-      await fsFromises.rename(file.path, `${pathToDataBase}${backendImgPath}`);
-      delete req.body.file;
-      req.body.img = backendImgPath;
+      return res.status(HttpCodes.OK).json(data);
+    } catch (error) {
+      return error;
     }
-    const data = api.articles.edit(id, req.body);
+  });
+
+  articlesRouter.put(`/:id`, rules.article(true), validate, async (req, res, next) => {
+    const {id} = req.params;
+    try {
+      if (req.body.file) {
+        const {file} = req.body;
+        const backendImgPath = `img/articles/${file.filename}`;
+        const pathToDataBase = path.join(process.cwd(), `./src/frontend/public/`);
+        const prevArticle = await api.articles.findById(id);
+        if (prevArticle.img) {
+          const pathToPrevFile = `${pathToDataBase}${prevArticle.img}`;
+          const isExists = await isFileExistsAsync(pathToPrevFile);
+          if (isExists) {
+            await fsFromises.unlink(pathToPrevFile);
+          }
+        }
+        await fsFromises.rename(file.path, `${pathToDataBase}${backendImgPath}`);
+        delete req.body.file;
+        req.body.img = backendImgPath;
+      }
+      const data = await api.articles.edit(id, req.body);
+      if (data instanceof CustomError) {
+        return next(data);
+      }
+      return res.status(HttpCodes.OK).json(data);
+    } catch (error) {
+      return error;
+    }
+  });
+
+  articlesRouter.get(`/articles/my`, async (req, res) => {
+    const data = await api.articles.getAll();
     res.status(HttpCodes.OK).json(data);
   });
 
-  articlesRouter.get(`/articles/my`, (req, res) => {
-    const data = api.articles.getAll();
-    res.status(HttpCodes.OK).json(data);
-  });
-
-  articlesRouter.get(`/articles/search`, (req, res) => {
+  articlesRouter.get(`/articles/search`, async (req, res) => {
     const {query} = req.query;
     let data = {};
     if (query) {
-      data = api.articles.searchByTitle(query);
+      data = await api.articles.searchByTitle(query);
     }
     res.status(HttpCodes.OK).json(data);
   });
 
-  articlesRouter.get(`/articles/hot`, (req, res) => {
-    const data = api.articles.getHotArticles();
+  articlesRouter.get(`/articles/hot`, async (req, res) => {
+    const data = await api.articles.getHotArticles();
     res.status(HttpCodes.OK).json(data);
   });
 
