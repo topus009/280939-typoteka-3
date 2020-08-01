@@ -1,4 +1,4 @@
 mixin searchResult(result)
   .search__result
-    +formattedDate(result.createdDate, {class: 'search__date'})
+    +formattedDate(result.created_date, {class: 'search__date'})
     a.search__link(href=`/articles/article/${result.id}`) !{result.title}

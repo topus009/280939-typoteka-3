@@ -10,13 +10,13 @@ mixin getError(errors, field)
       if error[field]
         p.comments__error= `${error[field]}`
 
-mixin countComments(articleId, comments)
+mixin countComments(article_id, comments)
   - count = 0;
   each comment in comments
-    if comment.articleId === articleId
+    if comment.article_id === article_id
       - count = +count + 1;
   if count
-    a.preview__comment(href=`/articles/article/${articleId}`)
+    a.preview__comment(href=`/articles/article/${article_id}`)
       | Комментарии
       span.preview__cloud
       |

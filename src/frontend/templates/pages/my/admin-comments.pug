@@ -13,10 +13,9 @@ include ../../common/index.pug
       section.main-page__publication.publication
         h1.publication__title Комментарии
         ul.publication__list
-          each myArticleComments, articleId in myComments
+          each myComment in myComments
             each articleData in articles
               - currentArticleData
-              if articleId === articleData.id
+              if myComment.article_id === articleData.id
                 - currentArticleData = articleData
-                each myArticleComment in myArticleComments
-                  +adminComment(currentArticleData, myArticleComment, currentUser)
+                +adminComment(currentArticleData, myComment, currentUser)
