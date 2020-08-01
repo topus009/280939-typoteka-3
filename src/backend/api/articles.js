@@ -1,128 +1,178 @@
 "use strict";
 
-const {nanoid} = require(`nanoid`);
+const {Op, literal} = require(`sequelize`);
 const dayjs = require(`dayjs`);
 const {
   DATE_FORMAT,
   HttpCodes,
 } = require(`../../../config/constants`);
-const {CustomError} = require(`../../utils/utils`);
-const {getHighlitedMatches} = require(`./utils`);
+const {
+  CustomError,
+  sqlzObjsToArr,
+  sqlzExcludeFieldsFromObjs,
+  sqlzParse,
+  getHighlitedMatches,
+} = require(`../../utils/utils`);
 
 const articlesApi = (entityName, database) => ({
-  delete(id) {
-    const article = database[entityName].find((item) => item.id === +id);
-    if (!article) {
-      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_ARTICLE_ID`, {id}));
+  async getAll() {
+    try {
+      const data = await database[entityName].findAll({
+        include: [
+          {
+            model: database.Category,
+            as: `categories`,
+            required: false,
+            attributes: [`id`],
+            through: {attributes: []}
+          },
+        ]
+      });
+      return sqlzObjsToArr(data, `categories`, `id`);
+    } catch (error) {
+      return error;
     }
-    database[entityName] = database[entityName].filter((item) => item.id !== +id);
-    database.comments = database.comments.filter((item) => item.articleId !== +id);
-    return id;
   },
 
-  add(data) {
-    const id = nanoid();
-    const createdDate = data.createdDate ? dayjs(data.createdDate).format(DATE_FORMAT) : dayjs().format(DATE_FORMAT);
-
-    const categories = !Array.isArray(data.categories) ? [data.categories] : data.categories;
-    database[entityName].push({
-      id,
-      ...data,
-      createdDate,
-      categories,
-    });
-    return id;
-  },
-
-  edit(id, data) {
-    let article;
-
-    const targetArticle = database[entityName].find((item) => item.id === +id);
-    if (!targetArticle) {
-      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_ARTICLE_ID`, {id}));
-    }
-
-    database[entityName] = database[entityName].map((item) => {
-      if (item.id === +id) {
-
-        const categories = !Array.isArray(data.categories) ? [data.categories] : data.categories;
-
-        article = {
-          ...item,
-          ...data,
-          categories,
-        };
-        return article;
-      } else {
-        return item;
+  async findById(id) {
+    try {
+      let article = await database[entityName].findByPk(+id);
+      if (!article) {
+        throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_ARTICLE_ID`, {id}));
       }
-    });
-    return article;
-  },
-
-  getAll() {
-    return database[entityName];
-  },
-
-  findById(id) {
-    const articles = database[entityName];
-    const article = articles.find((item) => item.id === +id);
-    if (!article) {
-      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_ARTICLE_ID`, {id}));
+      const categories = await article.getCategories({raw: true});
+      article = article.toJSON();
+      const data = {
+        ...article,
+        "categories": categories.map((el) => el.id),
+        'created_date': dayjs(article.created_date).format(`DD.MM.YYYY`)
+      };
+      return data;
+    } catch (error) {
+      return error;
     }
-    return {
-      ...article,
-      createdDate: dayjs(article.createdDate).format(`DD.MM.YYYY`)
-    };
   },
 
-  getArticlesByCategoryId(id) {
-    const articles = database[entityName];
-    const categories = database.categories;
-    const category = categories.find((item) => item.id === +id);
-    if (!category) {
-      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_CATEGORY_ID`, {id}));
-    }
-    return articles.filter((article) => article.categories.includes(+id));
-  },
-
-  searchByTitle(query) {
-    const articles = database[entityName];
-    const results = [];
-
-    articles.forEach((article) => {
-      const formattedMatch = getHighlitedMatches(query, article.title);
-      if (formattedMatch) {
-        results.push({
-          ...article,
-          title: formattedMatch
-        });
+  async delete(id) {
+    try {
+      const num = await database[entityName].destroy({where: {id: +id}});
+      if (!num) {
+        throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_ARTICLE_ID`, {id}));
       }
-    });
-    return results;
+      return id;
+    } catch (error) {
+      return error;
+    }
   },
 
-  getHotArticles() {
+  async add(data) {
+    try {
+      const createdDate = data.created_date ?
+        dayjs(data.created_date).format(DATE_FORMAT) : dayjs().format(DATE_FORMAT);
+
+      const article = await database[entityName].create({
+        ...data,
+        'created_date': createdDate,
+      });
+      await article.setCategories(Array.isArray(data.categories) ? data.categories : [data.categories]);
+      return article.id;
+    } catch (error) {
+      return error;
+    }
+  },
+
+  async edit(id, data) {
+    try {
+      const targetArticle = await database[entityName].findByPk(+id);
+      if (!targetArticle) {
+        throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_ARTICLE_ID`, {id}));
+      }
+      const article = await targetArticle.update(data);
+      let categories = Array.isArray(data.categories) ? data.categories : [data.categories];
+      categories = categories.filter(Boolean);
+      if (categories.length) {
+        await article.setCategories(categories);
+      }
+      return {...article.toJSON(), categories};
+    } catch (error) {
+      return error;
+    }
+  },
+
+  async getArticlesByCategoryId(id) {
+    try {
+      const category = await database.Category.findByPk(+id);
+      if (!category) {
+        throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_CATEGORY_ID`, {id}));
+      }
+      console.log(category.getArticles);
+      const data = await category.getArticle({
+        include: [
+          {
+            model: database.Category,
+            as: `categories`,
+            required: false,
+            attributes: [`id`],
+            through: {attributes: []},
+          },
+        ]
+      });
+      const prepedData = sqlzExcludeFieldsFromObjs(data, [`articles_categories`]);
+      return sqlzObjsToArr(prepedData, `categories`, `id`);
+    } catch (error) {
+      return error;
+    }
+  },
+
+  async searchByTitle(query) {
+    try {
+      const data = await database[entityName].findAll({
+        where: {
+          title: {[Op.iLike]: `%${query}%`}
+        },
+        include: [
+          {
+            model: database.Category,
+            as: `categories`,
+            required: false,
+            attributes: [`id`],
+            through: {attributes: []}
+          },
+        ]
+      });
+      const articles = sqlzObjsToArr(data, `categories`, `id`);
+      const results = [];
+      articles.forEach((article) => {
+        const formattedMatch = getHighlitedMatches(query, article.title);
+        if (formattedMatch) {
+          results.push({
+            ...article,
+            title: formattedMatch
+          });
+        }
+      });
+      return results;
+    } catch (error) {
+      return error;
+    }
+  },
+
+  async getHotArticles() {
     const MAX_HOT_COUNT = 4;
-
-    const articles = database[entityName];
-    const comments = database.comments;
-
-    const getCommentsCount = (id, commentsData) => {
-      const commentsCount = commentsData.filter((el) => el.articleId === id);
-      if (commentsCount.length) {
-        return commentsCount.length;
-      }
-      return 0;
-    };
-    const sortedArticlesByCommentsCount =
-      articles
-        .sort((a, b) => (getCommentsCount(b.id, comments)) - getCommentsCount(a.id, comments))
-        .slice(0, MAX_HOT_COUNT);
-    const articlesCount = sortedArticlesByCommentsCount.map((article) => {
-      return [article.id, comments.filter((el) => el.articleId === article.id).length];
-    });
-    return articlesCount;
+    try {
+      const articles = await database[entityName].findAll({
+        attributes: {
+          include: [
+            [literal(`(SELECT COUNT(*) FROM comments WHERE comments.article_id = "Article"."id")`), `commentsCount`],
+          ]
+        },
+        order: [[literal(`"commentsCount"`), `DESC`]],
+        limit: MAX_HOT_COUNT,
+      });
+      return sqlzParse(articles).map((item) => ([item.id, +item.commentsCount]));
+    } catch (error) {
+      return error;
+    }
   },
 });
 

@@ -4,68 +4,91 @@ const {HttpCodes} = require(`../../../config/constants`);
 const {CustomError} = require(`../../utils/utils`);
 
 const categoriesApi = (entityName, database) => ({
-  delete(id) {
-    const category = database[entityName].find((item) => item.id === +id);
-    if (!category) {
-      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_CATEGORY_ID`, {id}));
+  async getAll() {
+    try {
+      return await database[entityName].findAll();
+    } catch (error) {
+      return error;
     }
-    database[entityName] = database[entityName].filter((item) => item.id !== +id);
-    return id;
   },
 
-  add(data) {
-    const id = database[entityName].length + 1;
-    database[entityName].push({
-      id,
-      ...data,
-    });
-    return id;
-  },
-
-  edit(id, data) {
-    database[entityName] = database[entityName].map((item) => {
-      if (item.id === +id) {
-        return {
-          ...item,
-          ...data
-        };
-      } else {
-        return item;
+  async findById(id) {
+    try {
+      const category = await database[entityName].findByPk(+id);
+      if (!category) {
+        throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_CATEGORY_ID`, {id}));
       }
-    });
-    return id;
-  },
-
-  findById(id) {
-    const category = database[entityName].find((item) => item.id === +id);
-    if (!category) {
-      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_CATEGORY_ID`, {id}));
+      return category;
+    } catch (error) {
+      return error;
     }
-    return category;
   },
 
-  getAll() {
-    return database[entityName];
-  },
-
-  getCategoriesCount() {
-    const articles = database.articles;
-    const categoriesCount = {};
-
-    articles.forEach((article) => {
-      article.categories.forEach((id) => {
-        if (!categoriesCount[id]) {
-          categoriesCount[id] = [];
-          categoriesCount[id].push(null);
-        } else {
-          categoriesCount[id].push(null);
+  async delete(id) {
+    try {
+      const category = await database[entityName].findByPk(+id);
+      if (!category) {
+        throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_CATEGORY_ID`, {id}));
+      }
+      const articles = await category.getArticle();
+      let blockedArticles = [];
+      for (const article of articles) {
+        const categoriesCount = await article.countCategories();
+        if (categoriesCount === 1) {
+          blockedArticles.push(article.id);
         }
-      });
-    });
-    Object.keys(categoriesCount).forEach((id) => {
-      categoriesCount[id] = categoriesCount[id].length;
-    });
-    return categoriesCount;
+      }
+      if (blockedArticles.length) {
+        throw new CustomError(HttpCodes.BAD_REQUEST, _f(`DELETING_CATEGORY_HAS_ARTICLES`, {ids: blockedArticles}));
+      }
+      await category.destroy();
+      return id;
+    } catch (error) {
+      return error;
+    }
+  },
+
+  async add(data) {
+    try {
+      const category = await database[entityName].create(data);
+      return category;
+    } catch (error) {
+      if (error.name === `SequelizeUniqueConstraintError`) {
+        return new CustomError(HttpCodes.BAD_REQUEST, _f(`DUPLICATE_CATEGORY_LABEL`));
+      }
+      return error;
+    }
+  },
+
+  async edit(id, data) {
+    try {
+      const targetCategory = await database[entityName].findByPk(+id);
+      if (!targetCategory) {
+        throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_CATEGORY_ID`, {id}));
+      }
+      return await targetCategory.update(data);
+    } catch (error) {
+      if (error.name === `SequelizeUniqueConstraintError`) {
+        return new CustomError(HttpCodes.BAD_REQUEST, _f(`DUPLICATE_CATEGORY_LABEL`));
+      }
+      return error;
+    }
+  },
+
+  async getCategoriesCount() {
+    try {
+      const categories = await database[entityName].findAll();
+      const categoriesCount = {};
+      for (const category of categories) {
+        const count = await category.countArticle();
+        if (count) {
+          categoriesCount[category.id] = count;
+        }
+      }
+      return categoriesCount;
+    } catch (error) {
+      return error;
+    }
   }
 });
 

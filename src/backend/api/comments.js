@@ -1,5 +1,6 @@
 "use strict";
 
+const {Op} = require(`sequelize`);
 const dayjs = require(`dayjs`);
 const {
   DATE_FORMAT,
@@ -8,71 +9,73 @@ const {
 } = require(`../../../config/constants`);
 const {CustomError} = require(`../../utils/utils`);
 
-const commentsApi = (entityName, database, api) => ({
-  delete(id) {
-    const prevCommentsLength = database[entityName].length;
-    database[entityName] = database[entityName].filter((item) => item.id !== +id);
-    if (prevCommentsLength === database[entityName].length) {
-      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_COMMENT_ID`, {id}));
+const commentsApi = (entityName, database) => ({
+  async getAll() {
+    return await database[entityName].findAll();
+  },
+
+  async findById(id) {
+    try {
+      const comment = await database[entityName].findByPk(+id);
+      if (!comment) {
+        throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_COMMENT_ID`, {id}));
+      }
+      return comment;
+    } catch (error) {
+      return error;
     }
-    return id;
   },
 
-  add(articleId, data) {
-    const id = database[entityName].length + 1;
-    const {id: userId} = api.users(`users`, database, api).getUserByName(MY_NAME);
-    const article = database.articles.find((item) => item.id === +articleId);
-    if (!article) {
-      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_ARTICLE_ID`, {id}));
+  async delete(id) {
+    try {
+      const num = await database[entityName].destroy({where: {id: +id}});
+      if (!+num) {
+        throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_COMMENT_ID`, {id}));
+      }
+      return id;
+    } catch (error) {
+      return error;
     }
-    database[entityName].push({
-      id,
-      ...data,
-      articleId: +articleId,
-      userId,
-      createdDate: dayjs().format(DATE_FORMAT),
-    });
-    return id;
   },
 
-  findById(id) {
-    const comment = database[entityName].find((item) => item.id === +id);
-    if (!comment) {
-      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_COMMENT_ID`, {id}));
-    }
-    return comment || null;
-  },
-
-  getAll() {
-    return database[entityName];
-  },
-
-  getCommentsByArticleId(articleId) {
-    const articleInDB = database.articles.find((item) => item.id === +articleId);
+  async add(articleId, data) {
+    const articleInDB = await database.Article.findByPk(+articleId);
     if (!articleInDB) {
       throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_ARTICLE_ID`, {id: articleId}));
     }
-    const comments = database[entityName].filter((comment) => comment.articleId === +articleId);
-    return comments || [];
+    const {id: userId} = await database.User.findOne({where: {name: {[Op.like]: MY_NAME}}});
+    return await database[entityName].create({
+      ...data,
+      'article_id': +articleId,
+      'user_id': userId,
+      'created_date': dayjs().format(DATE_FORMAT),
+    });
   },
 
-  getMyComments() {
-    const comments = database[entityName];
-    const currentUser = api.users(`users`, database, api).getUserByName(MY_NAME);
-    return comments.filter((comment) => comment.userId === currentUser.id);
+  async getCommentsByArticleId(articleId) {
+    try {
+      const articleInDB = await database.Article.findByPk(+articleId);
+      if (!articleInDB) {
+        throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_ARTICLE_ID`, {id: articleId}));
+      }
+      const comments = database[entityName].findAll({where: {'article_id': +articleId}});
+      return comments;
+    } catch (error) {
+      return error;
+    }
   },
 
-  getLatestComments() {
+  async getMyComments() {
+    const currentUser = await database.User.findOne({where: {name: {[Op.like]: MY_NAME}}});
+    return await database[entityName].findAll({where: {'user_id': currentUser.id}});
+  },
+
+  async getLatestComments() {
     const MAX_LATEST_COUNT = 3;
-    const comments = database[entityName];
-
-    const formatDate = (value) => dayjs(value).valueOf();
-
-    const sortedCommentsByLatesDate =
-      comments
-        .sort((a, b) => (formatDate(b.createdDate) - formatDate(a.createdDate)))
-        .slice(0, MAX_LATEST_COUNT);
-    return sortedCommentsByLatesDate;
+    return await database[entityName].findAll({
+      order: [[`created_date`, `DESC`]],
+      limit: MAX_LATEST_COUNT,
+    });
   }
 });
 
