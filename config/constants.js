@@ -34,6 +34,7 @@ const MockFilesPaths = {
 };
 
 const BACKEND_API_PREFIX = `/api`;
+const ARTICLES_PAGE_LIMIT = 8;
 
 module.exports = {
   ExitCodes,
@@ -48,4 +49,5 @@ module.exports = {
   BACKEND_API_PREFIX,
   DATE_FORMAT,
   MY_NAME,
+  ARTICLES_PAGE_LIMIT,
 };

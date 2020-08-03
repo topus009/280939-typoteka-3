@@ -3,7 +3,7 @@
 const fs = require(`fs`);
 const path = require(`path`);
 const dayjs = require(`dayjs`);
-const {ExitCodes, DATE_FORMAT, HttpCodes} = require(`../../config/constants`);
+const {ExitCodes, DATE_FORMAT, HttpCodes, ARTICLES_PAGE_LIMIT} = require(`../../config/constants`);
 const {createLogger, LoggerNames} = require(`./logger`);
 
 const log = createLogger(LoggerNames.COMMON);
@@ -106,12 +106,17 @@ const sqlzParse = (data) => JSON.parse(JSON.stringify(data));
 
 const sqlzObjsToArr = (data, key, objKey) => {
   const parsedData = sqlzParse(data);
-  return parsedData.map((item) => {
+  const formattedData = parsedData.map((item) => {
+    const formattedField = {};
+    if (item[key]) {
+      formattedField[key] = item[key].map((el) => el[objKey]);
+    }
     return ({
       ...item,
-      [key]: item[key].map((el) => el[objKey])
+      ...formattedField,
     });
   });
+  return formattedData;
 };
 
 const sqlzExcludeFieldsFromObjs = (data = [], fields = []) => {
@@ -134,6 +139,18 @@ const getHighlitedMatches = (queryString, string) => {
   return newString.length !== string.length ? newString : ``;
 };
 
+const getPaginationData = ({articlesTotalCount, page}) => {
+  if (page) {
+    return {
+      activePage: +page,
+      pagesCount: Math.ceil(articlesTotalCount / ARTICLES_PAGE_LIMIT),
+      articlesTotalCount,
+    };
+  } else {
+    return {};
+  }
+};
+
 module.exports = {
   getRangomInteger,
   shuffle,
@@ -151,4 +168,5 @@ module.exports = {
   sqlzObjsToArr,
   sqlzExcludeFieldsFromObjs,
   sqlzParse,
+  getPaginationData,
 };
