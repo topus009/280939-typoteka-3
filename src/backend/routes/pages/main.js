@@ -2,12 +2,16 @@
 
 const {Router} = require(`express`);
 const {HttpCodes} = require(`../../../../config/constants`);
-const {CustomError} = require(`../../../utils/utils`);
+const {
+  CustomError,
+  getPaginationData,
+} = require(`../../../utils/utils`);
 
 const mainPageRouter = new Router();
 
 const router = (api) => {
   mainPageRouter.get(`/`, async (req, res) => {
+    const page = req.query.page || 1;
     try {
       const [
         users,
@@ -17,14 +21,16 @@ const router = (api) => {
         lastComments,
         mostPopularArticles,
         categoriesCount,
+        articlesTotalCount,
       ] = await Promise.all([
         api.users.getAll(),
         api.categories.getAll(),
-        api.articles.getAll(),
+        api.articles.getArticlesByPage(page),
         api.comments.getAll(),
         api.comments.getLatestComments(),
         api.articles.getHotArticles(),
         api.categories.getCategoriesCount(),
+        api.articles.getTotalCount(),
       ]);
 
       const data = {
@@ -35,6 +41,7 @@ const router = (api) => {
         lastComments,
         mostPopularArticles,
         categoriesCount,
+        ...getPaginationData({articlesTotalCount, page}),
       };
 
       return res.status(HttpCodes.OK).json(data);
@@ -62,19 +69,22 @@ const router = (api) => {
 
   mainPageRouter.get(`/category/:id`, async (req, res, next) => {
     const {id} = req.params;
+    const page = req.query.page || 1;
     try {
-      const articles = await api.articles.getArticlesByCategoryId(id);
+      const articles = await api.articles.getArticlesByCategoryId(id, page);
       if (articles instanceof CustomError) {
-        next(articles);
+        return next(articles);
       }
       const [
         categories,
         categoriesCount,
         comments,
+        articlesTotalCount,
       ] = await Promise.all([
         api.categories.getAll(),
         api.categories.getCategoriesCount(),
         api.comments.getAll(),
+        api.articles.getTotalCount(+id),
       ]);
 
       const data = {
@@ -83,6 +93,7 @@ const router = (api) => {
         comments,
         categoriesCount,
         activeCategoryId: id,
+        ...getPaginationData({articlesTotalCount, page}),
       };
 
       return res.status(HttpCodes.OK).json(data);

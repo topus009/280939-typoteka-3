@@ -6,7 +6,8 @@ const axios = require(`../axios`);
 const mainRouter = new Router();
 
 mainRouter.get(`/`, async (req, res) => {
-  const {data} = await axios.get(`/pages/main`);
+  const {page} = req.query;
+  const {data} = await axios.get(`/pages/main`, {params: {page}});
   res.render(`pages/main/main`, data);
 });
 
@@ -22,7 +23,8 @@ mainRouter.get(`/search`, async (req, res) => {
 
 mainRouter.get(`/category/:id`, async (req, res) => {
   const {id} = req.params;
-  const {data} = await axios.get(`/pages/main/category/${id}`);
+  const {page} = req.query;
+  const {data} = await axios.get(`/pages/main/category/${id}`, {params: {page}});
   res.render(`pages/main/category`, data);
 });
 

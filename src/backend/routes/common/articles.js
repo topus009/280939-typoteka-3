@@ -10,9 +10,22 @@ const {validate, rules} = require(`../../validation`);
 const router = (api) => {
   const articlesRouter = new Router();
 
-  articlesRouter.get(`/`, async (req, res) => {
-    const data = await api.articles.getAll();
-    res.status(HttpCodes.OK).json(data);
+  articlesRouter.get(`/`, async (req, res, next) => {
+    let data;
+    const {page} = req.query;
+    try {
+      if (!page) {
+        data = await api.articles.getAll();
+      } else {
+        data = await api.articles.getArticlesByPage(page);
+      }
+      if (data instanceof CustomError) {
+        return next(data);
+      }
+      return res.status(HttpCodes.OK).json(data);
+    } catch (error) {
+      return error;
+    }
   });
 
   articlesRouter.get(`/:id`, async (req, res, next) => {
@@ -31,7 +44,8 @@ const router = (api) => {
   articlesRouter.get(`/categories/:categoryId`, async (req, res, next) => {
     try {
       const {categoryId} = req.params;
-      const data = await api.articles.getArticlesByCategoryId(categoryId);
+      const {page} = req.query;
+      const data = await api.articles.getArticlesByCategoryId(categoryId, page);
       if (data instanceof CustomError) {
         return next(data);
       }
