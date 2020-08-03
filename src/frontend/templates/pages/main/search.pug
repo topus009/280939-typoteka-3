@@ -15,10 +15,10 @@ include ../../common/index.pug
     main
       section.search-page
         //- add class fixes long list
-        .search-page__wrapper(class=`${emptyWrapperClass}`)
+        .search-page__wrapper(class=emptyWrapperClass)
           h1 Поиск
           //- add class fixes long list
-          .search.search-page__form(class=`${searchFormClass}`)
+          .search.search-page__form(class=searchFormClass)
             form(action=`/search` method='GET')
               label
                 input(name='query' type='text' placeholder='Что ищем?' value=`${query || ''}`)

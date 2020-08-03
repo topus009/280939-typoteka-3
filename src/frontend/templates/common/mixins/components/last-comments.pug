@@ -11,6 +11,6 @@ mixin lastComments(lastComments, users)
           li.last__list-item
             each user in users
               if comment.user_id === user.id
-                img.last__list-image(src=`${user.avatar_small}` width='20' height='20' alt='Аватар пользователя')
-                b.last__list-name= `${user.name}`
-            a.last__list-link(href=`/articles/article/${comment.article_id}`)= `${comment.comment}`
+                img.last__list-image(src=user.avatar_small width='20' height='20' alt='Аватар пользователя')
+                b.last__list-name= user.name
+            a.last__list-link(href=`/articles/article/${comment.article_id}`)= comment.comment

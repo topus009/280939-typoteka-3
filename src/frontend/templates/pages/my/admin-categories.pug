@@ -21,7 +21,7 @@ include ../../common/index.pug
           if errors
             each error in errors
               if !error.id
-                p.comments__error= `${error.label}`
+                p.comments__error= error.label
         ul.category__list
           each categoryData in categories
             +adminCategory(categoryData, errors)

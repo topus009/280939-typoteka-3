@@ -1,10 +1,10 @@
 mixin adminComment(article, comment, user)
   li.publication__list-item
     .publication__header
-      img.publication__list-image(src=`${user.avatar_small}` width='20' height='20' alt='Аватар пользователя')
-      b.publication__list-name= `${user.name}`
+      img.publication__list-image(src=user.avatar_small width='20' height='20' alt='Аватар пользователя')
+      b.publication__list-name= user.name
       +formattedDate(comment.created_date, {class: 'publication__item-time'})
-    a.publication__item-text(href=`/articles/article/${article.id}`)= `${article.title}`
-    p.publication__text-strong= `${comment.comment}`
+    a.publication__item-text(href=`/articles/article/${article.id}`)= article.title
+    p.publication__text-strong= comment.comment
     button.publication__button.button.button--close-item(type='button')
       span.visually-hidden Закрыть строку списка

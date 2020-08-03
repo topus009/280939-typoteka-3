@@ -13,5 +13,5 @@ mixin hottestArticles(articles, mostPopularArticles)
           each articleData in articles
             if id === articleData.id
               li.hot__list-item
-                a.hot__list-link(href=`/articles/article/${articleData.id}`)= `${articleData.title}`
+                a.hot__list-link(href=`/articles/article/${articleData.id}`)= articleData.title
                   sup.hot__link-sup= ` ${count}`

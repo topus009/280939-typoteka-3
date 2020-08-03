@@ -1,6 +1,6 @@
 mixin footer(props = {})
   - className = `footer ${props.mod ? ` footer--${props.mod}` : ''}`
-  footer(class=`${className}`)
+  footer(class=className)
     a.footer__copyright(href='#' aria-label='HTMLAcademy')
       img(src='img/icons/HTMLAcademyLogo.svg' width='112' height='50' alt='HTMLAcademy')
     span •

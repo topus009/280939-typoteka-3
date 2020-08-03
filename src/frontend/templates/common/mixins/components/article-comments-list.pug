@@ -3,7 +3,7 @@ mixin articleCommentsForm(currentUser, article_id, errors)
     .comments__footer.comments__footer--user
       form(action=`/articles/article/${article_id}` method='POST')
         .comments__avatar.avatar
-          img(src=`${currentUser.avatar}` alt='аватар пользователя')
+          img(src=currentUser.avatar alt='аватар пользователя')
         label
           textarea(rows='1' name='comment' placeholder='Присоединиться к обсуждению')
         button.comments__button.button.button--colored(type='submit') Опубликовать
@@ -19,12 +19,12 @@ mixin articleCommentsForm(currentUser, article_id, errors)
 mixin articleCommentItem({comment, user})
   li.comments__comment
     .comments__avatar.avatar
-      img(src=`${user.avatar}` alt='аватар пользователя')
+      img(src=user.avatar alt='аватар пользователя')
     .comments__text
       .comments__head
         p= `${user.name} •`
         +formattedDate(comment.created_date, {class: 'comments__date'})
-      p.comments__message= `${comment.comment}`
+      p.comments__message= comment.comment
 
 mixin articleCommentsList({currentUser, comments, users, article_id, errors})
   .post__wrapper.post__wrapper--comments

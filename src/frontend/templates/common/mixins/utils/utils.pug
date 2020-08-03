@@ -2,13 +2,13 @@ mixin formattedDate(value, componentAttrs = {})
   - valueArr = `${value}`.split(' ');
   - dateTime = valueArr.join('T');
   - textTime =  valueArr.join(', ');
-  time(datetime=`${dateTime}`)&attributes(componentAttrs)= `${textTime}`
+  time(datetime=dateTime)&attributes(componentAttrs)= textTime
 
 mixin getError(errors, field)
   if errors
     each error in errors
       if error[field]
-        p.comments__error= `${error[field]}`
+        p.comments__error= error[field]
 
 mixin countComments(article_id, comments)
   - count = 0;

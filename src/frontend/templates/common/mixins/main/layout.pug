@@ -5,7 +5,7 @@ mixin body({mod = '', bodyAttrs = {}, colored = false, noFooter = false, footerP
   else
     - wrapperClassName = `wrapper ${mod ? ` wrapper--${mod}` : ''}`
   body&attributes(bodyAttrs)
-    div(class=`${wrapperClassName}`)
+    div(class=wrapperClassName)
       if block
         block
       if !noFooter

@@ -2,13 +2,13 @@ mixin adminCategory(category)
   - itemId = `modify-form-category-${category.id}`
   li.category__list-item
     form(action='/my/categories' method='POST')
-      input(id=`${itemId}` type='text' name='label' value=`${category.label}`)
-      input(type='text' name='id' value=`${category.id}` style={'display': 'none'})
-      label(for=`${itemId}`)
+      input(id=itemId type='text' name='label' value=category.label)
+      input(type='text' name='id' value=category.id style={'display': 'none'})
+      label(for=itemId)
         span.visually-hidden Редактировать категорию
       button.category__button.button.button--category(type='submit') Сохранить
       button.category__button.button.button--category(type='button') Удалить
   if errors
     each error in errors
       if error.id === category.id
-        p.comments__error= `${error.label}`
+        p.comments__error= error.label
