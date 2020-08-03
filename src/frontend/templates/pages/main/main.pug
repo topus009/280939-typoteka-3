@@ -24,7 +24,8 @@ include ../../common/index.pug
           ul.preview__list
             each articleData in articles
               +publicationCard(articleData, comments, categories)
-          //- +articlesPagination()
+          if pagesCount > 1
+            +articlesPagination(activePage, pagesCount)
       else
         .main-page__empty-wrapper
           p.main-page__empty-text Здесь пока пусто!
