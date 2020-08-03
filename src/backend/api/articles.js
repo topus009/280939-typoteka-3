@@ -5,6 +5,7 @@ const dayjs = require(`dayjs`);
 const {
   DATE_FORMAT,
   HttpCodes,
+  ARTICLES_PAGE_LIMIT,
 } = require(`../../../config/constants`);
 const {
   CustomError,
@@ -27,6 +28,39 @@ const articlesApi = (entityName, database) => ({
             through: {attributes: []}
           },
         ]
+      });
+      return sqlzObjsToArr(data, `categories`, `id`);
+    } catch (error) {
+      return error;
+    }
+  },
+
+  async getTotalCount(categoryId) {
+    if (!isNaN(categoryId)) {
+      const category = await database.Category.findByPk(+categoryId);
+      return await category.countArticle();
+    }
+    return await database[entityName].count();
+  },
+
+  async getArticlesByPage(page) {
+    let num = parseInt(page, 10);
+    if (isNaN(num) || num <= 0) {
+      num = 1;
+    }
+    try {
+      const data = await database[entityName].findAll({
+        include: [
+          {
+            model: database.Category,
+            as: `categories`,
+            required: false,
+            attributes: [`id`],
+            through: {attributes: []}
+          },
+        ],
+        limit: ARTICLES_PAGE_LIMIT,
+        offset: ARTICLES_PAGE_LIMIT * (num - 1),
       });
       return sqlzObjsToArr(data, `categories`, `id`);
     } catch (error) {
@@ -99,13 +133,16 @@ const articlesApi = (entityName, database) => ({
     }
   },
 
-  async getArticlesByCategoryId(id) {
+  async getArticlesByCategoryId(id, page) {
+    let num = parseInt(page, 10);
+    if (isNaN(num) || num <= 0) {
+      num = 1;
+    }
     try {
       const category = await database.Category.findByPk(+id);
       if (!category) {
         throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_CATEGORY_ID`, {id}));
       }
-      console.log(category.getArticles);
       const data = await category.getArticle({
         include: [
           {
@@ -115,10 +152,12 @@ const articlesApi = (entityName, database) => ({
             attributes: [`id`],
             through: {attributes: []},
           },
-        ]
+        ],
+        limit: ARTICLES_PAGE_LIMIT,
+        offset: ARTICLES_PAGE_LIMIT * (num - 1),
       });
-      const prepedData = sqlzExcludeFieldsFromObjs(data, [`articles_categories`]);
-      return sqlzObjsToArr(prepedData, `categories`, `id`);
+      const preparedData = sqlzExcludeFieldsFromObjs(data, [`articles_categories`]);
+      return sqlzObjsToArr(preparedData, `categories`, `id`);
     } catch (error) {
       return error;
     }

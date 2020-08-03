@@ -11,7 +11,11 @@ const {CustomError} = require(`../../utils/utils`);
 
 const commentsApi = (entityName, database) => ({
   async getAll() {
-    return await database[entityName].findAll();
+    try {
+      return await database[entityName].findAll();
+    } catch (error) {
+      return error;
+    }
   },
 
   async findById(id) {
