@@ -20,4 +20,4 @@ mixin articleItem({article, categories, comments, currentUser, users, categories
           h3= article.title
           p= article.announce
           p= article.sentences
-    +articleCommentsList({currentUser, comments, users, articleId, errors})
+    +articleCommentsList({currentUser, comments, users, articleId: article.id, errors})

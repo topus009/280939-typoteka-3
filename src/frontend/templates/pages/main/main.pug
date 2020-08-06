@@ -17,7 +17,7 @@ include ../../common/index.pug
             each categoryData in categories
               +themesItem(categoryData, categoriesCount)
         .main-page__section-flex.main-page__section-flex--short
-          +hottestArticles(articles, mostPopularArticles)
+          +hottestArticles(mostPopularArticles)
           +lastComments(lastComments, users)
         section.main-page__list.preview
           h2.visually-hidden Список превью статей

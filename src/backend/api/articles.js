@@ -179,7 +179,7 @@ const articlesApi = (entityName, database) => ({
       order: [[literal(`"commentsCount"`), `DESC`]],
       limit: MAX_HOT_COUNT,
     });
-    return sqlzParse(articles).map((item) => ([item.id, +item.commentsCount]));
+    return sqlzParse(articles).map((item) => ([item.id, +item.commentsCount, item.title]));
   },
 });
 
