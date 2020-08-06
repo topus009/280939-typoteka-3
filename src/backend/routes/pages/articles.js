@@ -66,7 +66,7 @@ const router = (api) => {
       categories,
       isNew: true,
       article: {
-        'created_date': dayjs().format(`DD.MM.YYYY`)
+        createdDate: dayjs().format(`DD.MM.YYYY`)
       }
     };
 

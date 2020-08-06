@@ -16,9 +16,10 @@ class Article extends Model {
         type: DataTypes.TEXT,
         allowNull: false
       },
-      "created_date": {
+      "createdDate": {
         type: DataTypes.TEXT,
-        allowNull: false
+        allowNull: false,
+        field: `createdDate`,
       },
       "announce": {
         type: DataTypes.TEXT,
@@ -35,21 +36,22 @@ class Article extends Model {
     }, {
       sequelize,
       tableName: `articles`,
-      timestamps: false
+      timestamps: false,
+      underscored: false
     });
   }
 
   static associate(models) {
     this.articlesComments = this.hasMany(models.Comment, {
       as: `comments`,
-      foreignKey: `article_id`,
+      foreignKey: `articleId`,
       onUpdate: `cascade`,
       onDelete: `cascade`
     });
     this.articlesCategories = this.belongsToMany(models.Category, {
       through: `articles_categories`,
       as: `categories`,
-      foreignKey: `article_id`,
+      foreignKey: `articleId`,
       timestamps: false,
       paranoid: false,
     });

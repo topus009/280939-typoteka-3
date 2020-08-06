@@ -20,21 +20,23 @@ class User extends Model {
         type: DataTypes.TEXT,
         allowNull: true
       },
-      "avatar_small": {
+      "avatarSmall": {
         type: DataTypes.TEXT,
-        allowNull: true
+        allowNull: true,
+        field: `avatarSmall`,
       },
     }, {
       sequelize,
       tableName: `users`,
-      timestamps: false
+      timestamps: false,
+      underscored: false
     });
   }
 
   static associate(models) {
     this.usersComments = this.hasMany(models.Comment, {
       as: `comments`,
-      foreignKey: `user_id`,
+      foreignKey: `userId`,
       onUpdate: `cascade`,
       onDelete: `cascade`
     });

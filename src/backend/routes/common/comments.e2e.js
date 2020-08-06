@@ -21,7 +21,7 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
     expect(res.statusCode).toBe(200);
   });
   test(`GET /article/:articleId - correct - return 200`, async () => {
-    const {article_id: articleId} = comments[0];
+    const {articleId} = comments[0];
     const res = await request.get(`${apiPrefix}/article/${articleId}`);
     expect(res.statusCode).toBe(200);
   });
@@ -30,7 +30,7 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
     expect(res.statusCode).toBe(404);
   });
   test(`GET /article/:articleId/:id - correct - return 200`, async () => {
-    const {article_id: articleId, id} = comments[0];
+    const {articleId, id} = comments[0];
     const res = await request.get(`${apiPrefix}/article/${articleId}/${id}`);
     expect(res.statusCode).toBe(200);
   });
@@ -39,7 +39,7 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
     expect(res.statusCode).toBe(404);
   });
   test(`POST /article/:articleId - correct - return 200`, async () => {
-    const {article_id: articleId} = comments[0];
+    const {articleId} = comments[0];
     const res = await request.post(`${apiPrefix}/article/${articleId}`).send({
       comment: `ascascaasc as asda sd asd ad asd asd asd asdas dasd asdas dasd`
     });
@@ -47,7 +47,7 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
     expect(Number(res.body)).toBeNumber();
   });
   test(`POST /article/:articleId - wrong - return 400`, async () => {
-    const {article_id: articleId} = comments[0];
+    const {articleId} = comments[0];
     const res = await request.post(`${apiPrefix}/article/${articleId}`).send({
       comment: `dasd asdas dasd`
     });
@@ -62,13 +62,13 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
     expect(res.statusCode).toBe(200);
   });
   test(`DELETE /article/:articleId/:id - correct - return 200`, async () => {
-    const {article_id: articleId, id} = comments[1];
+    const {articleId, id} = comments[1];
     const res = await request.delete(`${apiPrefix}/article/${articleId}/${id}`);
     expect(res.statusCode).toBe(200);
     expect(Number(res.body)).toBeNumber();
   });
   test(`DELETE /article/:articleId/:id - wrong - return 404`, async () => {
-    const {article_id: articleId} = comments[2];
+    const {articleId} = comments[2];
     const res = await request.delete(`${apiPrefix}/article/${articleId}/999`);
     expect(res.statusCode).toBe(404);
   });

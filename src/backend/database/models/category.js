@@ -20,7 +20,8 @@ class Category extends Model {
     }, {
       sequelize,
       tableName: `categories`,
-      timestamps: false
+      timestamps: false,
+      underscored: false
     });
   }
 
@@ -28,7 +29,7 @@ class Category extends Model {
     this.articlesCategories = this.belongsToMany(models.Article, {
       through: `articles_categories`,
       as: `article`,
-      foreignKey: `category_id`,
+      foreignKey: `categoryId`,
       timestamps: false,
       paranoid: false,
     });

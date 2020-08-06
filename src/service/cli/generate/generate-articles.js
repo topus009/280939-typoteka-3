@@ -18,12 +18,12 @@ const generateMockData = async (count, categories) => {
       const categoriesIds = categories.map((category) => category.id);
 
       const content = {
-        "id": id + 1,
-        "title": getRandomString(samples.titles),
-        'created_date': getRandomDate(),
-        "announce": sentences.slice(0, 5).join(` `),
-        "sentences": sentences.join(` `),
-        "categories": getRandomStrings(categoriesIds, 3).slice(0, 3),
+        id: id + 1,
+        title: getRandomString(samples.titles),
+        createdDate: getRandomDate(),
+        announce: sentences.slice(0, 5).join(` `),
+        sentences: sentences.join(` `),
+        categories: getRandomStrings(categoriesIds, 3).slice(0, 3),
       };
 
       if (id % 5 !== 0) {

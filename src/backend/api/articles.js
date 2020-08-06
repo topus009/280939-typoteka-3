@@ -71,8 +71,8 @@ const articlesApi = (entityName, database) => ({
     article = article.toJSON();
     const data = {
       ...article,
-      "categories": categories.map((el) => el.id),
-      'created_date': dayjs(article.created_date).format(`DD.MM.YYYY`)
+      categories: categories.map((el) => el.id),
+      createdDate: dayjs(article.createdDate).format(`DD.MM.YYYY`)
     };
     return data;
   },
@@ -86,12 +86,12 @@ const articlesApi = (entityName, database) => ({
   },
 
   async add(data) {
-    const createdDate = data.created_date ?
-      dayjs(data.created_date).format(DATE_FORMAT) : dayjs().format(DATE_FORMAT);
+    const createdDate = data.createdDate ?
+      dayjs(data.createdDate).format(DATE_FORMAT) : dayjs().format(DATE_FORMAT);
 
     const article = await database[entityName].create({
       ...data,
-      'created_date': createdDate,
+      createdDate,
     });
     await article.setCategories(Array.isArray(data.categories) ? data.categories : [data.categories]);
     return article.id;
@@ -173,7 +173,7 @@ const articlesApi = (entityName, database) => ({
     const articles = await database[entityName].findAll({
       attributes: {
         include: [
-          [literal(`(SELECT COUNT(*) FROM comments WHERE comments.article_id = "Article"."id")`), `commentsCount`],
+          [literal(`(SELECT COUNT(*) FROM comments WHERE "comments"."articleId" = "Article"."id")`), `commentsCount`],
         ]
       },
       order: [[literal(`"commentsCount"`), `DESC`]],

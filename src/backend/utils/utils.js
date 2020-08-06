@@ -16,7 +16,7 @@ const errorsHandler = (log) => (error, req, res, next) => {
   let errObj = error;
   if (errObj.name === `SequelizeForeignKeyConstraintError`) {
     const {original} = errObj;
-    if (original.constraint === `articles_categories_category_id_fkey`) {
+    if (original.constraint === `articles_categories_categoryId_fkey`) {
       const {detail} = original;
       const id = detail.replace(/\D/g, ``);
       const text = _f(`NO_CATEGORY_ID`, {id});

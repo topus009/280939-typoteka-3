@@ -1,7 +1,7 @@
-mixin articleCommentsForm(currentUser, article_id, errors)
+mixin articleCommentsForm(currentUser, articleId, errors)
   if currentUser
     .comments__footer.comments__footer--user
-      form(action=`/articles/article/${article_id}` method='POST')
+      form(action=`/articles/article/${articleId}` method='POST')
         .comments__avatar.avatar
           img(src=currentUser.avatar alt='аватар пользователя')
         label
@@ -23,10 +23,10 @@ mixin articleCommentItem({comment, user})
     .comments__text
       .comments__head
         p= `${user.name} •`
-        +formattedDate(comment.created_date, {class: 'comments__date'})
+        +formattedDate(comment.createdDate, {class: 'comments__date'})
       p.comments__message= comment.comment
 
-mixin articleCommentsList({currentUser, comments, users, article_id, errors})
+mixin articleCommentsList({currentUser, comments, users, articleId, errors})
   .post__wrapper.post__wrapper--comments
     section.post__comments.comments
       if comments.length
@@ -34,8 +34,8 @@ mixin articleCommentsList({currentUser, comments, users, article_id, errors})
         ul.comments__list
           each comment in comments
             each user in users
-              if comment.user_id === user.id
+              if comment.userId === user.id
                 +articleCommentItem({comment, user})
       else
         h2.comments__title.title.title--middle Комментарии отсутствуют
-      +articleCommentsForm(currentUser, article_id, errors)
+      +articleCommentsForm(currentUser, articleId, errors)

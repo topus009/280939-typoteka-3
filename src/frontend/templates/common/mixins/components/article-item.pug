@@ -6,7 +6,7 @@ mixin articleItem({article, categories, comments, currentUser, users, categories
       .post__wrapper
         .post__head
           a.post__backwards.button.button--backwards(href='#') Назад
-          +formattedDate(article.created_date, {class: 'post__date'})
+          +formattedDate(article.createdDate, {class: 'post__date'})
           h2.post__title.title.title--main= article.title
           ul.post__themes.themes
             each categoryId in article.categories
@@ -20,4 +20,4 @@ mixin articleItem({article, categories, comments, currentUser, users, categories
           h3= article.title
           p= article.announce
           p= article.sentences
-    +articleCommentsList({currentUser, comments, users, article_id: article.id, errors})
+    +articleCommentsList({currentUser, comments, users, articleId, errors})

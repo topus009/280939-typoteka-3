@@ -38,9 +38,9 @@ const commentsApi = (entityName, database) => ({
     const {id: userId} = await database.User.findOne({where: {name: {[Op.like]: MY_NAME}}});
     return await database[entityName].create({
       ...data,
-      'article_id': articleId,
-      'user_id': userId,
-      'created_date': dayjs().format(DATE_FORMAT),
+      articleId,
+      userId,
+      createdDate: dayjs().format(DATE_FORMAT),
     });
   },
 
@@ -49,7 +49,7 @@ const commentsApi = (entityName, database) => ({
     if (!articleInDB) {
       throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_ARTICLE_ID`, {id: articleId}));
     }
-    const comments = database[entityName].findAll({where: {'article_id': articleId}});
+    const comments = database[entityName].findAll({where: {articleId}});
     return comments;
   },
 
@@ -58,13 +58,13 @@ const commentsApi = (entityName, database) => ({
     if (!user) {
       throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_USER_WITH_NAME`, {name: MY_NAME}));
     }
-    return await database[entityName].findAll({where: {'user_id': user.id}});
+    return await database[entityName].findAll({where: {userId: user.id}});
   },
 
   async getLatestComments() {
     const MAX_LATEST_COUNT = 3;
     return await database[entityName].findAll({
-      order: [[`created_date`, `DESC`]],
+      order: [[`createdDate`, `DESC`]],
       limit: MAX_LATEST_COUNT,
     });
   }

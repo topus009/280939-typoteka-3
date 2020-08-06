@@ -16,6 +16,6 @@ include ../../common/index.pug
           each myComment in myComments
             each articleData in articles
               - currentArticleData
-              if myComment.article_id === articleData.id
+              if myComment.articleId === articleData.id
                 - currentArticleData = articleData
                 +adminComment(currentArticleData, myComment, currentUser)

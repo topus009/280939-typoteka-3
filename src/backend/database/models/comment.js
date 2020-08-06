@@ -16,33 +16,37 @@ class Comment extends Model {
         type: DataTypes.TEXT,
         allowNull: false
       },
-      "user_id": {
+      "userId": {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
+        field: `userId`,
       },
-      "article_id": {
+      "articleId": {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
+        field: `articleId`,
       },
-      "created_date": {
+      "createdDate": {
         type: DataTypes.TEXT,
-        allowNull: false
+        allowNull: false,
+        field: `createdDate`,
       },
     }, {
       sequelize,
       tableName: `comments`,
-      timestamps: false
+      timestamps: false,
+      underscored: false
     });
   }
 
   static associate(models) {
     this.commentsArticles = this.belongsTo(models.Article, {
       as: `articles`,
-      foreignKey: `article_id`
+      foreignKey: `articleId`
     });
     this.commentsUsers = this.belongsTo(models.User, {
       as: `users`,
-      foreignKey: `user_id`,
+      foreignKey: `userId`,
       onUpdate: `cascade`,
       onDelete: `cascade`
     });
