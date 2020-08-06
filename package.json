@@ -7,7 +7,7 @@
     "eslint": "eslint --ext .js \"src/**\"",
     "lint:pug": "pug-lint ./src",
     "generate": "npm run start -- --generate",
-    "test:rest": "cross-env LOG_LEVEL=debug TESTING=true npm run db:all && jest .e2e.js --forceExit",
+    "test:rest": "cross-env COUNT=20 LOG_LEVEL=debug TESTING=true npm run db:all && jest .e2e.js --forceExit",
     "start": "node -r ./config ./src/service/service.js",
     "backend": "cross-env COMMAND=\"--server\" npm start",
     "frontend": "node -r ./config ./src/frontend/server.js",

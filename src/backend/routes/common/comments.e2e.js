@@ -53,6 +53,14 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
     });
     expect(res.statusCode).toBe(400);
   });
+  test(`GET /comments/my - return 200`, async () => {
+    const res = await request.get(`${apiPrefix}/comments/my`);
+    expect(res.statusCode).toBe(200);
+  });
+  test(`GET /comments/latest - return 200`, async () => {
+    const res = await request.get(`${apiPrefix}/comments/latest`);
+    expect(res.statusCode).toBe(200);
+  });
   test(`DELETE /article/:articleId/:id - correct - return 200`, async () => {
     const {article_id: articleId, id} = comments[1];
     const res = await request.delete(`${apiPrefix}/article/${articleId}/${id}`);
@@ -63,13 +71,5 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
     const {article_id: articleId} = comments[2];
     const res = await request.delete(`${apiPrefix}/article/${articleId}/999`);
     expect(res.statusCode).toBe(404);
-  });
-  test(`GET /comments/my - return 200`, async () => {
-    const res = await request.get(`${apiPrefix}/comments/my`);
-    expect(res.statusCode).toBe(200);
-  });
-  test(`GET /comments/latest - return 200`, async () => {
-    const res = await request.get(`${apiPrefix}/comments/latest`);
-    expect(res.statusCode).toBe(200);
   });
 });

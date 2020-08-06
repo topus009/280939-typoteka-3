@@ -2,63 +2,61 @@
 
 const {Router} = require(`express`);
 const {HttpCodes} = require(`../../../../config/constants`);
-const {validate, rules} = require(`../../validation`);
-const {CustomError} = require(`../../../utils/utils`);
+const {
+  validate,
+  rules,
+} = require(`../../validation`);
+const {
+  CustomError,
+  catchAsync,
+} = require(`../../../utils/utils`);
 
 const router = (api) => {
   const categoriesRouter = new Router();
 
-  categoriesRouter.get(`/`, async (req, res) => {
+  categoriesRouter.get(`/`, catchAsync(async (req, res) => {
     const data = await api.categories.getAll();
     res.status(HttpCodes.OK).json(data);
-  });
+  }));
 
-  categoriesRouter.get(`/:id`, async (req, res, next) => {
-    try {
-      const {id} = req.params;
-      const data = await api.categories.findById(id);
-      if (data instanceof CustomError) {
-        return next(data);
-      }
-      return res.status(HttpCodes.OK).json(data);
-    } catch (error) {
-      return error;
+  categoriesRouter.get(`/:id`, catchAsync(async (req, res, next) => {
+    const {id} = req.params;
+    const data = await api.categories.findById(id);
+    if (data instanceof CustomError) {
+      return next(data);
     }
-  });
+    return res.status(HttpCodes.OK).json(data);
+  }));
 
-  categoriesRouter.post(`/`, rules.category(), validate, async (req, res) => {
+  categoriesRouter.post(`/`, rules.category(), validate, catchAsync(async (req, res) => {
     const data = await api.categories.add(req.body);
     res.status(HttpCodes.OK).json(data);
-  });
+  }));
 
-  categoriesRouter.put(`/:id`, rules.category(), validate, async (req, res) => {
+  categoriesRouter.put(`/:id`, rules.category(), validate, catchAsync(async (req, res) => {
     const {id} = req.params;
     const data = await api.categories.edit(id, req.body);
     res.status(HttpCodes.OK).json(data);
-  });
+  }));
 
-  categoriesRouter.delete(`/:id`, async (req, res, next) => {
+  categoriesRouter.delete(`/:id`, catchAsync(async (req, res, next) => {
     const {id} = req.params;
-    try {
-      const data = await api.categories.delete(id);
-      if (data instanceof CustomError) {
-        return next(data);
-      }
-      return res.status(HttpCodes.OK).json(data);
-    } catch (error) {
-      return error;
+    const data = await api.categories.delete(id);
+    if (data instanceof CustomError) {
+      return next(data);
     }
-  });
+    return res.status(HttpCodes.OK).json(data);
+  }));
 
-  categoriesRouter.get(`/categories/my`, async (req, res) => {
+  categoriesRouter.get(`/categories/my`, catchAsync(async (req, res) => {
     const data = await api.categories.getAll();
     res.status(HttpCodes.OK).json(data);
-  });
+  }));
 
-  categoriesRouter.get(`/categories/count`, async (req, res) => {
+  categoriesRouter.get(`/categories/count`, catchAsync(async (req, res) => {
     const data = await api.categories.getCategoriesCount();
     res.status(HttpCodes.OK).json(data);
-  });
+  }));
 
   return categoriesRouter;
 };

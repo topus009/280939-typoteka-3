@@ -8,6 +8,7 @@ const {HttpCodes} = require(`../../config/constants`);
 const {CustomError} = require(`../utils/utils`);
 const {createLogger, LoggerNames} = require(`../utils/logger`);
 const routers = require(`./router`);
+const {errorsHandler} = require(`./utils/utils`);
 require(`../../config/localization.setup`);
 
 require(`dayjs/locale/ru`);
@@ -39,18 +40,7 @@ app.use((req, res, next) => {
   next(new CustomError(HttpCodes.NOT_FOUND, _f(`NO_ROUTE_IN_APP`)));
 });
 
-app.use((error, req, res, next) => {
-  const {text, statusCode} = error;
-  const {method, url} = req;
-
-  const formattedText = Array.isArray(text) ? JSON.stringify(text) : text;
-
-  logApi.error(`${method} ${url} - statusCode - ${statusCode}, text - ${formattedText}`);
-  res
-    .status(statusCode)
-    .render(`pages/errors/error`, {error});
-  next(error);
-});
+app.use(errorsHandler(logApi));
 
 app.listen(DEFAULT_PORT, (error) => {
   if (error) {

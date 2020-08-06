@@ -42,6 +42,14 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
     const res = await request.get(`${apiPrefix}/999`);
     expect(res.statusCode).toBe(404);
   });
+  test(`GET /categories/my - return 200`, async () => {
+    const res = await request.get(`${apiPrefix}/categories/my`);
+    expect(res.statusCode).toBe(200);
+  });
+  test(`GET /categories/count - return 200`, async () => {
+    const res = await request.get(`${apiPrefix}/categories/count`);
+    expect(res.statusCode).toBe(200);
+  });
   test(`DELETE / - correct - return 200`, async () => {
     const {id} = categories[0];
     const res = await request.delete(`${apiPrefix}/${id}`);
@@ -51,13 +59,5 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
   test(`DELETE / - wrong - return 404`, async () => {
     const res = await request.delete(`${apiPrefix}/999`);
     expect(res.statusCode).toBe(404);
-  });
-  test(`GET /categories/my - return 200`, async () => {
-    const res = await request.get(`${apiPrefix}/categories/my`);
-    expect(res.statusCode).toBe(200);
-  });
-  test(`GET /categories/count - return 200`, async () => {
-    const res = await request.get(`${apiPrefix}/categories/count`);
-    expect(res.statusCode).toBe(200);
   });
 });

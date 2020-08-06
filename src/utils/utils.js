@@ -151,6 +151,23 @@ const getPaginationData = ({articlesTotalCount, page}) => {
   }
 };
 
+const catchAsync = (fn) => {
+  return (req, res, next) => {
+    fn(req, res, next).catch(next);
+  };
+};
+
+const capitalizeFirstLetter = (str) => str[0].toUpperCase() + str.slice(1);
+
+const commonErrorsHandler = (logCb) => (error, req, res, next, cb) => {
+  const {text, statusCode} = error;
+  const {method, url} = req;
+  const formattedText = Array.isArray(text) ? JSON.stringify(text) : text;
+
+  logCb.error(`${method} ${url} - statusCode - ${statusCode}, text - ${formattedText}`);
+  cb(res, next, error);
+};
+
 module.exports = {
   getRangomInteger,
   shuffle,
@@ -169,4 +186,7 @@ module.exports = {
   sqlzExcludeFieldsFromObjs,
   sqlzParse,
   getPaginationData,
+  catchAsync,
+  capitalizeFirstLetter,
+  commonErrorsHandler,
 };

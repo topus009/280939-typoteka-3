@@ -11,8 +11,8 @@ myRouter.get(`/categories`, async (req, res) => {
 });
 
 myRouter.post(`/categories`, async (req, res, next) => {
+  const {id, label} = req.body;
   try {
-    const {id, label} = req.body;
     let method = id ? `put` : `post`;
     let path = id ? `/categories/${id}` : `/categories`;
     const apiReq = await axios[method](path, {label});
@@ -20,9 +20,13 @@ myRouter.post(`/categories`, async (req, res, next) => {
       res.redirect(`/my/categories`);
     }
   } catch (error) {
-    if (error.statusCode === 400 && Array.isArray(error.text)) {
+    if (error.statusCode === 400) {
       const {data} = await axios.get(`/pages/my/categories`);
-      res.render(`pages/my/admin-categories`, {...data, errors: error.text});
+      const errors = Array.isArray(error.text) ? error.text : [{
+        id: +id,
+        label: error.text
+      }];
+      res.render(`pages/my/admin-categories`, {...data, errors});
       return;
     }
     next(error);

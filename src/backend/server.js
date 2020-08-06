@@ -2,11 +2,20 @@
 
 const express = require(`express`);
 const bodyParser = require(`body-parser`);
-const {HttpCodes, BACKEND_API_PREFIX} = require(`../../config/constants`);
-const {CustomError} = require(`../utils/utils`);
-const {createLogger, LoggerNames} = require(`../utils/logger`);
+const {
+  HttpCodes,
+  BACKEND_API_PREFIX,
+} = require(`../../config/constants`);
+const {
+  CustomError,
+} = require(`../utils/utils`);
+const {
+  createLogger,
+  LoggerNames,
+} = require(`../utils/logger`);
 const router = require(`./router`);
 const api = require(`./api`);
+const {errorsHandler} = require(`./utils/utils`);
 require(`../../config/localization.setup`);
 
 const log = createLogger(LoggerNames.BACKEND);
@@ -28,25 +37,18 @@ const createServer = async () => {
     next();
   });
 
-  Object.entries(router).forEach(([key, _router]) => {
-    app.use(`${BACKEND_API_PREFIX}/${key}`, _router(connectedApi));
+  Object.entries(router).forEach(([key, route]) => {
+    app.use(`${BACKEND_API_PREFIX}/${key}`, route(connectedApi));
   });
 
   app.use((req, res, next) => {
     next(new CustomError(HttpCodes.NOT_FOUND, _f(`NO_ROUTE_IN_API`)));
   });
 
-  app.use((error, req, res, next) => {
-    const {text, statusCode} = error;
-    const {method, url} = req;
+  app.use(errorsHandler(logApi));
 
-    const formattedText = Array.isArray(text) ? JSON.stringify(text) : text;
-
-    logApi.error(`${method} ${url} - statusCode - ${statusCode}, text - ${formattedText}`);
-    res
-      .status(statusCode)
-      .json(error);
-    next(error);
+  app.use((req, res, next) => {
+    next(new CustomError(HttpCodes.NOT_FOUND, _f(`NO_ROUTE_IN_API`)));
   });
 
   return app;

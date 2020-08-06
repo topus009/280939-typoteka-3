@@ -1,18 +1,22 @@
 'use strict';
 
 const {Router} = require(`express`);
-const {HttpCodes, MY_NAME} = require(`../../../../config/constants`);
+const {
+  HttpCodes,
+  MY_NAME
+} = require(`../../../../config/constants`);
+const {catchAsync} = require(`../../../utils/utils`);
 
 const myPageRouter = new Router();
 
 const router = (api) => {
-  myPageRouter.get(`/categories`, async (req, res) => {
+  myPageRouter.get(`/categories`, catchAsync(async (req, res) => {
     const categories = await api.categories.getAll();
 
     return res.status(HttpCodes.OK).json({categories});
-  });
+  }));
 
-  myPageRouter.get(`/comments`, async (req, res) => {
+  myPageRouter.get(`/comments`, catchAsync(async (req, res) => {
     const [
       comments,
       articles,
@@ -33,13 +37,13 @@ const router = (api) => {
     };
 
     return res.status(HttpCodes.OK).json(data);
-  });
+  }));
 
-  myPageRouter.get(`/articles`, async (req, res) => {
+  myPageRouter.get(`/articles`, catchAsync(async (req, res) => {
     const articles = await api.articles.getAll();
 
     return res.status(HttpCodes.OK).json({articles});
-  });
+  }));
 
   return myPageRouter;
 };

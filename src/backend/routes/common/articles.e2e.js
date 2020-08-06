@@ -52,15 +52,6 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
     });
     expect(res.statusCode).toBe(400);
   });
-  test(`DELETE /:id - correct - return 200`, async () => {
-    const {id} = articles[0];
-    const res = await request.delete(`${apiPrefix}/${id}`);
-    expect(res.statusCode).toBe(200);
-  });
-  test(`DELETE /:id - wrong - return 404`, async () => {
-    const res = await request.delete(`${apiPrefix}/999`);
-    expect(res.statusCode).toBe(404);
-  });
   test(`PUT /:id - correct - return 200`, async () => {
     const {id} = articles[1];
     const newArticle = {
@@ -94,5 +85,14 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
   test(`GET /articles/hot - return 200`, async () => {
     const res = await request.get(`${apiPrefix}/articles/hot`);
     expect(res.statusCode).toBe(200);
+  });
+  test(`DELETE /:id - correct - return 200`, async () => {
+    const {id} = articles[0];
+    const res = await request.delete(`${apiPrefix}/${id}`);
+    expect(res.statusCode).toBe(200);
+  });
+  test(`DELETE /:id - wrong - return 404`, async () => {
+    const res = await request.delete(`${apiPrefix}/999`);
+    expect(res.statusCode).toBe(404);
   });
 });
