@@ -3,7 +3,7 @@
 const {Router} = require(`express`);
 const {
   HttpCodes,
-  MY_NAME
+  ADMIN_ID,
 } = require(`../../../../config/constants`);
 const {catchAsync} = require(`../../../utils/utils`);
 
@@ -26,7 +26,7 @@ const router = (api) => {
       api.comments.getAll(),
       api.articles.getAll(),
       api.comments.getMyComments(),
-      api.users.getUserByName(MY_NAME),
+      api.users.findById(ADMIN_ID),
     ]);
 
     const data = {

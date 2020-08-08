@@ -1,10 +1,9 @@
 "use strict";
 
-const {Op} = require(`sequelize`);
 const dayjs = require(`dayjs`);
 const {
   DATE_FORMAT,
-  MY_NAME,
+  ADMIN_ID,
   HttpCodes,
 } = require(`../../../config/constants`);
 const {CustomError} = require(`../../utils/utils`);
@@ -35,11 +34,14 @@ const commentsApi = (entityName, database) => ({
     if (!articleInDB) {
       throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_ARTICLE_ID`, {id: articleId}));
     }
-    const {id: userId} = await database.User.findOne({where: {name: {[Op.like]: MY_NAME}}});
+    const user = await database.User.findByPk(ADMIN_ID);
+    if (!user) {
+      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_USER_ID`, {id: ADMIN_ID}));
+    }
     return await database[entityName].create({
       ...data,
       articleId,
-      userId,
+      userId: user.id,
       createdDate: dayjs().format(DATE_FORMAT),
     });
   },
@@ -54,9 +56,9 @@ const commentsApi = (entityName, database) => ({
   },
 
   async getMyComments() {
-    const user = await database.User.findOne({where: {name: {[Op.like]: MY_NAME}}});
+    const user = await database.User.findByPk(ADMIN_ID);
     if (!user) {
-      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_USER_WITH_NAME`, {name: MY_NAME}));
+      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_USER_ID`, {id: ADMIN_ID}));
     }
     return await database[entityName].findAll({where: {userId: user.id}});
   },

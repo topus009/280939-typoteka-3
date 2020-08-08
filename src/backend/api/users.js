@@ -1,7 +1,11 @@
 "use strict";
 
+const bcrypt = require(`bcrypt`);
 const {Op} = require(`sequelize`);
-const {HttpCodes} = require(`../../../config/constants`);
+const {
+  HttpCodes,
+  UsersRoles,
+} = require(`../../../config/constants`);
 const {CustomError} = require(`../../utils/utils`);
 
 const usersApi = (entityName, database) => ({
@@ -17,18 +21,25 @@ const usersApi = (entityName, database) => ({
     return user;
   },
 
-  async getUserByName(name) {
-    const user = await database[entityName].findOne({
+  async findByEmail(email) {
+    return await database[entityName].findOne({
       where: {
-        name: {
-          [Op.iLike]: `%${name}%`
+        email: {
+          [Op.like]: `%${email}%`
         }
       }
     });
-    if (!user) {
-      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_USER_WITH_NAME`, {name}));
-    }
-    return user;
+  },
+
+  async add(data) {
+    delete data.passwordConfirmation;
+    const {password, ...userData} = data;
+    const hash = await bcrypt.hash(password, +process.env.PASSWORD_SALT);
+    return await database[entityName].create({
+      ...userData,
+      password: hash,
+      role: UsersRoles.READER,
+    });
   },
 });
 

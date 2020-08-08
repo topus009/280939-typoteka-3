@@ -4,7 +4,7 @@ const {Router} = require(`express`);
 const dayjs = require(`dayjs`);
 const {
   HttpCodes,
-  MY_NAME,
+  ADMIN_ID,
 } = require(`../../../../config/constants`);
 const {
   CustomError,
@@ -29,7 +29,7 @@ const router = (api) => {
     ] = await Promise.all([
       api.categories.getAll(),
       api.users.getAll(),
-      api.users.getUserByName(MY_NAME),
+      api.users.findById(ADMIN_ID),
       api.categories.getCategoriesCount(),
       api.comments.getCommentsByArticleId(id),
     ]);
