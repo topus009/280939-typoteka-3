@@ -143,11 +143,7 @@ const getPaginationData = ({articlesTotalCount, page}) => {
   }
 };
 
-const catchAsync = (fn) => {
-  return (req, res, next) => {
-    fn(req, res, next).catch(next);
-  };
-};
+const catchAsync = (fn) => (req, res, next) => fn(req, res, next).catch(next);
 
 const capitalizeFirstLetter = (str) => str[0].toUpperCase() + str.slice(1);
 
@@ -157,7 +153,7 @@ const commonErrorsHandler = (logCb) => (error, req, res, next, cb) => {
   const formattedText = Array.isArray(text) ? JSON.stringify(text) : text;
 
   logCb.error(`${method} ${url} - statusCode - ${statusCode}, text - ${formattedText}`);
-  cb(res, next, error);
+  return cb(res, next, error);
 };
 
 module.exports = {

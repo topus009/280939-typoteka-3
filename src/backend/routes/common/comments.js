@@ -3,10 +3,7 @@
 const {Router} = require(`express`);
 const {HttpCodes} = require(`../../../../config/constants`);
 const {validate, rules} = require(`../../validation`);
-const {
-  CustomError,
-  catchAsync
-} = require(`../../../utils/utils`);
+const {catchAsync} = require(`../../../utils/utils`);
 
 const router = (api) => {
   const commentsRouter = new Router();
@@ -16,36 +13,30 @@ const router = (api) => {
     return res.status(HttpCodes.OK).json(data);
   }));
 
-  commentsRouter.get(`/article/:articleId`, catchAsync(async (req, res, next) => {
+  commentsRouter.get(`/article/:articleId`, catchAsync(async (req, res) => {
     const {articleId} = req.params;
     const data = await api.comments.getCommentsByArticleId(articleId);
-    if (data instanceof CustomError) {
-      return next(data);
-    }
     return res.status(HttpCodes.OK).json(data);
   }));
 
-  commentsRouter.get(`/article/:articleId/:id`, catchAsync(async (req, res, next) => {
+  commentsRouter.get(`/article/:articleId/:id`, catchAsync(async (req, res) => {
     const {id} = req.params;
     const data = await api.comments.findById(id);
-    if (data instanceof CustomError) {
-      return next(data);
-    }
     return res.status(HttpCodes.OK).json(data);
   }));
 
-  commentsRouter.post(`/article/:articleId`, rules.comment(), validate, catchAsync(async (req, res) => {
+  commentsRouter.post(`/article/:articleId`, [
+    rules.comment(),
+    validate,
+  ], catchAsync(async (req, res) => {
     const {articleId} = req.params;
     const data = await api.comments.add(articleId, req.body);
     return res.status(HttpCodes.OK).json(data);
   }));
 
-  commentsRouter.delete(`/article/:articleId/:id`, catchAsync(async (req, res, next) => {
+  commentsRouter.delete(`/article/:articleId/:id`, catchAsync(async (req, res) => {
     const {id} = req.params;
     const data = await api.comments.delete(id);
-    if (data instanceof CustomError) {
-      return next(data);
-    }
     return res.status(HttpCodes.OK).json(data);
   }));
 

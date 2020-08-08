@@ -3,7 +3,6 @@
 const {Router} = require(`express`);
 const {HttpCodes} = require(`../../../../config/constants`);
 const {
-  CustomError,
   getPaginationData,
   catchAsync,
 } = require(`../../../utils/utils`);
@@ -60,13 +59,10 @@ const router = (api) => {
     return res.status(HttpCodes.OK).json(data);
   }));
 
-  mainPageRouter.get(`/category/:id`, catchAsync(async (req, res, next) => {
+  mainPageRouter.get(`/category/:id`, catchAsync(async (req, res) => {
     const {id} = req.params;
     const page = req.query.page || 1;
     const articles = await api.articles.getArticlesByCategoryId(id, page);
-    if (articles instanceof CustomError) {
-      return next(articles);
-    }
     const [
       categories,
       categoriesCount,

@@ -6,20 +6,14 @@ const {
   HttpCodes,
   ADMIN_ID,
 } = require(`../../../../config/constants`);
-const {
-  CustomError,
-  catchAsync,
-} = require(`../../../utils/utils`);
+const {catchAsync} = require(`../../../utils/utils`);
 
 const articlesPageRouter = new Router();
 
 const router = (api) => {
-  articlesPageRouter.get(`/article/:id`, catchAsync(async (req, res, next) => {
+  articlesPageRouter.get(`/article/:id`, catchAsync(async (req, res) => {
     const {id} = req.params;
     const article = await api.articles.findById(id);
-    if (article instanceof CustomError) {
-      next(article);
-    }
     const [
       categories,
       users,
@@ -44,12 +38,9 @@ const router = (api) => {
     return res.status(HttpCodes.OK).json(data);
   }));
 
-  articlesPageRouter.get(`/article/edit/:id`, catchAsync(async (req, res, next) => {
+  articlesPageRouter.get(`/article/edit/:id`, catchAsync(async (req, res) => {
     const {id} = req.params;
     const article = await api.articles.findById(id);
-    if (article instanceof CustomError) {
-      return next(article);
-    }
     const categories = await api.categories.getAll();
     const data = {
       categories,

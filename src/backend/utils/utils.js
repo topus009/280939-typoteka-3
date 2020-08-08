@@ -8,8 +8,9 @@ const {
 } = require(`../../utils/utils`);
 
 const sendError = (res, next, error) => {
-  res.status(error.statusCode).json(error);
-  next(error);
+  return res
+    .status(error.statusCode)
+    .json(error);
 };
 
 const errorsHandler = (log) => (error, req, res, next) => {
@@ -20,7 +21,7 @@ const errorsHandler = (log) => (error, req, res, next) => {
     errObj = new CustomError(statusCode, text);
   }
 
-  commonErrorsHandler(log)(errObj, req, res, next, sendError);
+  return commonErrorsHandler(log)(errObj, req, res, next, sendError);
 };
 
 module.exports = {

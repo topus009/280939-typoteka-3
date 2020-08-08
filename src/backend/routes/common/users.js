@@ -8,10 +8,7 @@ const {
   validate,
   rules,
 } = require(`../../validation`);
-const {
-  CustomError,
-  catchAsync,
-} = require(`../../../utils/utils`);
+const {catchAsync} = require(`../../../utils/utils`);
 
 const router = (api) => {
   const usersRouter = new Router();
@@ -21,12 +18,9 @@ const router = (api) => {
     return res.status(HttpCodes.OK).json(data);
   }));
 
-  usersRouter.get(`/:id`, catchAsync(async (req, res, next) => {
+  usersRouter.get(`/:id`, catchAsync(async (req, res) => {
     const {id} = req.params;
     const data = await api.users.findById(id);
-    if (data instanceof CustomError) {
-      return next(data);
-    }
     return res.status(HttpCodes.OK).json(data);
   }));
 

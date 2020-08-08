@@ -25,6 +25,7 @@ articlesRouter.post(`/article/:id`, async (req, res, next) => {
     if (error.statusCode === 400 && Array.isArray(error.text)) {
       const {data} = await axios.get(`/pages/articles/article/${id}`);
       res.render(`pages/articles/article`, {...data, errors: error.text});
+      return;
     }
     next(error);
   }
@@ -60,6 +61,7 @@ articlesRouter.post(`/article/edit/:id`, articleImgUpload, async (req, res, next
         errors: error.text
       };
       res.render(`pages/articles/article-form`, prevarticleData);
+      return;
     }
     next(error);
   }

@@ -6,7 +6,6 @@ const {Router} = require(`express`);
 const {HttpCodes} = require(`../../../../config/constants`);
 const {
   isFileExistsAsync,
-  CustomError,
   catchAsync,
 } = require(`../../../utils/utils`);
 const {
@@ -17,7 +16,7 @@ const {
 const router = (api) => {
   const articlesRouter = new Router();
 
-  articlesRouter.get(`/`, catchAsync(async (req, res, next) => {
+  articlesRouter.get(`/`, catchAsync(async (req, res) => {
     let data;
     const {page} = req.query;
     if (!page) {
@@ -25,28 +24,19 @@ const router = (api) => {
     } else {
       data = await api.articles.getArticlesByPage(page);
     }
-    if (data instanceof CustomError) {
-      return next(data);
-    }
     return res.status(HttpCodes.OK).json(data);
   }));
 
-  articlesRouter.get(`/:id`, catchAsync(async (req, res, next) => {
+  articlesRouter.get(`/:id`, catchAsync(async (req, res) => {
     const {id} = req.params;
     const data = await api.articles.findById(id);
-    if (data instanceof CustomError) {
-      return next(data);
-    }
     return res.status(HttpCodes.OK).json(data);
   }));
 
-  articlesRouter.get(`/categories/:categoryId`, catchAsync(async (req, res, next) => {
+  articlesRouter.get(`/categories/:categoryId`, catchAsync(async (req, res) => {
     const {categoryId} = req.params;
     const {page} = req.query;
     const data = await api.articles.getArticlesByCategoryId(categoryId, page);
-    if (data instanceof CustomError) {
-      return next(data);
-    }
     return res.status(HttpCodes.OK).json(data);
   }));
 
@@ -62,16 +52,13 @@ const router = (api) => {
     return res.status(HttpCodes.OK).json(data);
   }));
 
-  articlesRouter.delete(`/:id`, catchAsync(async (req, res, next) => {
+  articlesRouter.delete(`/:id`, catchAsync(async (req, res) => {
     const {id} = req.params;
     const data = await api.articles.delete(id);
-    if (data instanceof CustomError) {
-      return next(data);
-    }
     return res.status(HttpCodes.OK).json(data);
   }));
 
-  articlesRouter.put(`/:id`, rules.article(api, true), validate, catchAsync(async (req, res, next) => {
+  articlesRouter.put(`/:id`, rules.article(api, true), validate, catchAsync(async (req, res) => {
     const {id} = req.params;
     if (req.body.file) {
       const {file} = req.body;
@@ -90,9 +77,6 @@ const router = (api) => {
       req.body.img = backendImgPath;
     }
     const data = await api.articles.edit(id, req.body);
-    if (data instanceof CustomError) {
-      return next(data);
-    }
     return res.status(HttpCodes.OK).json(data);
   }));
 
