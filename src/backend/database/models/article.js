@@ -5,31 +5,31 @@ const {Model} = require(`sequelize`);
 class Article extends Model {
   static init(sequelize, DataTypes) {
     return super.init({
-      "id": {
+      id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         autoIncrementIdentity: true,
         primaryKey: true,
         allowNull: false
       },
-      "title": {
+      title: {
         type: DataTypes.TEXT,
         allowNull: false
       },
-      "createdDate": {
+      createdDate: {
         type: DataTypes.TEXT,
         allowNull: false,
         field: `createdDate`,
       },
-      "announce": {
+      announce: {
         type: DataTypes.TEXT,
         allowNull: false
       },
-      "sentences": {
+      sentences: {
         type: DataTypes.TEXT,
         allowNull: true
       },
-      "img": {
+      img: {
         type: DataTypes.TEXT,
         allowNull: true
       },

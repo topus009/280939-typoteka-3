@@ -5,9 +5,9 @@
   "NO_ARTICLE_ID": "Article with ID «{id}» does not exist",
   "NO_COMMENT_ID": "Comment with ID «{id}» does not exist",
   "NO_USER_ID": "User with ID «{id}» does not exist",
-  "NO_USER_WITH_NAME": "The user with the name «{name}» does not exist",
   "DELETING_CATEGORY_HAS_ARTICLES": "Only this category is assigned to articles with IDS «{ids}»",
   "DUPLICATE_CATEGORY_LABEL": "Category title must be unique",
   "PAGE_SHOULD_BE_A_NUMBER": "Page should be a number",
-  "PAGE_SHOULD_BE_GREATER_THAN_ZERO": "Page should be greater than zero"
+  "PAGE_SHOULD_BE_GREATER_THAN_ZERO": "Page should be greater than zero",
+  "USER_WITH_EMAIL_EXISTS": "User with EMAIL «{email}» already exists"
 }

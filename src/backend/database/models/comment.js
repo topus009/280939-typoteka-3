@@ -5,28 +5,28 @@ const {Model} = require(`sequelize`);
 class Comment extends Model {
   static init(sequelize, DataTypes) {
     return super.init({
-      "id": {
+      id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         autoIncrementIdentity: true,
         primaryKey: true,
         allowNull: false
       },
-      "comment": {
+      comment: {
         type: DataTypes.TEXT,
         allowNull: false
       },
-      "userId": {
+      userId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         field: `userId`,
       },
-      "articleId": {
+      articleId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         field: `articleId`,
       },
-      "createdDate": {
+      createdDate: {
         type: DataTypes.TEXT,
         allowNull: false,
         field: `createdDate`,

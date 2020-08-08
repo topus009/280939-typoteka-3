@@ -47,10 +47,6 @@ const createServer = async () => {
 
   app.use(errorsHandler(logApi));
 
-  app.use((req, res, next) => {
-    next(new CustomError(HttpCodes.NOT_FOUND, _f(`NO_ROUTE_IN_API`)));
-  });
-
   return app;
 };
 

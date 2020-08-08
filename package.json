@@ -7,7 +7,7 @@
     "eslint": "eslint --ext .js \"src/**\"",
     "lint:pug": "pug-lint ./src",
     "generate": "npm run start -- --generate",
-    "test:rest": "cross-env COUNT=20 LOG_LEVEL=debug TESTING=true npm run db:all && jest .e2e.js --forceExit",
+    "test:rest": "cross-env LOG_LEVEL=debug TESTING=true npm run db:all && jest .e2e.js --forceExit",
     "start": "node -r ./config ./src/service/service.js",
     "backend": "cross-env COMMAND=\"--server\" npm start",
     "frontend": "node -r ./config ./src/frontend/server.js",
@@ -28,7 +28,7 @@
     "db:drop": "dropdb --if-exists -h localhost -U postgres -e typoteka",
     "db:generate:fill": "npm run generate && npm run db:prepare",
     "db:init": "node -r ./config ./src/backend/database/db-init.js",
-    "db:all": "npm-run-all generate db:drop db:create db:init db:fill"
+    "db:all": "cross-env COUNT=20 npm-run-all generate db:drop db:create db:init db:fill"
   },
   "repository": {
     "type": "git",
@@ -55,6 +55,7 @@
   },
   "dependencies": {
     "axios": "0.19.2",
+    "bcrypt": "5.0.0",
     "body-parser": "1.19.0",
     "chalk": "4.0.0",
     "dayjs": "1.8.28",

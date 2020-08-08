@@ -5,27 +5,52 @@ const {Model} = require(`sequelize`);
 class User extends Model {
   static init(sequelize, DataTypes) {
     return super.init({
-      "id": {
+      id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         autoIncrementIdentity: true,
         primaryKey: true,
         allowNull: false
       },
-      "name": {
+      firstName: {
         type: DataTypes.TEXT,
         allowNull: false
       },
-      "avatar": {
+      email: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+        unique: true
+      },
+      password: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+      },
+      role: {
+        type: DataTypes.TEXT,
+        allowNull: false
+      },
+      lastName: {
+        type: DataTypes.TEXT,
+        allowNull: false
+      },
+      avatar: {
         type: DataTypes.TEXT,
         allowNull: true
       },
-      "avatarSmall": {
+      avatarSmall: {
         type: DataTypes.TEXT,
         allowNull: true,
         field: `avatarSmall`,
       },
     }, {
+      defaultScope: {
+        attributes: {exclude: [`password`]},
+      },
+      scopes: {
+        withPassword: {
+          attributes: {include: [`password`]},
+        }
+      },
       sequelize,
       tableName: `users`,
       timestamps: false,

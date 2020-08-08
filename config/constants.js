@@ -7,7 +7,9 @@ const ExitCodes = {
   ERROR: 1
 };
 
-const MY_NAME = `Topolov Sergey`;
+const MY_FIRSTNAME = `Sergey`;
+const MY_LASTNAME = `Topolov`;
+const MY_EMAIL = `sj_89@mail.ru`;
 const DATE_FORMAT = `YYYY-MM-DD HH:mm:ss`;
 const DEFAULT_GENERATE_COUNT = 1;
 const GENERATE_MAX_ITEMS_ALLOWED = 1000;
@@ -35,6 +37,11 @@ const MockFilesPaths = {
 
 const BACKEND_API_PREFIX = `/api`;
 const ARTICLES_PAGE_LIMIT = 8;
+const UsersRoles = {
+  ADMIN: `admin`,
+  READER: `reader`
+};
+const ADMIN_ID = 1;
 
 module.exports = {
   ExitCodes,
@@ -48,6 +55,10 @@ module.exports = {
   MockFilesPaths,
   BACKEND_API_PREFIX,
   DATE_FORMAT,
-  MY_NAME,
+  MY_FIRSTNAME,
+  MY_LASTNAME,
   ARTICLES_PAGE_LIMIT,
+  UsersRoles,
+  ADMIN_ID,
+  MY_EMAIL,
 };

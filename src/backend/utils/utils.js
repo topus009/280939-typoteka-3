@@ -23,7 +23,7 @@ const errorsHandler = (log) => (error, req, res, next) => {
       const statusCode = HttpCodes.BAD_REQUEST;
       errObj = new CustomError(statusCode, text);
     }
-  } else if (error.name === `SequelizeUniqueConstraintError`) {
+  } else if (errObj.name === `SequelizeUniqueConstraintError`) {
     const {original} = errObj;
     if (original.constraint === `categories_label_key`) {
       errObj = new CustomError(HttpCodes.BAD_REQUEST, _f(`DUPLICATE_CATEGORY_LABEL`));

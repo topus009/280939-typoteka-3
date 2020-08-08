@@ -5,9 +5,13 @@ BEGIN;
 CREATE TEMP TABLE users_json (values TEXT)  ON COMMIT DROP;
 \copy users_json FROM './mocks/users.json';
 
-INSERT INTO users(id, name, avatar, "avatarSmall")
+INSERT INTO users(id, "firstName", "lastName", email, password, role, avatar, "avatarSmall")
 SELECT CAST(values->>'id' AS BIGINT) AS id,
-       CAST(values->>'name' AS TEXT) AS name,
+       CAST(values->>'firstName' AS TEXT) AS "firstName",
+       CAST(values->>'lastName' AS TEXT) AS "lastName",
+       CAST(values->>'email' AS TEXT) AS email,
+       CAST(values->>'password' AS TEXT) AS password,
+       CAST(values->>'role' AS TEXT) AS role,
        CAST(values->>'avatar' AS TEXT) AS avatar,
        CAST(values->>'avatarSmall' AS TEXT) AS "avatarSmall"
 FROM (SELECT json_array_elements(values::json) AS values FROM users_json) a;
