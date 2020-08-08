@@ -3,6 +3,7 @@
 const supertest = require(`supertest`);
 const users = require(`../../../../mocks/users.json`);
 const {createServer} = require(`../../server`);
+const {MY_EMAIL} = require(`../../../../config/constants`);
 
 let server;
 let request;
@@ -29,13 +30,31 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
     const res = await request.get(`${apiPrefix}/999`);
     expect(res.statusCode).toBe(404);
   });
-  test(`GET /name/:name - correct - return 200`, async () => {
-    const name = users[0].name;
-    const res = await request.get(`${apiPrefix}/name/${name}`);
+  test(`POST /register - correct - return 200`, async () => {
+    const res = await request.post(`${apiPrefix}/register`).send({
+      firstName: `aaaaaa`,
+      lastName: `aaaaaa`,
+      email: `aaaaaa@bbbb.com`,
+      password: `aaaaaa`,
+      passwordConfirmation: `aaaaaa`
+    });
     expect(res.statusCode).toBe(200);
   });
-  test(`GET /name/:name - wrong - return 404`, async () => {
-    const res = await request.get(`${apiPrefix}/name/x`);
-    expect(res.statusCode).toBe(404);
+  test(`POST /register - same email - wrong - return 404`, async () => {
+    const res = await request.post(`${apiPrefix}/register`).send({
+      firstName: `aaaaaa`,
+      lastName: `aaaaaa`,
+      email: MY_EMAIL,
+      password: `aaaaaa`,
+    });
+    expect(res.statusCode).toBe(400);
+  });
+  test(`POST /register - wrong - return 404`, async () => {
+    const res = await request.post(`${apiPrefix}/register`).send({
+      firstName: `aaaaaa`,
+      email: `aaaaaa`,
+      password: `aaaaaa`,
+    });
+    expect(res.statusCode).toBe(400);
   });
 });
