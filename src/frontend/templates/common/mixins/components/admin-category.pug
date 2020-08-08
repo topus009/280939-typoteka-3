@@ -10,5 +10,5 @@ mixin adminCategory(category)
       button.category__button.button.button--category(type='button') Удалить
   if errors
     each error in errors
-      if error.id === category.id
+      if +error.id === +category.id
         p.comments__error= error.label

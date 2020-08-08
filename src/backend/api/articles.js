@@ -10,7 +10,6 @@ const {
 const {
   CustomError,
   sqlzObjsToArr,
-  sqlzExcludeFieldsFromObjs,
   sqlzParse,
   getHighlitedMatches,
 } = require(`../../utils/utils`);
@@ -123,6 +122,7 @@ const articlesApi = (entityName, database) => ({
       throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_CATEGORY_ID`, {id}));
     }
     const data = await category.getArticle({
+      joinTableAttributes: [],
       include: [
         {
           model: database.Category,
@@ -135,8 +135,7 @@ const articlesApi = (entityName, database) => ({
       limit: ARTICLES_PAGE_LIMIT,
       offset: ARTICLES_PAGE_LIMIT * (num - 1),
     });
-    const preparedData = sqlzExcludeFieldsFromObjs(data, [`articles_categories`]);
-    return sqlzObjsToArr(preparedData, `categories`, `id`);
+    return sqlzObjsToArr(data, `categories`, `id`);
   },
 
   async searchByTitle(query) {

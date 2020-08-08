@@ -16,7 +16,7 @@ const router = (api) => {
 
   categoriesRouter.get(`/`, catchAsync(async (req, res) => {
     const data = await api.categories.getAll();
-    res.status(HttpCodes.OK).json(data);
+    return res.status(HttpCodes.OK).json(data);
   }));
 
   categoriesRouter.get(`/:id`, catchAsync(async (req, res, next) => {
@@ -28,15 +28,15 @@ const router = (api) => {
     return res.status(HttpCodes.OK).json(data);
   }));
 
-  categoriesRouter.post(`/`, rules.category(), validate, catchAsync(async (req, res) => {
+  categoriesRouter.post(`/`, rules.category(api), validate, catchAsync(async (req, res) => {
     const data = await api.categories.add(req.body);
-    res.status(HttpCodes.OK).json(data);
+    return res.status(HttpCodes.OK).json(data);
   }));
 
-  categoriesRouter.put(`/:id`, rules.category(), validate, catchAsync(async (req, res) => {
+  categoriesRouter.put(`/:id`, rules.category(api), validate, catchAsync(async (req, res) => {
     const {id} = req.params;
     const data = await api.categories.edit(id, req.body);
-    res.status(HttpCodes.OK).json(data);
+    return res.status(HttpCodes.OK).json(data);
   }));
 
   categoriesRouter.delete(`/:id`, catchAsync(async (req, res, next) => {
@@ -50,12 +50,12 @@ const router = (api) => {
 
   categoriesRouter.get(`/categories/my`, catchAsync(async (req, res) => {
     const data = await api.categories.getAll();
-    res.status(HttpCodes.OK).json(data);
+    return res.status(HttpCodes.OK).json(data);
   }));
 
   categoriesRouter.get(`/categories/count`, catchAsync(async (req, res) => {
     const data = await api.categories.getCategoriesCount();
-    res.status(HttpCodes.OK).json(data);
+    return res.status(HttpCodes.OK).json(data);
   }));
 
   return categoriesRouter;

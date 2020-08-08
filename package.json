@@ -5,6 +5,7 @@
   "main": "./src/service/service.js",
   "scripts": {
     "eslint": "eslint --ext .js \"src/**\"",
+    "find:dup": "jscpd src -f \"javascript\"",
     "lint:pug": "pug-lint ./src",
     "generate": "npm run start -- --generate",
     "test:rest": "cross-env LOG_LEVEL=debug TESTING=true npm run db:all && jest .e2e.js --forceExit",
@@ -28,7 +29,7 @@
     "db:drop": "dropdb --if-exists -h localhost -U postgres -e typoteka",
     "db:generate:fill": "npm run generate && npm run db:prepare",
     "db:init": "node -r ./config ./src/backend/database/db-init.js",
-    "db:all": "cross-env COUNT=20 npm-run-all generate db:drop db:create db:init db:fill"
+    "db:all": "cross-env COUNT=20 PGPASSWORD=postgres npm-run-all generate db:drop db:create db:init db:fill"
   },
   "repository": {
     "type": "git",
@@ -47,6 +48,7 @@
     "jest": "26.1.0",
     "jest-extended": "0.11.5",
     "jest-html-reporter": "3.1.3",
+    "jscpd": "3.3.3",
     "nodemon": "2.0.4",
     "npm-run-all": "4.1.5",
     "pino-pretty": "4.0.0",

@@ -47,10 +47,16 @@ const user = (api) => ([
     .withMessage(`Only png,jpg,jpeg files supported`),
 ]);
 
-const category = () => ([
+const category = (api) => ([
   body(`label`)
     .isLength({min: 5, max: 30})
-    .withMessage(`The name must contain at least 5 characters and a maximum of 30`),
+    .withMessage(`The name must contain at least 5 characters and a maximum of 30`)
+    .custom(async (label) => {
+      const data = await api.categories.findByLabel(label);
+      if (data) {
+        throw new Error(_f(`DUPLICATE_CATEGORY_LABEL`, {label}));
+      }
+    }),
 ]);
 
 const comment = () => ([
@@ -61,7 +67,7 @@ const comment = () => ([
 
 const validExtensions = [`.png`, `.jpg`, `.jpeg`];
 
-const articleValidators = {
+const articleValidators = (api) => ({
   title: (fieldEl) => fieldEl
     .isLength({min: 30, max: 250})
     .withMessage(`The title must contain a minimum of 30 characters and a maximum of 250`),
@@ -78,17 +84,20 @@ const articleValidators = {
   categories: (fieldEl) => fieldEl
     .toArray()
     .isArray({min: 1})
-    .withMessage(`At least 1 category must be selected`),
+    .withMessage(`At least 1 category must be selected`)
+    .custom(async (arr) => {
+      await Promise.all(arr.map((id) => api.categories.findById(id)));
+    }),
   announce: (fieldEl) => fieldEl
     .isLength({min: 30, max: 250})
     .withMessage(`The announcement must contain a minimum of 30 characters and a maximum of 250`),
   sentences: (fieldEl) => fieldEl
     .isLength({max: 1000})
     .withMessage(`Publication text must not exceed 1000 characters`),
-};
+});
 
 
-const article = (optional) => {
+const article = (api, optional) => {
   const articleFields = {
     title: optional ? body(`title`).optional() : body(`title`),
     file: optional ? body(`file`).optional() : body(`file`),
@@ -96,7 +105,7 @@ const article = (optional) => {
     announce: optional ? body(`announce`).optional() : body(`announce`),
     sentences: optional ? body(`sentences`).optional() : body(`sentences`),
   };
-  return Object.keys(articleFields).map((field) => articleValidators[field](articleFields[field]));
+  return Object.keys(articleFields).map((field) => articleValidators(api)[field](articleFields[field]));
 };
 
 const rules = {

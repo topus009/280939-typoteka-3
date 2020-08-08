@@ -3,18 +3,15 @@
 const {Router} = require(`express`);
 const axios = require(`../axios`);
 const {articleImgUpload} = require(`../../utils/upload`);
+const {catchAsync} = require(`../../utils/utils`);
 
 const articlesRouter = new Router();
 
-articlesRouter.get(`/article/:id`, async (req, res, next) => {
-  try {
-    const {id} = req.params;
-    const {data} = await axios.get(`/pages/articles/article/${id}`);
-    res.render(`pages/articles/article`, data);
-  } catch (error) {
-    next(error);
-  }
-});
+articlesRouter.get(`/article/:id`, catchAsync(async (req, res) => {
+  const {id} = req.params;
+  const {data} = await axios.get(`/pages/articles/article/${id}`);
+  return res.render(`pages/articles/article`, data);
+}));
 
 articlesRouter.post(`/article/:id`, async (req, res, next) => {
   const {id} = req.params;
@@ -23,21 +20,21 @@ articlesRouter.post(`/article/:id`, async (req, res, next) => {
     if (apiReq.status === 200) {
       res.redirect(`/my/comments`);
     }
+    return;
   } catch (error) {
     if (error.statusCode === 400 && Array.isArray(error.text)) {
       const {data} = await axios.get(`/pages/articles/article/${id}`);
       res.render(`pages/articles/article`, {...data, errors: error.text});
-      return;
     }
     next(error);
   }
 });
 
-articlesRouter.get(`/article/edit/:id`, async (req, res) => {
+articlesRouter.get(`/article/edit/:id`, catchAsync(async (req, res) => {
   const {id} = req.params;
   const {data} = await axios.get(`/pages/articles/article/edit/${id}`);
-  res.render(`pages/articles/article-form`, data);
-});
+  return res.render(`pages/articles/article-form`, data);
+}));
 
 articlesRouter.post(`/article/edit/:id`, articleImgUpload, async (req, res, next) => {
   const {id} = req.params;
@@ -50,6 +47,7 @@ articlesRouter.post(`/article/edit/:id`, articleImgUpload, async (req, res, next
     if (apiReq.status === 200) {
       res.redirect(`/my/articles`);
     }
+    return;
   } catch (error) {
     if (error.statusCode === 400 && Array.isArray(error.text)) {
       const {data} = await axios.get(`/pages/articles/article/edit/${id}`);
@@ -62,16 +60,15 @@ articlesRouter.post(`/article/edit/:id`, articleImgUpload, async (req, res, next
         errors: error.text
       };
       res.render(`pages/articles/article-form`, prevarticleData);
-      return;
     }
     next(error);
   }
 });
 
-articlesRouter.get(`/add`, async (req, res) => {
+articlesRouter.get(`/add`, catchAsync(async (req, res) => {
   const {data} = await axios.get(`/pages/articles/add`);
-  res.render(`pages/articles/article-form`, data);
-});
+  return res.render(`pages/articles/article-form`, data);
+}));
 
 articlesRouter.post(`/add`, articleImgUpload, async (req, res, next) => {
   const articleData = req.body;

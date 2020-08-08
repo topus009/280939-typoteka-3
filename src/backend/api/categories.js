@@ -1,5 +1,6 @@
 "use strict";
 
+const {Op} = require(`sequelize`);
 const {HttpCodes} = require(`../../../config/constants`);
 const {CustomError} = require(`../../utils/utils`);
 
@@ -14,6 +15,16 @@ const categoriesApi = (entityName, database) => ({
       throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_CATEGORY_ID`, {id}));
     }
     return category;
+  },
+
+  async findByLabel(label) {
+    return await database[entityName].findOne({
+      where: {
+        label: {
+          [Op.like]: `%${label}%`
+        }
+      }
+    });
   },
 
   async delete(id) {

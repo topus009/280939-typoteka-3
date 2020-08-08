@@ -18,6 +18,7 @@ registerRouter.post(`/`, userImgUpload, async (req, res, next) => {
     if (registerData.status === 200) {
       res.redirect(`/login`);
     }
+    return;
   } catch (error) {
     if (error.statusCode === 400 && Array.isArray(error.text)) {
       res.render(`pages/auth/registration`, {errors: error.text});

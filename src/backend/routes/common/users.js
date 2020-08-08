@@ -18,7 +18,7 @@ const router = (api) => {
 
   usersRouter.get(`/`, catchAsync(async (req, res) => {
     const data = await api.users.getAll();
-    res.status(HttpCodes.OK).json(data);
+    return res.status(HttpCodes.OK).json(data);
   }));
 
   usersRouter.get(`/:id`, catchAsync(async (req, res, next) => {

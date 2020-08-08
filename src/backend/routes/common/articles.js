@@ -50,7 +50,7 @@ const router = (api) => {
     return res.status(HttpCodes.OK).json(data);
   }));
 
-  articlesRouter.post(`/`, rules.article(), validate, catchAsync(async (req, res) => {
+  articlesRouter.post(`/`, rules.article(api), validate, catchAsync(async (req, res) => {
     if (req.body.file) {
       const {file} = req.body;
       const backendImgPath = `img/articles/${file.filename}`;
@@ -59,7 +59,7 @@ const router = (api) => {
       req.body.img = backendImgPath;
     }
     const data = await api.articles.add(req.body);
-    res.status(HttpCodes.OK).json(data);
+    return res.status(HttpCodes.OK).json(data);
   }));
 
   articlesRouter.delete(`/:id`, catchAsync(async (req, res, next) => {
@@ -71,7 +71,7 @@ const router = (api) => {
     return res.status(HttpCodes.OK).json(data);
   }));
 
-  articlesRouter.put(`/:id`, rules.article(true), validate, catchAsync(async (req, res, next) => {
+  articlesRouter.put(`/:id`, rules.article(api, true), validate, catchAsync(async (req, res, next) => {
     const {id} = req.params;
     if (req.body.file) {
       const {file} = req.body;
@@ -98,7 +98,7 @@ const router = (api) => {
 
   articlesRouter.get(`/articles/my`, catchAsync(async (req, res) => {
     const data = await api.articles.getAll();
-    res.status(HttpCodes.OK).json(data);
+    return res.status(HttpCodes.OK).json(data);
   }));
 
   articlesRouter.get(`/articles/search`, catchAsync(async (req, res) => {
@@ -107,12 +107,12 @@ const router = (api) => {
     if (query) {
       data = await api.articles.searchByTitle(query);
     }
-    res.status(HttpCodes.OK).json(data);
+    return res.status(HttpCodes.OK).json(data);
   }));
 
   articlesRouter.get(`/articles/hot`, catchAsync(async (req, res) => {
     const data = await api.articles.getHotArticles();
-    res.status(HttpCodes.OK).json(data);
+    return res.status(HttpCodes.OK).json(data);
   }));
 
   return articlesRouter;

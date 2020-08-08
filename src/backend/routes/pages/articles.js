@@ -48,7 +48,7 @@ const router = (api) => {
     const {id} = req.params;
     const article = await api.articles.findById(id);
     if (article instanceof CustomError) {
-      next(article);
+      return next(article);
     }
     const categories = await api.categories.getAll();
     const data = {

@@ -13,7 +13,7 @@ const router = (api) => {
 
   commentsRouter.get(`/`, catchAsync(async (req, res) => {
     const data = await api.comments.getAll();
-    res.status(HttpCodes.OK).json(data);
+    return res.status(HttpCodes.OK).json(data);
   }));
 
   commentsRouter.get(`/article/:articleId`, catchAsync(async (req, res, next) => {
@@ -37,7 +37,7 @@ const router = (api) => {
   commentsRouter.post(`/article/:articleId`, rules.comment(), validate, catchAsync(async (req, res) => {
     const {articleId} = req.params;
     const data = await api.comments.add(articleId, req.body);
-    res.status(HttpCodes.OK).json(data);
+    return res.status(HttpCodes.OK).json(data);
   }));
 
   commentsRouter.delete(`/article/:articleId/:id`, catchAsync(async (req, res, next) => {
@@ -51,12 +51,12 @@ const router = (api) => {
 
   commentsRouter.get(`/comments/my`, catchAsync(async (req, res) => {
     const data = await api.comments.getMyComments();
-    res.status(HttpCodes.OK).json(data);
+    return res.status(HttpCodes.OK).json(data);
   }));
 
   commentsRouter.get(`/comments/latest`, catchAsync(async (req, res) => {
     const data = await api.comments.getLatestComments();
-    res.status(HttpCodes.OK).json(data);
+    return res.status(HttpCodes.OK).json(data);
   }));
 
   return commentsRouter;

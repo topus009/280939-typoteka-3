@@ -2,13 +2,14 @@
 
 const {Router} = require(`express`);
 const axios = require(`../axios`);
+const {catchAsync} = require(`../../utils/utils`);
 
 const myRouter = new Router();
 
-myRouter.get(`/categories`, async (req, res) => {
+myRouter.get(`/categories`, catchAsync(async (req, res) => {
   const {data} = await axios.get(`/pages/my/categories`);
-  res.render(`pages/my/admin-categories`, data);
-});
+  return res.render(`pages/my/admin-categories`, data);
+}));
 
 myRouter.post(`/categories`, async (req, res, next) => {
   const {id, label} = req.body;
@@ -19,6 +20,7 @@ myRouter.post(`/categories`, async (req, res, next) => {
     if (apiReq.status === 200) {
       res.redirect(`/my/categories`);
     }
+    return;
   } catch (error) {
     if (error.statusCode === 400) {
       const {data} = await axios.get(`/pages/my/categories`);
@@ -33,14 +35,14 @@ myRouter.post(`/categories`, async (req, res, next) => {
   }
 });
 
-myRouter.get(`/comments`, async (req, res) => {
+myRouter.get(`/comments`, catchAsync(async (req, res) => {
   const {data} = await axios.get(`/pages/my/comments`);
-  res.render(`pages/my/admin-comments`, data);
-});
+  return res.render(`pages/my/admin-comments`, data);
+}));
 
-myRouter.get(`/articles`, async (req, res) => {
+myRouter.get(`/articles`, catchAsync(async (req, res) => {
   const {data} = await axios.get(`/pages/my/articles`);
-  res.render(`pages/my/admin-articles`, data);
-});
+  return res.render(`pages/my/admin-articles`, data);
+}));
 
 module.exports = myRouter;

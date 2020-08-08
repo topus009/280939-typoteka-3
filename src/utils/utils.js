@@ -119,14 +119,6 @@ const sqlzObjsToArr = (data, key, objKey) => {
   return formattedData;
 };
 
-const sqlzExcludeFieldsFromObjs = (data = [], fields = []) => {
-  const parsedData = sqlzParse(data);
-  fields.forEach((field) => {
-    parsedData.forEach((item) => delete item[field]);
-  });
-  return parsedData;
-};
-
 const getHighlitedMatches = (queryString, string) => {
   let newString = ``;
   const rgxp = new RegExp(`(\\S*)?(` + queryString + `)(\\S*)?`, `ig`);
@@ -183,7 +175,6 @@ module.exports = {
   isFileExistsAsync,
   getHighlitedMatches,
   sqlzObjsToArr,
-  sqlzExcludeFieldsFromObjs,
   sqlzParse,
   getPaginationData,
   catchAsync,
