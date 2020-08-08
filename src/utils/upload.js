@@ -18,7 +18,10 @@ const articleImgUpload = upload.single(`img`);
 
 const userImgUpload = upload.single(`avatar`);
 
+const validExtensions = [`.png`, `.jpg`, `.jpeg`];
+
 module.exports = {
   articleImgUpload,
   userImgUpload,
+  validExtensions,
 };
