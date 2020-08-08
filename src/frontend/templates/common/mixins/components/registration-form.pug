@@ -1,0 +1,32 @@
+mixin registrationForm(errors)
+  .popup__form.popup__form--active.form.form--register
+    form(action='/register' method='POST' enctype='multipart/form-data')
+      .form__field
+        label
+          input(type='email' name='email' placeholder='Электронная почта' required)
+      +getError(errors, 'email')
+      .form__field
+        label
+          input(type='text' name='firstName' placeholder='Имя' required)
+      +getError(errors, 'firstName')
+      .form__field
+        label
+          input(type='text' name='lastName' placeholder='Фамилия' required)
+      +getError(errors, 'lastName')
+      .form__field
+        label
+          input(type='password' name='password' placeholder='Пароль' required)
+      +getError(errors, 'password')
+      .form__field
+        label
+          input(type='password' name='passwordConfirmation' placeholder='Повтор пароля' required)
+      +getError(errors, 'passwordConfirmation')
+      .form__image-loader
+        a.form__avatar.avatar
+          img(src='img/icons/smile.svg' alt='аватар пользователя')
+        label
+          input.visually-hidden(type='file' name='avatar')
+          | Загрузить фото профиля
+      //- +getError(errors, 'avatar')
+      +getError(errors, 'file')
+      button.form__submit-btn.form__submit-btn--register.button.button--colored(type='submit') Зарегистрироваться

@@ -2,7 +2,7 @@ mixin adminComment(article, comment, user)
   li.publication__list-item
     .publication__header
       img.publication__list-image(src=user.avatarSmall width='20' height='20' alt='Аватар пользователя')
-      b.publication__list-name= user.name
+      b.publication__list-name= `${user.lastName} ${user.firstName}`
       +formattedDate(comment.createdDate, {class: 'publication__item-time'})
     a.publication__item-text(href=`/articles/article/${article.id}`)= article.title
     p.publication__text-strong= comment.comment

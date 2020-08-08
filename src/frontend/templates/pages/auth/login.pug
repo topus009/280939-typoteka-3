@@ -1,0 +1,18 @@
+include ../../common/index.pug
+
++layout('login')
+  +body({noVendor: true})
+    +header({
+      type: 'user'
+    })
+    main
+      h1.visually-hidden Авторизация
+      section.modal
+        .popup.popup--registration
+          button.popup__button.button.button--popup-close(type='button' aria-label='Закрыть окно') Закрыть окно
+          h2.visually-hidden Форма авторизации
+          ul.popup__tabs
+            li.popup__tab.popup__tab--log-in.popup__tab--active
+              button.popup__tab-switcher.button(type='button') Войти
+          +loginForm(errors, success)
+        .modal__overlay

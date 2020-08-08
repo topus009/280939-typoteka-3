@@ -22,7 +22,7 @@ mixin articleCommentItem({comment, user})
       img(src=user.avatar alt='аватар пользователя')
     .comments__text
       .comments__head
-        p= `${user.name} •`
+        p= `${user.lastName} ${user.firstName} •`
         +formattedDate(comment.createdDate, {class: 'comments__date'})
       p.comments__message= comment.comment
 
