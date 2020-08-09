@@ -29,7 +29,7 @@
     "db:drop": "dropdb --if-exists -h localhost -U postgres -e typoteka",
     "db:generate:fill": "npm run generate && npm run db:prepare",
     "db:init": "node -r ./config ./src/backend/database/db-init.js",
-    "db:all": "cross-env COUNT=20 PGPASSWORD=postgres npm-run-all generate db:drop db:create db:init db:fill"
+    "db:all": "cross-env COUNT=20 npm-run-all generate db:drop db:create db:init db:fill"
   },
   "repository": {
     "type": "git",

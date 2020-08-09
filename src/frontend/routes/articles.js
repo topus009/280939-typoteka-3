@@ -2,7 +2,10 @@
 
 const {Router} = require(`express`);
 const axios = require(`../axios`);
-const {articleImgUpload} = require(`../../utils/upload`);
+const {
+  articleImgUpload,
+  addFile,
+} = require(`../../utils/upload`);
 const {catchAsync} = require(`../../utils/utils`);
 
 const articlesRouter = new Router();
@@ -40,9 +43,7 @@ articlesRouter.get(`/article/edit/:id`, catchAsync(async (req, res) => {
 articlesRouter.post(`/article/edit/:id`, articleImgUpload, async (req, res, next) => {
   const {id} = req.params;
   const articleData = req.body;
-  if (req.file) {
-    articleData.file = req.file;
-  }
+  addFile(req, articleData);
   try {
     const apiReq = await axios.put(`/articles/${id}`, articleData);
     if (apiReq.status === 200) {
@@ -52,7 +53,7 @@ articlesRouter.post(`/article/edit/:id`, articleImgUpload, async (req, res, next
   } catch (error) {
     if (error.statusCode === 400 && Array.isArray(error.text)) {
       const {data} = await axios.get(`/pages/articles/article/edit/${id}`);
-      const prevarticleData = {
+      const prevArticleData = {
         ...data,
         article: {
           ...data.article,
@@ -60,7 +61,7 @@ articlesRouter.post(`/article/edit/:id`, articleImgUpload, async (req, res, next
         },
         errors: error.text
       };
-      res.render(`pages/articles/article-form`, prevarticleData);
+      res.render(`pages/articles/article-form`, prevArticleData);
       return;
     }
     next(error);
@@ -74,9 +75,7 @@ articlesRouter.get(`/add`, catchAsync(async (req, res) => {
 
 articlesRouter.post(`/add`, articleImgUpload, async (req, res, next) => {
   const articleData = req.body;
-  if (req.file) {
-    articleData.file = req.file;
-  }
+  addFile(req, articleData);
   try {
     const apiReq = await axios.post(`/articles`, articleData);
     if (apiReq.status === 200) {
@@ -85,7 +84,7 @@ articlesRouter.post(`/add`, articleImgUpload, async (req, res, next) => {
   } catch (error) {
     if (error.statusCode === 400 && Array.isArray(error.text)) {
       const {data} = await axios.get(`/pages/articles/add`);
-      const prevarticleData = {
+      const prevArticleData = {
         ...data,
         article: {
           ...data.article,
@@ -93,7 +92,7 @@ articlesRouter.post(`/add`, articleImgUpload, async (req, res, next) => {
         },
         errors: error.text
       };
-      res.render(`pages/articles/article-form`, prevarticleData);
+      res.render(`pages/articles/article-form`, prevArticleData);
       return;
     }
     next(error);

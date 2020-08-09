@@ -1,8 +1,18 @@
 {
   "reporters": ["html"],
-  "minLines": 50,
-  "minTokens": 30,
+  "minLines": 3,
+  "minTokens": 10,
   "mode": "weak",
   "output": "./",
-  "silent": true
+  "silent": true,
+  "ignore": [
+    "**/public",
+    "**/database",
+    "**/*.e2e.js",
+    "**/generate",
+    "**/api",
+    "**/validation",
+    "**/utils",
+    "**/*/server.js"
+  ]
 }

@@ -12,6 +12,7 @@ const {
   validate,
   rules,
 } = require(`../../validation`);
+const {saveFile} = require(`../../../utils/upload`);
 
 const router = (api) => {
   const articlesRouter = new Router();
@@ -41,13 +42,7 @@ const router = (api) => {
   }));
 
   articlesRouter.post(`/`, rules.article(api), validate, catchAsync(async (req, res) => {
-    if (req.body.file) {
-      const {file} = req.body;
-      const backendImgPath = `img/articles/${file.filename}`;
-      await fsFromises.rename(file.path, path.join(process.cwd(), `./src/frontend/public/${backendImgPath}`));
-      delete req.body.file;
-      req.body.img = backendImgPath;
-    }
+    await saveFile(req, `img/articles`, [`img`]);
     const data = await api.articles.add(req.body);
     return res.status(HttpCodes.OK).json(data);
   }));
