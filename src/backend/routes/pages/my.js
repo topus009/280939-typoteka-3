@@ -21,7 +21,6 @@ const router = (api) => {
       comments,
       articles,
       myComments,
-      currentUser,
     ] = await Promise.all([
       api.comments.getAll(),
       api.articles.getAll(),
@@ -33,7 +32,6 @@ const router = (api) => {
       comments,
       articles,
       myComments,
-      currentUser,
     };
 
     return res.status(HttpCodes.OK).json(data);

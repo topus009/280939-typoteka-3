@@ -24,8 +24,8 @@ const router = (api) => {
     return res.status(HttpCodes.OK).json(data);
   }));
 
-  usersRouter.post(`/register`, [
-    rules.user(api),
+  usersRouter.post(`/auth/register`, [
+    rules.user.registration(api),
     validate,
   ], catchAsync(async (req, res) => {
     if (req.body.file) {
@@ -37,6 +37,14 @@ const router = (api) => {
       req.body.avatarSmall = backendImgPath;
     }
     const data = await api.users.add(req.body);
+    return res.status(HttpCodes.OK).json(data);
+  }));
+
+  usersRouter.post(`/auth/login`, [
+    rules.user.login(),
+    validate,
+  ], catchAsync(async (req, res) => {
+    const data = await api.users.auth(req.body);
     return res.status(HttpCodes.OK).json(data);
   }));
 

@@ -2,10 +2,9 @@
 
 const {body} = require(`express-validator`);
 const path = require(`path`);
-
 const {validExtensions} = require(`../../../utils/upload`);
 
-const user = (api) => ([
+const registration = (api) => ([
   body(`email`)
     .isEmail()
     .withMessage(`Email is not valid`)
@@ -49,4 +48,19 @@ const user = (api) => ([
     .withMessage(`Only png,jpg,jpeg files supported`),
 ]);
 
-module.exports = user;
+const login = () => ([
+  body(`email`)
+    .isEmail()
+    .withMessage(`Email is not valid`),
+  body(`password`)
+    .trim()
+    .isLength({min: 6})
+    .withMessage(`Password must be at least 6 characters`),
+]);
+
+const userValidation = {
+  registration,
+  login,
+};
+
+module.exports = userValidation;

@@ -29,14 +29,14 @@ const commentsApi = (entityName, database) => ({
     return id;
   },
 
-  async add(articleId, data) {
+  async add(articleId, {userId, ...data}) {
     const articleInDB = await database.Article.findByPk(articleId);
     if (!articleInDB) {
       throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_ARTICLE_ID`, {id: articleId}));
     }
-    const user = await database.User.findByPk(ADMIN_ID);
+    const user = await database.User.findByPk(userId);
     if (!user) {
-      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_USER_ID`, {id: ADMIN_ID}));
+      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_USER_ID`, {id: userId}));
     }
     return await database[entityName].create({
       ...data,

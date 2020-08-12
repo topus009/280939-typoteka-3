@@ -4,7 +4,6 @@ const {Router} = require(`express`);
 const dayjs = require(`dayjs`);
 const {
   HttpCodes,
-  ADMIN_ID,
 } = require(`../../../../config/constants`);
 const {catchAsync} = require(`../../../utils/utils`);
 
@@ -17,19 +16,16 @@ const router = (api) => {
     const [
       categories,
       users,
-      currentUser,
       categoriesCount,
       comments,
     ] = await Promise.all([
       api.categories.getAll(),
       api.users.getAll(),
-      api.users.findById(ADMIN_ID),
       api.categories.getCategoriesCount(),
       api.comments.getCommentsByArticleId(id),
     ]);
     const data = {
       categories,
-      currentUser,
       article,
       users,
       categoriesCount,
