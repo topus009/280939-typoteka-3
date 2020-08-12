@@ -39,17 +39,19 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
     expect(res.statusCode).toBe(404);
   });
   test(`POST /article/:articleId - correct - return 200`, async () => {
-    const {articleId} = comments[0];
+    const {articleId, userId} = comments[0];
     const res = await request.post(`${apiPrefix}/article/${articleId}`).send({
-      comment: `ascascaasc as asda sd asd ad asd asd asd asdas dasd asdas dasd`
+      comment: `ascascaasc as asda sd asd ad asd asd asd asdas dasd asdas dasd`,
+      userId,
     });
     expect(res.statusCode).toBe(200);
     expect(Number(res.body)).toBeNumber();
   });
   test(`POST /article/:articleId - wrong - return 400`, async () => {
-    const {articleId} = comments[0];
+    const {articleId, userId} = comments[0];
     const res = await request.post(`${apiPrefix}/article/${articleId}`).send({
-      comment: `dasd asdas dasd`
+      comment: `dasd asdas dasd`,
+      userId,
     });
     expect(res.statusCode).toBe(400);
   });
