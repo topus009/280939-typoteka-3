@@ -6,9 +6,7 @@ include ../../common/index.pug
     footerProps: {mod: 'padding'},
     noVendor: true,
   })
-    +header({
-      type: 'admin'
-    })
+    +header({currentUser})
     main.main-page.main-page--padding
       section.main-page__publication.publication
         h1.publication__title Комментарии

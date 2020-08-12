@@ -8,7 +8,7 @@ mixin backLink
     colored: true,
     noVendor: true,
   })
-    +header({error})
+    +header({currentUser, error})
     main
       h1.visually-hidden= `Ошибка ${error.statusCode}`
       if error.statusCode === 404

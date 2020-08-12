@@ -9,9 +9,7 @@ include ../../common/index.pug
     colored: true,
     noVendor: true
   })
-    +header({
-      type: 'admin'
-    })
+    +header({currentUser})
     main
       section.search-page
         //- add class fixes long list

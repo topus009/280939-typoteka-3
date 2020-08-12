@@ -2,5 +2,6 @@ mixin adminArticle(article)
   li.notes__list-item
     +formattedDate(article.createdDate, {class: 'notes__item-time'})
     a.notes__item-text(href=`/articles/article/${article.id}`)= article.title
+    a.notes__button.button.button--close-item.button--edit-item(href=`/articles/article/edit/${article.id}`)
     button.notes__button.button.button--close-item(type='button')
       span.visually-hidden Закрыть строку списка

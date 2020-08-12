@@ -9,9 +9,7 @@ include ../../common/index.pug
     bodyAttrs: {style: "height: 1050px"},
     noFooter: true
   })
-    +header({
-      type: 'admin'
-    })
+    +header({currentUser})
     main
       section.modal.modal--flex
         .popup.popup--new-publication.popup--flex

@@ -2,9 +2,7 @@ include ../../common/index.pug
 
 +layout('login')
   +body({noVendor: true})
-    +header({
-      type: 'user'
-    })
+    +header({currentUser})
     main
       h1.visually-hidden Авторизация
       section.modal
@@ -14,5 +12,5 @@ include ../../common/index.pug
           ul.popup__tabs
             li.popup__tab.popup__tab--log-in.popup__tab--active
               button.popup__tab-switcher.button(type='button') Войти
-          +loginForm(errors, success)
+          +loginForm(errors)
         .modal__overlay

@@ -1,5 +1,5 @@
-mixin articleCommentsForm(currentUser, articleId, errors)
-  if currentUser
+mixin articleCommentsForm(currentUser = {}, articleId, errors)
+  if currentUser.id
     .comments__footer.comments__footer--user
       form(action=`/articles/article/${articleId}` method='POST')
         .comments__avatar.avatar
@@ -10,7 +10,7 @@ mixin articleCommentsForm(currentUser, articleId, errors)
       +getError(errors, 'comment')
   else
     .comments__footer.comments__footer--visitor
-      button.comments__button.button.button--colored(type='submit') Войти
+      a.comments__button.button.button--colored(href='/login') Войти
       .comments__registration
         p.text.text--signature
           b.title.title--small Регистрация

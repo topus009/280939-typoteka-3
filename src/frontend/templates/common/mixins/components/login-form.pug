@@ -1,7 +1,5 @@
-mixin loginForm(errors, success)
+mixin loginForm(errors)
   .popup__form.popup__form--active.form.form--log-in
-    if success
-      b ___ВЫ УСПЕШНО ЗАРЕГИЛИСЬ___
     form(action='/login' method='POST')
       .form__field
         label

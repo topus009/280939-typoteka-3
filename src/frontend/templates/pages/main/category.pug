@@ -2,9 +2,7 @@ include ../../common/index.pug
 
 +layout('Типотека')
   +body({noVendor: true})
-    +header({
-      type: 'user'
-    })
+    +header({currentUser})
     main.main-page
       h1.visually-hidden Главная страница личного блога Типотека
       p.
