@@ -1,6 +1,7 @@
 'use strict';
 
 const axios = require(`../axios`);
+const csrfProtection = require(`csurf`);
 const {
   commonErrorsHandler,
   CustomError,
@@ -56,9 +57,12 @@ const getUser = catchAsync(async (req, res, next) => {
   return next();
 });
 
+const csrf = csrfProtection({cookie: true});
+
 module.exports = {
   errorsHandler,
   auth,
   getUser,
   admin,
+  csrf,
 };

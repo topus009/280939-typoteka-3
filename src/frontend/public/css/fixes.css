@@ -24,3 +24,7 @@
 .button--edit-item:hover {
   background-color: #2f80ed;
 }
+
+.pagination__item--active {
+  pointer-events: none;
+}

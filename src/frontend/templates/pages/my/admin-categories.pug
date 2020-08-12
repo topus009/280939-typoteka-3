@@ -12,6 +12,7 @@ include ../../common/index.pug
         h1.category__title Категории
         .category__add-form
           form(action='/my/categories' method='POST')
+            input(type='hidden' name='_csrf' value= csrf)
             input#add-form-add-category(type='text' name='label' placeholder='Новая категория')
             label(for='add-form-add-category')
               span.visually-hidden Добавить категорию

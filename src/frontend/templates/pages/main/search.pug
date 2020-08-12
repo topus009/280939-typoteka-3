@@ -18,6 +18,7 @@ include ../../common/index.pug
           //- add class fixes long list
           .search.search-page__form(class=searchFormClass)
             form(action=`/search` method='GET')
+              input(type='hidden' name='_csrf' value= csrf)
               label
                 input(name='query' type='text' placeholder='Что ищем?' value=`${query || ''}`)
               button.search__button.button.button--transparent(type='submit') Найти

@@ -15,6 +15,7 @@ include ../../common/index.pug
         .popup.popup--new-publication.popup--flex
           .new-publication
             form(action=action method='POST' enctype='multipart/form-data')
+              input(type='hidden' name='_csrf' value= csrf)
               .new-publication__header
                 h1= pageTitle
                 +dateField(article)

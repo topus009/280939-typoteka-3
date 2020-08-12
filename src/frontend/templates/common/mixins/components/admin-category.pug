@@ -2,8 +2,9 @@ mixin adminCategory(category)
   - itemId = `modify-form-category-${category.id}`
   li.category__list-item
     form(action='/my/categories' method='POST')
+      input(type='hidden' name='_csrf' value= csrf)
       input(id=itemId type='text' name='label' value=category.label)
-      input(type='text' name='id' value=category.id style={'display': 'none'})
+      input(type='hidden' name='id' value=category.id)
       label(for=itemId)
         span.visually-hidden Редактировать категорию
       button.category__button.button.button--category(type='submit') Сохранить

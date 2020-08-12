@@ -6,16 +6,20 @@ const {catchAsync} = require(`../../utils/utils`);
 const {
   auth,
   admin,
+  csrf,
 } = require(`../utils/utils`);
 
 const myRouter = new Router();
 
-myRouter.get(`/categories`, [auth, admin], catchAsync(async (req, res) => {
+myRouter.get(`/categories`, [auth, admin, csrf], catchAsync(async (req, res) => {
   const {data} = await axios.get(`/pages/my/categories`);
-  return res.render(`pages/my/admin-categories`, data);
+  return res.render(`pages/my/admin-categories`, {
+    data,
+    csrf: req.csrfToken()
+  });
 }));
 
-myRouter.post(`/categories`, [auth, admin], async (req, res, next) => {
+myRouter.post(`/categories`, [auth, admin, csrf], async (req, res, next) => {
   const {id, label} = req.body;
   try {
     let method = id ? `put` : `post`;
@@ -32,7 +36,11 @@ myRouter.post(`/categories`, [auth, admin], async (req, res, next) => {
         id: +id,
         label: error.text
       }];
-      res.render(`pages/my/admin-categories`, {...data, errors});
+      res.render(`pages/my/admin-categories`, {
+        ...data,
+        errors,
+        csrf: req.csrfToken()
+      });
       return;
     }
     next(error);

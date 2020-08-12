@@ -4,13 +4,17 @@ const {Router} = require(`express`);
 const axios = require(`../axios`);
 const {userImgUpload} = require(`../../utils/upload`);
 const {catchAsync} = require(`../../utils/utils`);
+const {csrf} = require(`../utils/utils`);
 const registerRouter = new Router();
 const loginRouter = new Router();
 const logoutRouter = new Router();
 
-registerRouter.get(`/`, (req, res) => res.render(`pages/auth/registration`));
+registerRouter.get(`/`, csrf, (req, res) => {
+  res.render(`pages/auth/registration`, {csrf: req.csrfToken()});
+  return;
+});
 
-registerRouter.post(`/`, userImgUpload, async (req, res, next) => {
+registerRouter.post(`/`, [csrf, userImgUpload], async (req, res, next) => {
   try {
     const data = req.body;
     if (req.file) {
@@ -23,16 +27,22 @@ registerRouter.post(`/`, userImgUpload, async (req, res, next) => {
     return;
   } catch (error) {
     if (error.statusCode === 400 && Array.isArray(error.text)) {
-      res.render(`pages/auth/registration`, {errors: error.text});
+      res.render(`pages/auth/registration`, {
+        errors: error.text,
+        csrf: req.csrfToken()
+      });
       return;
     }
     next(error);
   }
 });
 
-loginRouter.get(`/`, (req, res) => res.render(`pages/auth/login`));
+loginRouter.get(`/`, csrf, (req, res) => {
+  res.render(`pages/auth/login`, {csrf: req.csrfToken()});
+  return;
+});
 
-loginRouter.post(`/`, catchAsync(async (req, res) => {
+loginRouter.post(`/`, csrf, catchAsync(async (req, res) => {
   const {data} = await axios.post(`/users/auth/login`, req.body);
   if (data) {
     req.session.uid = data;

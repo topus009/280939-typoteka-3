@@ -1,6 +1,7 @@
 mixin loginForm(errors)
   .popup__form.popup__form--active.form.form--log-in
     form(action='/login' method='POST')
+      input(type='hidden' name='_csrf' value= csrf)
       .form__field
         label
           input(type='email' name='email' placeholder='Электронная почта' required)
