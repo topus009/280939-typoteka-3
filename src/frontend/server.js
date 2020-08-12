@@ -1,6 +1,8 @@
 'use strict';
 
 const express = require(`express`);
+
+const cookieParser = require(`cookie-parser`);
 const bodyParser = require(`body-parser`);
 const dayjs = require(`dayjs`);
 const path = require(`path`);
@@ -8,7 +10,11 @@ const {HttpCodes} = require(`../../config/constants`);
 const {CustomError} = require(`../utils/utils`);
 const {createLogger, LoggerNames} = require(`../utils/logger`);
 const routers = require(`./router`);
-const {errorsHandler} = require(`./utils/utils`);
+const {errorsHandler, getUser} = require(`./utils/utils`);
+const {
+  store,
+  userSessions,
+} = require(`./session-store`);
 require(`../../config/localization.setup`);
 
 require(`dayjs/locale/ru`);
@@ -22,6 +28,11 @@ const DEFAULT_PORT = process.env.FRONTEND_PORT;
 const app = express();
 
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(cookieParser());
+
+app.use(userSessions);
+store.sync();
+app.use(getUser);
 
 app.set(`views`, path.join(__dirname, `./templates`));
 app.set(`view engine`, `pug`);

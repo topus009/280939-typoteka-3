@@ -7,6 +7,11 @@ const {
   addFile,
 } = require(`../../utils/upload`);
 const {catchAsync} = require(`../../utils/utils`);
+const {UsersRoles} = require(`../../../config/constants`);
+const {
+  auth,
+  admin,
+} = require(`../utils/utils`);
 
 const articlesRouter = new Router();
 
@@ -16,12 +21,16 @@ articlesRouter.get(`/article/:id`, catchAsync(async (req, res) => {
   return res.render(`pages/articles/article`, data);
 }));
 
-articlesRouter.post(`/article/:id`, async (req, res, next) => {
+articlesRouter.post(`/article/:id`, [auth], async (req, res, next) => {
   const {id} = req.params;
+  const {currentUser} = res.locals;
+  const userId = currentUser.id;
+  const role = currentUser.role;
   try {
-    const apiReq = await axios.post(`/comments/article/${id}`, req.body);
+    const apiReq = await axios.post(`/comments/article/${id}`, {...req.body, userId});
     if (apiReq.status === 200) {
-      res.redirect(`/my/comments`);
+      const url = role === UsersRoles.ADMIN ? `/my/comments` : req.originalUrl;
+      res.redirect(url);
     }
     return;
   } catch (error) {
@@ -34,13 +43,13 @@ articlesRouter.post(`/article/:id`, async (req, res, next) => {
   }
 });
 
-articlesRouter.get(`/article/edit/:id`, catchAsync(async (req, res) => {
+articlesRouter.get(`/article/edit/:id`, [auth, admin], catchAsync(async (req, res) => {
   const {id} = req.params;
   const {data} = await axios.get(`/pages/articles/article/edit/${id}`);
   return res.render(`pages/articles/article-form`, data);
 }));
 
-articlesRouter.post(`/article/edit/:id`, articleImgUpload, async (req, res, next) => {
+articlesRouter.post(`/article/edit/:id`, [auth, admin, articleImgUpload], async (req, res, next) => {
   const {id} = req.params;
   const articleData = req.body;
   addFile(req, articleData);
@@ -68,12 +77,12 @@ articlesRouter.post(`/article/edit/:id`, articleImgUpload, async (req, res, next
   }
 });
 
-articlesRouter.get(`/add`, catchAsync(async (req, res) => {
+articlesRouter.get(`/add`, [auth, admin], catchAsync(async (req, res) => {
   const {data} = await axios.get(`/pages/articles/add`);
   return res.render(`pages/articles/article-form`, data);
 }));
 
-articlesRouter.post(`/add`, articleImgUpload, async (req, res, next) => {
+articlesRouter.post(`/add`, [auth, admin, articleImgUpload], async (req, res, next) => {
   const articleData = req.body;
   addFile(req, articleData);
   try {

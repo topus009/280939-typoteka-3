@@ -3,15 +3,19 @@
 const {Router} = require(`express`);
 const axios = require(`../axios`);
 const {catchAsync} = require(`../../utils/utils`);
+const {
+  auth,
+  admin,
+} = require(`../utils/utils`);
 
 const myRouter = new Router();
 
-myRouter.get(`/categories`, catchAsync(async (req, res) => {
+myRouter.get(`/categories`, [auth, admin], catchAsync(async (req, res) => {
   const {data} = await axios.get(`/pages/my/categories`);
   return res.render(`pages/my/admin-categories`, data);
 }));
 
-myRouter.post(`/categories`, async (req, res, next) => {
+myRouter.post(`/categories`, [auth, admin], async (req, res, next) => {
   const {id, label} = req.body;
   try {
     let method = id ? `put` : `post`;
@@ -35,12 +39,12 @@ myRouter.post(`/categories`, async (req, res, next) => {
   }
 });
 
-myRouter.get(`/comments`, catchAsync(async (req, res) => {
+myRouter.get(`/comments`, [auth, admin], catchAsync(async (req, res) => {
   const {data} = await axios.get(`/pages/my/comments`);
   return res.render(`pages/my/admin-comments`, data);
 }));
 
-myRouter.get(`/articles`, catchAsync(async (req, res) => {
+myRouter.get(`/articles`, [auth, admin], catchAsync(async (req, res) => {
   const {data} = await axios.get(`/pages/my/articles`);
   return res.render(`pages/my/admin-articles`, data);
 }));
