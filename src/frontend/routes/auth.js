@@ -14,7 +14,7 @@ registerRouter.get(`/`, csrf, (req, res) => {
   return;
 });
 
-registerRouter.post(`/`, [csrf, userImgUpload], async (req, res, next) => {
+registerRouter.post(`/`, [userImgUpload, csrf], async (req, res, next) => {
   try {
     const data = req.body;
     if (req.file) {

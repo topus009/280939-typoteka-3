@@ -3,6 +3,7 @@
 const {Router} = require(`express`);
 const axios = require(`../axios`);
 const {catchAsync} = require(`../../utils/utils`);
+const {csrf} = require(`../utils/utils`);
 
 const mainRouter = new Router();
 
@@ -12,12 +13,15 @@ mainRouter.get(`/`, catchAsync(async (req, res) => {
   return res.render(`pages/main/main`, data);
 }));
 
-mainRouter.get(`/search`, catchAsync(async (req, res) => {
+mainRouter.get(`/search`, csrf, catchAsync(async (req, res) => {
   const {query} = req.query;
   if (!query) {
     res.render(`pages/main/search`);
   } else {
-    const {data} = await axios.get(`/pages/main/search`, {params: {query}});
+    const {data} = await axios.get(`/pages/main/search`, {
+      params: {query},
+      csrf: req.csrfToken(),
+    });
     res.render(`pages/main/search`, data);
   }
   return;

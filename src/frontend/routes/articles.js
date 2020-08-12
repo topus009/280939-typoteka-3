@@ -70,8 +70,8 @@ articlesRouter.get(`/article/edit/:id`, [
 articlesRouter.post(`/article/edit/:id`, [
   auth,
   admin,
-  csrf,
   articleImgUpload,
+  csrf,
 ], async (req, res, next) => {
   const {id} = req.params;
   const articleData = req.body;
@@ -114,8 +114,8 @@ articlesRouter.get(`/add`, [auth, admin, csrf], catchAsync(async (req, res) => {
 articlesRouter.post(`/add`, [
   auth,
   admin,
-  csrf,
   articleImgUpload,
+  csrf,
 ], async (req, res, next) => {
   const articleData = req.body;
   addFile(req, articleData);
