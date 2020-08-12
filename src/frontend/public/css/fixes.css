@@ -1,3 +1,7 @@
+.header {
+  z-index: 21;
+}
+
 .form__field--post-image {
   margin-bottom: 10px;
 }
@@ -9,4 +13,14 @@
 .new-publication__form-link {
   margin-top: 10px;
   margin-bottom: 10px;
+}
+
+.button--edit-item {
+  background: url(../img/icons/edit-btn.svg) no-repeat center;
+  right: 45px;
+  background-color: #bdbdbd;
+}
+
+.button--edit-item:hover {
+  background-color: #2f80ed;
 }

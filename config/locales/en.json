@@ -9,5 +9,9 @@
   "DUPLICATE_CATEGORY_LABEL": "Category with TITLE «{label}» already exists",
   "PAGE_SHOULD_BE_A_NUMBER": "Page should be a number",
   "PAGE_SHOULD_BE_GREATER_THAN_ZERO": "Page should be greater than zero",
-  "USER_WITH_EMAIL_EXISTS": "User with EMAIL «{email}» already exists"
+  "USER_WITH_EMAIL_EXISTS": "User with EMAIL «{email}» already exists",
+  "USER_WITH_EMAIL_NOT_EXISTS": "User with EMAIL «{email}» doesn't exist",
+  "PASSWORD_IS_INCORRECT": "Password is incorrect",
+  "USER_NOT_AUTHORIZED": "User not authorized",
+  "USER_IS_NOT_ADMIN": "You don't have a permission"
 }
