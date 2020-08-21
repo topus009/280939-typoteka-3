@@ -10,7 +10,7 @@ mixin hottestArticles(mostPopularArticles)
         each popularArticle in mostPopularArticles
           - id = popularArticle[0]
           - count = popularArticle[1]
-          - title = popularArticle[2]
             li.hot__list-item
-              a.hot__list-link(href=`/articles/article/${id}`)= title
+              a.hot__list-link(href=`/articles/article/${id}`)
+                +limitString(popularArticle[2], 100)
                 sup.hot__link-sup= ` ${count}`

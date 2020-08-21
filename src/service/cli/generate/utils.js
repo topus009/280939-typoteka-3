@@ -1,7 +1,10 @@
 'use strict';
 
 const path = require(`path`);
-const {createLogger, LoggerNames} = require(`../../../utils/logger`);
+const {
+  createLogger,
+  LoggerNames,
+} = require(`../../../utils/logger`);
 const {
   PATH_TO_FILES,
   DEFAULT_GENERATE_COUNT,

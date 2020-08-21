@@ -2,9 +2,18 @@
 
 const fs = require(`fs`);
 const path = require(`path`);
-const dayjs = require(`dayjs`);
-const {ExitCodes, DATE_FORMAT, HttpCodes, ARTICLES_PAGE_LIMIT} = require(`../../config/constants`);
-const {createLogger, LoggerNames} = require(`./logger`);
+const dayjs = require(`./dayjs`);
+const {
+  ExitCodes,
+  DATE_FORMAT,
+  HttpCodes,
+  ARTICLES_PAGE_LIMIT,
+  BACKEND_DATE_FORMAT,
+} = require(`../../config/constants`);
+const {
+  createLogger,
+  LoggerNames,
+} = require(`./logger`);
 
 const log = createLogger(LoggerNames.COMMON);
 
@@ -156,6 +165,15 @@ const commonErrorsHandler = (logCb) => (error, req, res, next, cb) => {
   return cb(res, next, error);
 };
 
+const normalizeDate = (date, formatStr) => {
+  const dateObj = date ? dayjs(date, BACKEND_DATE_FORMAT) : dayjs();
+  if (formatStr) {
+    return dateObj.format(formatStr);
+  } else {
+    return dateObj;
+  }
+};
+
 module.exports = {
   getRangomInteger,
   shuffle,
@@ -176,4 +194,5 @@ module.exports = {
   catchAsync,
   capitalizeFirstLetter,
   commonErrorsHandler,
+  normalizeDate,
 };

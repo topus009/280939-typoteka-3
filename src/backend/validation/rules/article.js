@@ -2,7 +2,6 @@
 
 const {body} = require(`express-validator`);
 const path = require(`path`);
-
 const {validExtensions} = require(`../../../utils/upload`);
 
 const articleValidators = (api) => ({

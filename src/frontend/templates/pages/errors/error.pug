@@ -1,14 +1,15 @@
 include ../../common/index.pug
 
 mixin backLink
-  a.error__link.text.text--big(href='/') Вернуться на главную
+  - backPath = '/'
+  if backPath !== path
+    a.error__link.text.text--big(href=backPath) Вернуться на главную
 
 +layout('Типотека')
   +body({
     colored: true,
     noVendor: true,
   })
-    +header({currentUser, error})
     main
       h1.visually-hidden= `Ошибка ${error.statusCode}`
       if error.statusCode === 404

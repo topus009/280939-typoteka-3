@@ -28,3 +28,49 @@
 .pagination__item--active {
   pointer-events: none;
 }
+
+.header--error .header__enter,
+.header--error .header__registration,
+.header--error .header__search {
+  display: inline;
+}
+
+.preview__toggle-wrapper {
+  width: auto;
+}
+
+.preview__background-image {
+  -o-object-fit: contain;
+  max-height: 240px;
+  object-fit: contain;
+}
+
+.preview__background {
+  height: auto;
+}
+
+.preview__item {
+  min-height: auto;
+}
+
+.preview__name-link {
+  word-wrap: break-word;
+}
+
+.pagination {
+  justify-content: center;
+  max-width: 940px;
+}
+
+.hot__empty {
+  margin-bottom: 0;
+}
+
+.hot__name {
+  margin: 0 0 17px;
+}
+
+.search-page__list {
+  height: 372px;
+  overflow-y: scroll;
+}

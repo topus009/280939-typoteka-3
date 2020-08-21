@@ -21,3 +21,9 @@ mixin countComments(articleId, comments)
       span.preview__cloud
       |
       b.preview__comment-count= ` ${count}`
+
+mixin limitString(str, limit = 100)
+  if str.length > limit
+    span= str.slice(0, limit) + `...`
+  else
+    span= str

@@ -5,6 +5,7 @@ const axios = require(`../axios`);
 const {userImgUpload} = require(`../../utils/upload`);
 const {catchAsync} = require(`../../utils/utils`);
 const {csrf} = require(`../utils/utils`);
+
 const registerRouter = new Router();
 const loginRouter = new Router();
 const logoutRouter = new Router();
@@ -45,11 +46,11 @@ loginRouter.get(`/`, csrf, (req, res) => {
 loginRouter.post(`/`, csrf, catchAsync(async (req, res) => {
   const {data} = await axios.post(`/users/auth/login`, req.body);
   if (data) {
-    req.session.uid = data;
     const {data: userData} = await axios.get(`/users/${data}`);
     res.locals.currentUser = userData;
+    req.session.uid = data;
   }
-  res.redirect(`/`);
+  req.session.save(() => res.redirect(`/`));
   return;
 }));
 

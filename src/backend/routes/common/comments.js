@@ -2,7 +2,10 @@
 
 const {Router} = require(`express`);
 const {HttpCodes} = require(`../../../../config/constants`);
-const {validate, rules} = require(`../../validation`);
+const {
+  validate,
+  rules,
+} = require(`../../validation`);
 const {catchAsync} = require(`../../../utils/utils`);
 
 const router = (api) => {

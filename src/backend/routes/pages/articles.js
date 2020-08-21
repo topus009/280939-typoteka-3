@@ -1,9 +1,10 @@
 'use strict';
 
 const {Router} = require(`express`);
-const dayjs = require(`dayjs`);
+const dayjs = require(`../../../utils/dayjs`);
 const {
   HttpCodes,
+  COMMON_DATE_FORMAT,
 } = require(`../../../../config/constants`);
 const {catchAsync} = require(`../../../utils/utils`);
 
@@ -53,7 +54,7 @@ const router = (api) => {
       categories,
       isNew: true,
       article: {
-        createdDate: dayjs().format(`DD.MM.YYYY`)
+        createdDate: dayjs().format(COMMON_DATE_FORMAT)
       }
     };
 

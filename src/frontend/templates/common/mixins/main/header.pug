@@ -1,6 +1,6 @@
 mixin logo(props)
   - user = props.currentUser || {}
-  a.header__logo.logo(class=`${props.error ? `header__logo--${error.statusCode}` : ''}` href='/')
+  a.header__logo.logo(href='/')
     case user.role
       when 'admin'
       when 'reader'
@@ -8,6 +8,9 @@ mixin logo(props)
         span.logo__name Типотека
       default
         img(src='img/icons/logo.svg' alt='логотип Тайпотеки')
+    if props.error && props.error.statusCode
+      b &nbsp;/&nbsp;
+      b= props.error.statusCode
 
 mixin userContent(currentUser = {})
   if currentUser.role === 'admin'
@@ -36,8 +39,7 @@ mixin headerContent(currentUser = {})
             a.header__enter(href='/login') Вход с паролем
 
 mixin header(props = {})
-  //- header.header(class=`${props.error ? 'header--error' : ''}`)
-  header.header
+  header.header(class=`${props.error ? 'header--error' : ''}`)
     +logo(props)
     +headerContent(props.currentUser)
     a.header__search.button.button--search(href='/search' aria-label='поиск по сайту')

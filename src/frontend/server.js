@@ -4,13 +4,19 @@ const express = require(`express`);
 
 const cookieParser = require(`cookie-parser`);
 const bodyParser = require(`body-parser`);
-const dayjs = require(`dayjs`);
+const dayjs = require(`../utils/dayjs`);
 const path = require(`path`);
 const {HttpCodes} = require(`../../config/constants`);
 const {CustomError} = require(`../utils/utils`);
-const {createLogger, LoggerNames} = require(`../utils/logger`);
+const {
+  createLogger,
+  LoggerNames,
+} = require(`../utils/logger`);
 const routers = require(`./router`);
-const {errorsHandler, getUser} = require(`./utils/utils`);
+const {
+  errorsHandler,
+  getUser,
+} = require(`./utils/utils`);
 const {
   store,
   userSessions,
@@ -41,6 +47,7 @@ app.use(express.static(path.resolve(__dirname, `public`)));
 
 app.use((req, res, next) => {
   const {method, url} = req;
+  res.locals.path = req.path;
   logApi.debug(`${method} ${url}`);
   next();
 });

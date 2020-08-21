@@ -2,6 +2,5 @@ include ../../common/index.pug
 
 +layout(article.title)
   +body({noVendor: true})
-    +header({currentUser})
     main
       +articleItem({article, categories, currentUser, comments, users, categoriesCount, errors})

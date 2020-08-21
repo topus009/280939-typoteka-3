@@ -1,6 +1,9 @@
 'use strict';
 
-const {createLogger, LoggerNames} = require(`../../utils/logger`);
+const {
+  createLogger,
+  LoggerNames,
+} = require(`../../utils/logger`);
 
 const log = createLogger(LoggerNames.BACKEND);
 

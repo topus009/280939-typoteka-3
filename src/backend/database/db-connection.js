@@ -1,7 +1,10 @@
 "use strict";
 
 const {Sequelize} = require(`sequelize`);
-const {createLogger, LoggerNames} = require(`../../utils/logger`);
+const {
+  createLogger,
+  LoggerNames,
+} = require(`../../utils/logger`);
 const {ExitCodes} = require(`../../../config/constants`);
 const {exit} = require(`../../utils/utils`);
 const UserModel = require(`./models/user`);
