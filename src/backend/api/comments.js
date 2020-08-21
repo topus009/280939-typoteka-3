@@ -1,16 +1,27 @@
 "use strict";
 
-const dayjs = require(`dayjs`);
+const dayjs = require(`../../utils/dayjs`);
 const {
   DATE_FORMAT,
   ADMIN_ID,
   HttpCodes,
+  MAX_LATEST_COUNT,
+  COMMON_DATE_FORMAT,
 } = require(`../../../config/constants`);
-const {CustomError} = require(`../../utils/utils`);
+const {
+  CustomError,
+  sqlzParse,
+} = require(`../../utils/utils`);
 
 const commentsApi = (entityName, database) => ({
   async getAll() {
-    return await database[entityName].findAll();
+    const data = await database[entityName].findAll({
+      order: [[`createdDate`, `ASC`]],
+    });
+    return sqlzParse(data).map((item) => ({
+      ...item,
+      createdDate: dayjs(item.createdDate).format(COMMON_DATE_FORMAT),
+    }));
   },
 
   async findById(id) {
@@ -51,8 +62,14 @@ const commentsApi = (entityName, database) => ({
     if (!articleInDB) {
       throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_ARTICLE_ID`, {id: articleId}));
     }
-    const comments = database[entityName].findAll({where: {articleId}});
-    return comments;
+    const data = await database[entityName].findAll({
+      where: {articleId},
+      order: [[`createdDate`, `ASC`]],
+    });
+    return sqlzParse(data).map((item) => ({
+      ...item,
+      createdDate: dayjs(item.createdDate).format(COMMON_DATE_FORMAT),
+    }));
   },
 
   async getMyComments() {
@@ -60,11 +77,17 @@ const commentsApi = (entityName, database) => ({
     if (!user) {
       throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_USER_ID`, {id: ADMIN_ID}));
     }
-    return await database[entityName].findAll({where: {userId: user.id}});
+    const data = await database[entityName].findAll({
+      where: {userId: user.id},
+      order: [[`createdDate`, `DESC`]],
+    });
+    return sqlzParse(data).map((item) => ({
+      ...item,
+      createdDate: dayjs(item.createdDate).format(COMMON_DATE_FORMAT),
+    }));
   },
 
   async getLatestComments() {
-    const MAX_LATEST_COUNT = 3;
     return await database[entityName].findAll({
       order: [[`createdDate`, `DESC`]],
       limit: MAX_LATEST_COUNT,

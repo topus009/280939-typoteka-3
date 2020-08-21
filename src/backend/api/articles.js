@@ -1,17 +1,22 @@
 "use strict";
 
-const {Op, literal} = require(`sequelize`);
-const dayjs = require(`dayjs`);
+const {
+  Op,
+  literal,
+} = require(`sequelize`);
+const dayjs = require(`../../utils/dayjs`);
 const {
   DATE_FORMAT,
   HttpCodes,
   ARTICLES_PAGE_LIMIT,
+  COMMON_DATE_FORMAT,
 } = require(`../../../config/constants`);
 const {
   CustomError,
   sqlzObjsToArr,
   sqlzParse,
   getHighlitedMatches,
+  normalizeDate,
 } = require(`../../utils/utils`);
 
 const articlesApi = (entityName, database) => ({
@@ -25,9 +30,14 @@ const articlesApi = (entityName, database) => ({
           attributes: [`id`],
           through: {attributes: []}
         },
-      ]
+      ],
+      order: [[`createdDate`, `DESC`]],
     });
-    return sqlzObjsToArr(data, `categories`, `id`);
+    const preparedData = sqlzObjsToArr(data, `categories`, `id`);
+    return preparedData.map((item) => ({
+      ...item,
+      createdDate: dayjs(item.createdDate).format(COMMON_DATE_FORMAT),
+    }));
   },
 
   async getTotalCount(categoryId) {
@@ -57,8 +67,13 @@ const articlesApi = (entityName, database) => ({
       ],
       limit: ARTICLES_PAGE_LIMIT,
       offset: ARTICLES_PAGE_LIMIT * (num - 1),
+      order: [[`createdDate`, `DESC`]],
     });
-    return sqlzObjsToArr(data, `categories`, `id`);
+    const preparedData = sqlzObjsToArr(data, `categories`, `id`);
+    return preparedData.map((item) => ({
+      ...item,
+      createdDate: dayjs(item.createdDate).format(COMMON_DATE_FORMAT),
+    }));
   },
 
   async findById(id) {
@@ -71,7 +86,7 @@ const articlesApi = (entityName, database) => ({
     const data = {
       ...article,
       categories: categories.map((el) => el.id),
-      createdDate: dayjs(article.createdDate).format(`DD.MM.YYYY`)
+      createdDate: dayjs(article.createdDate).format(COMMON_DATE_FORMAT)
     };
     return data;
   },
@@ -85,8 +100,7 @@ const articlesApi = (entityName, database) => ({
   },
 
   async add(data) {
-    const createdDate = data.createdDate ?
-      dayjs(data.createdDate).format(DATE_FORMAT) : dayjs().format(DATE_FORMAT);
+    const createdDate = normalizeDate(data.createdDate, DATE_FORMAT);
 
     const article = await database[entityName].create({
       ...data,
@@ -101,7 +115,11 @@ const articlesApi = (entityName, database) => ({
     if (!targetArticle) {
       throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_ARTICLE_ID`, {id}));
     }
-    const article = await targetArticle.update(data);
+    const preparedData = data;
+    if (preparedData.createdDate) {
+      preparedData.createdDate = normalizeDate(data.createdDate, DATE_FORMAT);
+    }
+    const article = await targetArticle.update(preparedData);
     let categories = Array.isArray(data.categories) ? data.categories : [data.categories];
     categories = categories.filter(Boolean);
     if (categories.length) {
@@ -134,8 +152,13 @@ const articlesApi = (entityName, database) => ({
       ],
       limit: ARTICLES_PAGE_LIMIT,
       offset: ARTICLES_PAGE_LIMIT * (num - 1),
+      order: [[`createdDate`, `DESC`]],
     });
-    return sqlzObjsToArr(data, `categories`, `id`);
+    const preparedData = sqlzObjsToArr(data, `categories`, `id`);
+    return preparedData.map((item) => ({
+      ...item,
+      createdDate: dayjs(item.createdDate).format(COMMON_DATE_FORMAT),
+    }));
   },
 
   async searchByTitle(query) {
@@ -151,9 +174,14 @@ const articlesApi = (entityName, database) => ({
           attributes: [`id`],
           through: {attributes: []}
         },
-      ]
+      ],
+      order: [[`createdDate`, `DESC`]],
     });
-    const articles = sqlzObjsToArr(data, `categories`, `id`);
+    const preparedData = sqlzObjsToArr(data, `categories`, `id`);
+    const articles = preparedData.map((item) => ({
+      ...item,
+      createdDate: dayjs(item.createdDate).format(COMMON_DATE_FORMAT),
+    }));
     const results = [];
     articles.forEach((article) => {
       const formattedMatch = getHighlitedMatches(query, article.title);

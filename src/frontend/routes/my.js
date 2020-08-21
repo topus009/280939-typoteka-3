@@ -14,9 +14,15 @@ const myRouter = new Router();
 myRouter.get(`/categories`, [auth, admin, csrf], catchAsync(async (req, res) => {
   const {data} = await axios.get(`/pages/my/categories`);
   return res.render(`pages/my/admin-categories`, {
-    data,
+    ...data,
     csrf: req.csrfToken()
   });
+}));
+
+myRouter.get(`/categories/delete/:id`, [auth, admin], catchAsync(async (req, res) => {
+  const {id} = req.params;
+  await axios.delete(`/categories/${id}`);
+  return res.redirect(`/my/categories`);
 }));
 
 myRouter.post(`/categories`, [auth, admin, csrf], async (req, res, next) => {
@@ -52,9 +58,21 @@ myRouter.get(`/comments`, [auth, admin], catchAsync(async (req, res) => {
   return res.render(`pages/my/admin-comments`, data);
 }));
 
+myRouter.get(`/comments/:articleId/:id/delete`, [auth, admin], catchAsync(async (req, res) => {
+  const {id, articleId} = req.params;
+  await axios.delete(`/comments/article/${articleId}/${id}`);
+  return res.redirect(`/my/comments`);
+}));
+
 myRouter.get(`/articles`, [auth, admin], catchAsync(async (req, res) => {
   const {data} = await axios.get(`/pages/my/articles`);
   return res.render(`pages/my/admin-articles`, data);
+}));
+
+myRouter.get(`/articles/delete/:id`, [auth, admin], catchAsync(async (req, res) => {
+  const {id} = req.params;
+  await axios.delete(`/articles/${id}`);
+  return res.redirect(`/my/articles`);
 }));
 
 module.exports = myRouter;
