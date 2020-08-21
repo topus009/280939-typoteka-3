@@ -2,23 +2,10 @@ include ../../common/index.pug
 
 +layout('Типотека')
   +body({noVendor: true})
-    +header({currentUser})
     main.main-page
-      h1.visually-hidden Главная страница личного блога Типотека
-      p.
-
-        Это приветственный текст, который владелец блога может выбрать, чтобы описать себя 👏
+      +helloMsg
       if articles.length
-        section.main-page__theme-list
-          h2.visually-hidden Список тем
-          ul.themes
-            each categoryData in categories
-              - isActive = +activeCategoryId === +categoryData.id
-              +themesItem(categoryData, categoriesCount, isActive)
-        section.main-page__list.preview
-          h2.visually-hidden Список превью статей
-          ul.preview__list
-            each articleData in articles
-              +publicationCard(articleData, comments, categories)
-          if pagesCount > 1
-            +articlesPagination(activePage, pagesCount, true, activeCategoryId)
+        +themesList(categories, categoriesCount, true)
+        +publicationsList(articles, comments, categories, pagesCount, activePage, activeCategoryId, true)
+      else
+        +noArticlesBlock

@@ -1,0 +1,8 @@
+mixin publicationsList(articles, comments, categories, pagesCount, activePage, activeCategoryId, byCategories = false)
+  section.main-page__list.preview
+    h2.visually-hidden Список превью статей
+    ul.preview__list
+      each articleData in articles
+        +publicationCard(articleData, comments, categories)
+    if pagesCount > 1
+      +articlesPagination(activePage, pagesCount, byCategories, activeCategoryId)

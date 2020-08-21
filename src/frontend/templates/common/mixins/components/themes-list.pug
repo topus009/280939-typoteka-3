@@ -1,0 +1,9 @@
+mixin themesList(categories, count, withActive)
+  - isActive = false
+  section.main-page__theme-list
+    h2.visually-hidden Список тем
+    ul.themes
+      each category in categories
+        if withActive && activeCategoryId
+          - isActive = +activeCategoryId === +category.id
+        +themesItem(category, count, isActive)
