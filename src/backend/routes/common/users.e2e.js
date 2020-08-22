@@ -1,18 +1,7 @@
 'use strict';
 
-const supertest = require(`supertest`);
 const users = require(`../../../../mocks/users.json`);
-const {createServer} = require(`../../server`);
 const {MY_EMAIL} = require(`../../../../config/constants`);
-
-let server;
-let request;
-
-beforeAll(async (done) => {
-  server = await createServer();
-  request = supertest(server);
-  done();
-});
 
 const apiPrefix = `/api/users`;
 

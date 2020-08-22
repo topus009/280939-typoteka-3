@@ -10,3 +10,8 @@ extends: 'htmlacademy/node'
 
 globals:
   _f: true
+
+overrides:
+  - files: "*.e2e.js"
+    globals:
+      request: true

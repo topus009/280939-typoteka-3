@@ -1,18 +1,7 @@
 'use strict';
 
-const supertest = require(`supertest`);
 const articles = require(`../../../../mocks/articles.json`);
 const categories = require(`../../../../mocks/categories.json`);
-const {createServer} = require(`../../server`);
-
-let server;
-let request;
-
-beforeAll(async (done) => {
-  server = await createServer();
-  request = supertest(server);
-  done();
-});
 
 const apiPrefix = `/api/articles`;
 

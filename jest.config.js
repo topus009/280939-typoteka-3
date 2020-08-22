@@ -3,9 +3,18 @@
 // For a detailed explanation regarding each configuration property, visit:
 // https://jestjs.io/docs/en/configuration.html
 
+require(`./config`);
+
 module.exports = {
   // ===== Indicates whether each individual test should be reported during the run
   verbose: true,
+
+  // ===== A set of global variables that need to be available in all test environments
+  globals: global.process.env,
+
+  // The test environment that will be used for testing
+  // testEnvironment: `node`,
+  testEnvironment: `<rootDir>/config/jest.setup.js`,
 
   // The directory where Jest should store its cached dependency information
   cacheDirectory: `./tests-cache`,
@@ -33,9 +42,9 @@ module.exports = {
   ],
 
   // The paths to modules that run some code to configure or set up the testing environment before each test
-  setupFiles: [
-    `<rootDir>/config/index.js`,
-  ],
+  // setupFiles: [
+  //   `<rootDir>/config/index.js`,
+  // ],
 
   // The root directory that Jest should scan for tests and modules within
   // rootDir: `src`,
@@ -52,8 +61,6 @@ module.exports = {
   setupFilesAfterEnv: [
     `jest-extended`,
   ],
-  // The test environment that will be used for testing
-  testEnvironment: `node`,
 
   // The glob patterns Jest uses to detect test files
   testMatch: [
@@ -125,9 +132,6 @@ module.exports = {
 
   // A path to a module which exports an async function that is triggered once after all test suites
   // globalTeardown: undefined,
-
-  // ===== A set of global variables that need to be available in all test environments
-  // globals: {},
 
   // The maximum amount of workers used to run your tests. Can be specified as % or a number. E.g. maxWorkers: 10% will use 10% of your CPU amount + 1 as the maximum worker number. maxWorkers: 2 will use a maximum of 2 workers.
   // maxWorkers: `80%`,
