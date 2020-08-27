@@ -1,83 +1,89 @@
 'use strict';
 
-const path = require(`path`);
-const fsFromises = require(`fs`).promises;
 const {Router} = require(`express`);
-const {HttpCodes} = require(`../../../../config/constants`);
 const {
-  isFileExistsAsync,
-  catchAsync,
-} = require(`../../../utils/utils`);
+  BACKEND_ARTICLES_PATH,
+  HttpCodes,
+} = require(`../../../../config/constants`);
+const {catchAsync} = require(`../../../utils/utils`);
 const {
-  validate,
-  rules,
+  saveFile,
+  deletePrevArticleImg,
+} = require(`../../../utils/upload`);
+const {
+  validationMiddleware,
+  rulesMiddleware,
 } = require(`../../validation`);
-const {saveFile} = require(`../../../utils/upload`);
+
+const articlesRouter = new Router();
 
 const router = (api) => {
-  const articlesRouter = new Router();
-
   articlesRouter.get(`/`, catchAsync(async (req, res) => {
     let data;
     const {page} = req.query;
     if (!page) {
       data = await api.articles.getAll();
     } else {
-      data = await api.articles.getArticlesByPage(page);
+      data = await api.articles.getAllByPage(page);
     }
-    return res.status(HttpCodes.OK).json(data);
+    res.status(HttpCodes.OK).json(data);
+    return;
   }));
 
   articlesRouter.get(`/:id`, catchAsync(async (req, res) => {
     const {id} = req.params;
     const data = await api.articles.findById(id);
-    return res.status(HttpCodes.OK).json(data);
+    res.status(HttpCodes.OK).json(data);
+    return;
   }));
 
   articlesRouter.get(`/categories/:categoryId`, catchAsync(async (req, res) => {
     const {categoryId} = req.params;
     const {page} = req.query;
-    const data = await api.articles.getArticlesByCategoryId(categoryId, page);
-    return res.status(HttpCodes.OK).json(data);
+    const data = await api.articles.getAllByCategoryId(categoryId, page);
+    res.status(HttpCodes.OK).json(data);
+    return;
   }));
 
-  articlesRouter.post(`/`, rules.article(api), validate, catchAsync(async (req, res) => {
-    await saveFile(req, `img/articles`, [`img`]);
+  articlesRouter.post(`/`, [
+    rulesMiddleware.article(api),
+    validationMiddleware,
+  ], catchAsync(async (req, res) => {
+    const fieldNames = [`img`];
+    await saveFile(req, BACKEND_ARTICLES_PATH, fieldNames);
     const data = await api.articles.add(req.body);
-    return res.status(HttpCodes.OK).json(data);
+    res.status(HttpCodes.OK).json(data);
+    return;
   }));
 
   articlesRouter.delete(`/:id`, catchAsync(async (req, res) => {
     const {id} = req.params;
     const data = await api.articles.delete(id);
-    return res.status(HttpCodes.OK).json(data);
+    res.status(HttpCodes.OK).json(data);
+    return;
   }));
 
-  articlesRouter.put(`/:id`, rules.article(api, true), validate, catchAsync(async (req, res) => {
+  articlesRouter.put(`/:id`, [
+    rulesMiddleware.article(api, true),
+    validationMiddleware,
+  ], catchAsync(async (req, res) => {
     const {id} = req.params;
-    if (req.body.file) {
-      const {file} = req.body;
-      const backendImgPath = `img/articles/${file.filename}`;
-      const pathToDataBase = path.join(process.cwd(), `./src/frontend/public/`);
-      const prevArticle = await api.articles.findById(id);
-      if (prevArticle.img) {
-        const pathToPrevFile = `${pathToDataBase}${prevArticle.img}`;
-        const isExists = await isFileExistsAsync(pathToPrevFile);
-        if (isExists) {
-          await fsFromises.unlink(pathToPrevFile);
-        }
-      }
-      await fsFromises.rename(file.path, `${pathToDataBase}${backendImgPath}`);
-      delete req.body.file;
-      req.body.img = backendImgPath;
-    }
+    const fieldNames = [`img`];
+    await saveFile(
+      req,
+      BACKEND_ARTICLES_PATH,
+      fieldNames,
+      () => deletePrevArticleImg(api, id),
+    );
     const data = await api.articles.edit(id, req.body);
-    return res.status(HttpCodes.OK).json(data);
+    res.status(HttpCodes.OK).json(data);
+    return;
   }));
 
   articlesRouter.get(`/articles/my`, catchAsync(async (req, res) => {
     const data = await api.articles.getAll();
-    return res.status(HttpCodes.OK).json(data);
+    res.status(HttpCodes.OK).json(data);
+    return;
   }));
 
   articlesRouter.get(`/articles/search`, catchAsync(async (req, res) => {
@@ -86,14 +92,15 @@ const router = (api) => {
     if (query) {
       data = await api.articles.searchByTitle(query);
     }
-    return res.status(HttpCodes.OK).json(data);
+    res.status(HttpCodes.OK).json(data);
+    return;
   }));
 
   articlesRouter.get(`/articles/hot`, catchAsync(async (req, res) => {
-    const data = await api.articles.getHotArticles();
-    return res.status(HttpCodes.OK).json(data);
+    const data = await api.articles.getHot();
+    res.status(HttpCodes.OK).json(data);
+    return;
   }));
-
   return articlesRouter;
 };
 

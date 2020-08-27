@@ -3,7 +3,7 @@
 const NodeEnvironment = require(`jest-environment-node`);
 const supertest = require(`supertest`);
 const {createServer} = require(`../src/backend/server`);
-
+require(`./localization.setup`);
 
 class CustomEnvironment extends NodeEnvironment {
   constructor(config, context) {
@@ -15,6 +15,7 @@ class CustomEnvironment extends NodeEnvironment {
     const server = await createServer();
     const request = supertest(server);
     this.global.request = request;
+    this.global._f = global._f;
   }
 }
 

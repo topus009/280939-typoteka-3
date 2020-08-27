@@ -1,12 +1,13 @@
 'use strict';
 
 const {Router} = require(`express`);
-const dayjs = require(`../../../utils/dayjs`);
 const {
   HttpCodes,
   COMMON_DATE_FORMAT,
+  BACKEND_ARTICLES_PATH,
 } = require(`../../../../config/constants`);
 const {catchAsync} = require(`../../../utils/utils`);
+const dayjs = require(`../../../utils/dayjs`);
 
 const articlesPageRouter = new Router();
 
@@ -22,8 +23,8 @@ const router = (api) => {
     ] = await Promise.all([
       api.categories.getAll(),
       api.users.getAll(),
-      api.categories.getCategoriesCount(),
-      api.comments.getCommentsByArticleId(id),
+      api.categories.countAll(),
+      api.comments.getAllByArticleId(id),
     ]);
     const data = {
       categories,
@@ -32,7 +33,8 @@ const router = (api) => {
       categoriesCount,
       comments,
     };
-    return res.status(HttpCodes.OK).json(data);
+    res.status(HttpCodes.OK).json(data);
+    return;
   }));
 
   articlesPageRouter.get(`/article/edit/:id`, catchAsync(async (req, res) => {
@@ -41,26 +43,27 @@ const router = (api) => {
     const categories = await api.categories.getAll();
     const data = {
       categories,
-      article
+      article: {
+        ...article,
+        img: article.img ? article.img.replace(`${BACKEND_ARTICLES_PATH}/`, ``) : ``,
+      },
     };
-
-    return res.status(HttpCodes.OK).json(data);
+    res.status(HttpCodes.OK).json(data);
+    return;
   }));
 
   articlesPageRouter.get(`/add`, catchAsync(async (req, res) => {
     const categories = await api.categories.getAll();
-
     const data = {
       categories,
       isNew: true,
       article: {
-        createdDate: dayjs().format(COMMON_DATE_FORMAT)
-      }
+        createdDate: dayjs().format(COMMON_DATE_FORMAT),
+      },
     };
-
-    return res.status(HttpCodes.OK).json(data);
+    res.status(HttpCodes.OK).json(data);
+    return;
   }));
-
   return articlesPageRouter;
 };
 

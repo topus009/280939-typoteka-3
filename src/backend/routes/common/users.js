@@ -1,53 +1,52 @@
 'use strict';
 
-const path = require(`path`);
-const fsFromises = require(`fs`).promises;
 const {Router} = require(`express`);
-const {HttpCodes} = require(`../../../../config/constants`);
 const {
-  validate,
-  rules,
-} = require(`../../validation`);
+  HttpCodes,
+  BACKEND_AVATARS_PATH,
+} = require(`../../../../config/constants`);
 const {catchAsync} = require(`../../../utils/utils`);
+const {saveFile} = require(`../../../utils/upload`);
+const {
+  validationMiddleware,
+  rulesMiddleware,
+} = require(`../../validation`);
+
+const usersRouter = new Router();
 
 const router = (api) => {
-  const usersRouter = new Router();
-
   usersRouter.get(`/`, catchAsync(async (req, res) => {
     const data = await api.users.getAll();
-    return res.status(HttpCodes.OK).json(data);
+    res.status(HttpCodes.OK).json(data);
+    return;
   }));
 
   usersRouter.get(`/:id`, catchAsync(async (req, res) => {
     const {id} = req.params;
     const data = await api.users.findById(id);
-    return res.status(HttpCodes.OK).json(data);
+    res.status(HttpCodes.OK).json(data);
+    return;
   }));
 
   usersRouter.post(`/auth/register`, [
-    rules.user.registration(api),
-    validate,
+    rulesMiddleware.user.registration(api),
+    validationMiddleware,
   ], catchAsync(async (req, res) => {
-    if (req.body.file) {
-      const {file} = req.body;
-      const backendImgPath = `img/avatars/${file.filename}`;
-      await fsFromises.rename(file.path, path.join(process.cwd(), `./src/frontend/public/${backendImgPath}`));
-      delete req.body.file;
-      req.body.avatar = backendImgPath;
-      req.body.avatarSmall = backendImgPath;
-    }
+    const fieldNames = [`avatar`, `avatarSmall`];
+    await saveFile(req, BACKEND_AVATARS_PATH, fieldNames);
     const data = await api.users.add(req.body);
-    return res.status(HttpCodes.OK).json(data);
+    res.status(HttpCodes.OK).json(data);
+    return;
   }));
 
   usersRouter.post(`/auth/login`, [
-    rules.user.login(),
-    validate,
+    rulesMiddleware.user.login(),
+    validationMiddleware,
   ], catchAsync(async (req, res) => {
     const data = await api.users.auth(req.body);
-    return res.status(HttpCodes.OK).json(data);
+    res.status(HttpCodes.OK).json(data);
+    return;
   }));
-
   return usersRouter;
 };
 

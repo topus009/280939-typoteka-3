@@ -2,14 +2,11 @@
 
 const path = require(`path`);
 const {
-  createLogger,
-  LoggerNames,
-} = require(`../../../utils/logger`);
-const {
   PATH_TO_FILES,
   DEFAULT_GENERATE_COUNT,
   GENERATE_MAX_ITEMS_ALLOWED,
   ExitCodes,
+  LoggerNames,
 } = require(`../../../../config/constants`);
 const {
   readDirAsync,
@@ -17,6 +14,8 @@ const {
   parseCommandParam,
   exit,
 } = require(`../../../utils/utils`);
+const {createLogger} = require(`../../../utils/logger`);
+require(`../../../../config/localization.setup`);
 
 const log = createLogger(LoggerNames.COMMON);
 
@@ -24,34 +23,40 @@ const getUserCount = (input) => {
   const parsedCount = parseCommandParam(input);
 
   if (isNaN(parsedCount)) {
-    log.error(`You did not specify parameters or they are not valid. 1 record will be created`);
+    log.error(_f(`GENERATE_ARTICLES_NO_COUNT`));
     return DEFAULT_GENERATE_COUNT;
   } else if (parsedCount > GENERATE_MAX_ITEMS_ALLOWED) {
-    log.error(`It is possible to create no more than ${GENERATE_MAX_ITEMS_ALLOWED} records`);
+    log.error(_f(`GENERATE_ARTICLES_MAX_LIMIT`, {limit: GENERATE_MAX_ITEMS_ALLOWED}));
     exit(ExitCodes.ERROR);
   }
-
   return parsedCount;
+};
+
+const readSamples = async (samples, files, name) => {
+  const [fileName, fileType] = files[name].split(`.`);
+  try {
+    samples[fileName] = await readFileAsync(
+      path.join(PATH_TO_FILES, `${fileName}.${fileType}`),
+    );
+  } catch (error) {
+    if (error) {
+      log.error(error);
+    }
+  }
 };
 
 const getSamples = async () => {
   const samples = {};
-
   const files = await readDirAsync(PATH_TO_FILES);
+
+  const readTasks = [];
 
   for (const name in files) {
     if (files.hasOwnProperty(name)) {
-      const [fileName, fileType] = files[name].split(`.`);
-      try {
-        samples[fileName] = await readFileAsync(path.join(PATH_TO_FILES, `${fileName}.${fileType}`));
-      } catch (error) {
-        if (error) {
-          log.error(error);
-        }
-      }
+      readTasks.push(readSamples(samples, files, name));
     }
   }
-
+  await Promise.all(readTasks);
   return samples;
 };
 

@@ -6,11 +6,11 @@ mixin logo(props)
       when 'reader'
         img.logo__image(src='img/icons/logo-image-only.svg' alt='логотип Тайпотеки')
         span.logo__name Типотека
+          if props.error && props.error.statusCode
+            b &nbsp;/&nbsp;
+            b= props.error.statusCode
       default
         img(src='img/icons/logo.svg' alt='логотип Тайпотеки')
-    if props.error && props.error.statusCode
-      b &nbsp;/&nbsp;
-      b= props.error.statusCode
 
 mixin userContent(currentUser = {})
   if currentUser.role === 'admin'

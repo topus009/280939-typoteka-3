@@ -54,5 +54,6 @@
   "validateExtensions": true,
   "validateIndentation": 2,
   "validateLineBreaks": "LF",
-  "validateSelfClosingTags": true
+  "validateSelfClosingTags": true,
+  "maximumLineLength": 120
 }

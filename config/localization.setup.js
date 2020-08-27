@@ -1,11 +1,13 @@
 "use strict";
 
 const formatMessage = require(`format-message`);
+const messagesEN = require(`./locales/en.json`);
+const {DEFAULT_LOCALIZATION_LOCALE} = require(`./constants`);
 
 formatMessage.setup({
-  locale: `en`,
+  locale: DEFAULT_LOCALIZATION_LOCALE,
   translations: {
-    en: require(`./locales/en.json`)
+    en: messagesEN,
   },
 });
 

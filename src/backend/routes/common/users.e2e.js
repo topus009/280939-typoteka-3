@@ -1,7 +1,10 @@
 'use strict';
 
 const users = require(`../../../../mocks/users.json`);
-const {MY_EMAIL} = require(`../../../../config/constants`);
+const {
+  MY_EMAIL,
+  HttpCodes,
+} = require(`../../../../config/constants`);
 
 const apiPrefix = `/api/users`;
 
@@ -10,63 +13,87 @@ const mockedUser = {
   lastName: `aaaaaa`,
   email: `aaaaaa@bbbb.com`,
   password: `aaaaaa`,
-  passwordConfirmation: `aaaaaa`
+  passwordConfirmation: `aaaaaa`,
 };
 
+const userShape = [`id`, `firstName`, `email`, `role`, `lastName`, `avatar`, `avatarSmall`];
+
 describe(`Testing end-points (${apiPrefix}...)`, () => {
-  test(`GET / - return 200`, async () => {
+  test(`GET / - return ${HttpCodes.OK}`, async () => {
     const res = await request.get(`${apiPrefix}/`);
-    expect(res.statusCode).toBe(200);
+    expect(res.statusCode).toBe(HttpCodes.OK);
+    expect(res.body).toBeArray();
+    expect(res.body.every((item) => expect(item).toContainAllKeys(userShape)));
   });
-  test(`GET /:id - correct - return 200`, async () => {
+  test(`GET /:id - correct - return ${HttpCodes.OK}`, async () => {
     const id = users[0].id;
     const res = await request.get(`${apiPrefix}/${id}`);
-    expect(res.statusCode).toBe(200);
+    expect(res.statusCode).toBe(HttpCodes.OK);
+    expect(res.body).toContainAllKeys(userShape);
   });
-  test(`GET /:id - wrong - return 404`, async () => {
-    const res = await request.get(`${apiPrefix}/999`);
-    expect(res.statusCode).toBe(404);
+  test(`GET /:id - wrong - return ${HttpCodes.NOT_FOUND}`, async () => {
+    const id = 999;
+    const res = await request.get(`${apiPrefix}/${id}`);
+    expect(res.statusCode).toBe(HttpCodes.NOT_FOUND);
+    expect(res.body.text).toBe(_f(`NO_USER_ID`, {id}));
   });
-  test(`POST /auth/register - same email - wrong - return 404`, async () => {
-    const res = await request.post(`${apiPrefix}/auth/register`).send({
+  test(`POST /auth/register - same email - wrong - return ${HttpCodes.NOT_FOUND}`, async () => {
+    const userData = {
       firstName: `aaaaaa`,
       lastName: `aaaaaa`,
       email: MY_EMAIL,
       password: `aaaaaa`,
-    });
-    expect(res.statusCode).toBe(400);
+    };
+    const res = await request.post(`${apiPrefix}/auth/register`).send(userData);
+    expect(res.statusCode).toBe(HttpCodes.BAD_REQUEST);
+    expect(res.body.text).toIncludeAllMembers([
+      {email: _f(`USER_WITH_EMAIL_EXISTS`, {email: userData.email})},
+      {passwordConfirmation: _f(`PASSWORD_DONT_MATCH`)},
+    ]);
   });
-  test(`POST /auth/login - no-user - wrong - return 404`, async () => {
-    const res = await request.post(`${apiPrefix}/auth/login`).send({
+  test(`POST /auth/login - no-user - wrong - return ${HttpCodes.NOT_FOUND}`, async () => {
+    const userData = {
       email: mockedUser.email,
       password: mockedUser.password,
-    });
-    expect(res.statusCode).toBe(400);
+    };
+    const res = await request.post(`${apiPrefix}/auth/login`).send(userData);
+    expect(res.statusCode).toBe(HttpCodes.BAD_REQUEST);
+    expect(res.body.text).toBe(_f(`USER_WITH_EMAIL_NOT_EXISTS`, {email: userData.email}));
   });
-  test(`POST /auth/login - no-password - wrong - return 404`, async () => {
-    const res = await request.post(`${apiPrefix}/auth/login`).send({
+  test(`POST /auth/login - no-password - wrong - return ${HttpCodes.NOT_FOUND}`, async () => {
+    const userData = {
       email: mockedUser.email,
-    });
-    expect(res.statusCode).toBe(400);
+    };
+    const res = await request.post(`${apiPrefix}/auth/login`).send(userData);
+    expect(res.statusCode).toBe(HttpCodes.BAD_REQUEST);
+    expect(res.body.text).toIncludeAllMembers([
+      {password: _f(`PASSWORD_MIN_LETTERS`)},
+    ]);
   });
-  test(`POST /auth/register - wrong - return 404`, async () => {
+  test(`POST /auth/register - wrong - return ${HttpCodes.NOT_FOUND}`, async () => {
     const res = await request.post(`${apiPrefix}/auth/register`).send({
       firstName: `aaaaaa`,
       email: `aaaaaa`,
       password: `aaaaaa`,
     });
-    expect(res.statusCode).toBe(400);
+    expect(res.statusCode).toBe(HttpCodes.BAD_REQUEST);
+    expect(res.body.text).toIncludeAllMembers([
+      {email: _f(`INVALID_EMAIL`)},
+      {lastName: _f(`LASTNAME_ONLY_LETTERS`)},
+      {passwordConfirmation: _f(`PASSWORD_DONT_MATCH`)},
+    ]);
   });
-  test(`POST /auth/register - correct - return 200`, async () => {
+  test(`POST /auth/register - correct - return ${HttpCodes.OK}`, async () => {
     const res = await request.post(`${apiPrefix}/auth/register`).send(mockedUser);
-    expect(res.statusCode).toBe(200);
+    expect(res.statusCode).toBe(HttpCodes.OK);
+    expect(res.body).toContainAllKeys(userShape);
   });
-  test(`POST /auth/login - correct - return 200`, async () => {
+  test(`POST /auth/login - correct - return ${HttpCodes.OK}`, async () => {
     const res = await request.post(`${apiPrefix}/auth/login`).send({
       email: mockedUser.email,
       password: mockedUser.password,
     });
-    expect(res.statusCode).toBe(200);
+    expect(res.statusCode).toBe(HttpCodes.OK);
     expect(res.body).toBeNumber();
   });
 });

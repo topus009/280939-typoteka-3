@@ -1,6 +1,7 @@
 'use strict';
 
 const {Model} = require(`sequelize`);
+const {sqlzParse} = require(`../../../utils/utils`);
 
 class User extends Model {
   static init(sequelize, DataTypes) {
@@ -10,16 +11,16 @@ class User extends Model {
         autoIncrement: true,
         autoIncrementIdentity: true,
         primaryKey: true,
-        allowNull: false
+        allowNull: false,
       },
       firstName: {
         type: DataTypes.TEXT,
-        allowNull: false
+        allowNull: false,
       },
       email: {
         type: DataTypes.TEXT,
         allowNull: false,
-        unique: true
+        unique: true,
       },
       password: {
         type: DataTypes.TEXT,
@@ -27,15 +28,15 @@ class User extends Model {
       },
       role: {
         type: DataTypes.TEXT,
-        allowNull: false
+        allowNull: false,
       },
       lastName: {
         type: DataTypes.TEXT,
-        allowNull: false
+        allowNull: false,
       },
       avatar: {
         type: DataTypes.TEXT,
-        allowNull: true
+        allowNull: true,
       },
       avatarSmall: {
         type: DataTypes.TEXT,
@@ -49,12 +50,19 @@ class User extends Model {
       scopes: {
         withPassword: {
           attributes: {include: [`password`]},
-        }
+        },
       },
       sequelize,
       tableName: `users`,
       timestamps: false,
-      underscored: false
+      underscored: false,
+      hooks: {
+        afterFind: (result) => sqlzParse(result),
+        afterCreate: (result) => {
+          delete result.dataValues.password;
+          return result;
+        },
+      },
     });
   }
 
@@ -63,7 +71,7 @@ class User extends Model {
       as: `comments`,
       foreignKey: `userId`,
       onUpdate: `cascade`,
-      onDelete: `cascade`
+      onDelete: `cascade`,
     });
   }
 }

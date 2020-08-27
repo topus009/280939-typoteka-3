@@ -5,8 +5,8 @@ mixin articleItem({article, categories, comments, currentUser, users, categories
       h2.visually-hidden Основное содержание
       .post__wrapper
         .post__head
-          a.post__backwards.button.button--backwards(href='#') Назад
-          +formattedDate(article.createdDate, {class: 'post__date'})
+          button.post__backwards.button.button--backwards(onclick='window.history.go(-1); return false;') Назад
+          +formatDate(article.createdDate, {class: 'post__date'})
           h2.post__title.title.title--main= article.title
           ul.post__themes.themes
             each categoryId in article.categories

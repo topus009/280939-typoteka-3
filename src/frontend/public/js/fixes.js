@@ -14,4 +14,13 @@ document.addEventListener('DOMContentLoaded', function() {
       this.style.height = (this.scrollHeight) + 'px';
     }
   }
+
+  var articleFormImgDeleteBtn = document.getElementById('image-file-delete');
+  articleFormImgDeleteBtn.addEventListener('click', function(e) {
+    e.preventDefault();
+    var articleFormImg = document.getElementById('image-name-field');
+    var prevArticleFormImg = document.getElementById('prevImage-name-field');
+    prevArticleFormImg.value = articleFormImg.value;
+    articleFormImg.value = '';
+  })
 })

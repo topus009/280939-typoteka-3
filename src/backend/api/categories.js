@@ -6,7 +6,8 @@ const {CustomError} = require(`../../utils/utils`);
 
 const categoriesApi = (entityName, database) => ({
   async getAll() {
-    return await database[entityName].findAll();
+    const data = await database[entityName].findAll();
+    return data;
   },
 
   async findById(id) {
@@ -18,13 +19,14 @@ const categoriesApi = (entityName, database) => ({
   },
 
   async findByLabel(label) {
-    return await database[entityName].findOne({
+    const data = await database[entityName].findOne({
       where: {
         label: {
-          [Op.like]: `%${label}%`
-        }
-      }
+          [Op.like]: `%${label}%`,
+        },
+      },
     });
+    return data;
   },
 
   async delete(id) {
@@ -33,22 +35,33 @@ const categoriesApi = (entityName, database) => ({
       throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_CATEGORY_ID`, {id}));
     }
     const articles = await category.getArticle();
-    let blockedArticles = [];
+    const blockedArticles = [];
+    const countTasksIds = [];
+    const countTasks = [];
     for (const article of articles) {
-      const categoriesCount = await article.countCategories();
-      if (categoriesCount === 1) {
-        blockedArticles.push(article.id);
-      }
+      countTasksIds.push(article.id);
+      countTasks.push(article.countCategories());
     }
+    const countResults = await Promise.all(countTasks);
+    countTasksIds.forEach((countId, index) => {
+      const count = countResults[index];
+      if (count === 1) {
+        blockedArticles.push(countId);
+      }
+    });
     if (blockedArticles.length) {
-      throw new CustomError(HttpCodes.BAD_REQUEST, _f(`DELETING_CATEGORY_HAS_ARTICLES`, {ids: blockedArticles}));
+      throw new CustomError(
+        HttpCodes.BAD_REQUEST,
+        _f(`DELETING_CATEGORY_HAS_ARTICLES`, {ids: blockedArticles}),
+      );
     }
     await category.destroy();
     return id;
   },
 
   async add(data) {
-    return await database[entityName].create(data);
+    const createdCategory = await database[entityName].create(data);
+    return createdCategory;
   },
 
   async edit(id, data) {
@@ -56,20 +69,28 @@ const categoriesApi = (entityName, database) => ({
     if (!targetCategory) {
       throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_CATEGORY_ID`, {id}));
     }
-    return await targetCategory.update(data);
+    const updatedCategory = await targetCategory.update(data);
+    return updatedCategory;
   },
 
-  async getCategoriesCount() {
+  async countAll() {
     const categories = await database[entityName].findAll();
     const categoriesCount = {};
+    const countTasksIds = [];
+    const countTasks = [];
     for (const category of categories) {
-      const count = await category.countArticle();
-      if (count) {
-        categoriesCount[category.id] = count;
-      }
+      countTasksIds.push(category.id);
+      countTasks.push(category.countArticle());
     }
+    const countResults = await Promise.all(countTasks);
+    countTasksIds.forEach((id, index) => {
+      const count = countResults[index];
+      if (count) {
+        categoriesCount[id] = count;
+      }
+    });
     return categoriesCount;
-  }
+  },
 });
 
 module.exports = categoriesApi;

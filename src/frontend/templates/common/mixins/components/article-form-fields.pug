@@ -21,7 +21,8 @@ mixin imageField(article, errors)
         input.visually-hidden(type='file' name='img')
         | Обзор
       if article.img
-        button.button.button--transparent Удалить
+        button#image-file-delete.button.button--transparent Удалить
+      input#prevImage-name-field(type='hidden' name='_prevImg')
   +getError(errors, 'file')
 
 mixin categoriesField(article, categories)
