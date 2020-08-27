@@ -1,9 +1,9 @@
 'use strict';
 
-const rules = require(`./rules`);
-const validate = require(`./validate`);
+const rulesMiddleware = require(`./rules`);
+const {validationMiddleware} = require(`./validate`);
 
 module.exports = {
-  rules,
-  validate
+  rulesMiddleware,
+  validationMiddleware,
 };

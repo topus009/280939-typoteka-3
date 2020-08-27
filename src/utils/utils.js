@@ -2,18 +2,18 @@
 
 const fs = require(`fs`);
 const path = require(`path`);
-const dayjs = require(`./dayjs`);
 const {
   ExitCodes,
   DATE_FORMAT,
   HttpCodes,
   ARTICLES_PAGE_LIMIT,
   BACKEND_DATE_FORMAT,
-} = require(`../../config/constants`);
-const {
-  createLogger,
+  DEFAULT_FILE_ENCODING,
+  GENERATE_MAX_MONTHS_FROM_NOW,
   LoggerNames,
-} = require(`./logger`);
+} = require(`../../config/constants`);
+const dayjs = require(`./dayjs`);
+const {createLogger} = require(`./logger`);
 
 const log = createLogger(LoggerNames.COMMON);
 
@@ -33,20 +33,17 @@ const shuffle = (someArray) => {
       someArray[i],
     ];
   }
-
   return someArray;
 };
 
-const readDirAsync = (folderPath) =>
-  fs.promises.readdir(folderPath, (err, files) => {
-    if (err) {
-      log.error(err);
-    }
-    return files;
+const readDirAsync = (folderPath) => {
+  return fs.promises.readdir(folderPath, (err, files) => {
+    return err ? log.error(err) : files;
   });
+};
 
 const readFileAsync = async (pathToFile, asText) => {
-  const data = await fs.promises.readFile(pathToFile, `utf8`);
+  const data = await fs.promises.readFile(pathToFile, DEFAULT_FILE_ENCODING);
   if (asText) {
     return data;
   }
@@ -56,9 +53,9 @@ const readFileAsync = async (pathToFile, asText) => {
 const writeToFileAsync = async (pathToFile, name, content) => {
   const filePath = path.join(pathToFile, name);
   try {
-    await fs.promises.writeFile(filePath, content, `utf8`);
-    log.info(`File ${name} was created!`);
-    log.info(`Destination: ${path.resolve(filePath)}`);
+    await fs.promises.writeFile(filePath, content, DEFAULT_FILE_ENCODING);
+    log.info(_f(`FILE_CREATED`, {name}));
+    log.info(_f(`FILE_DESTINATION`, {dest: path.resolve(filePath)}));
   } catch (err) {
     log.error(err);
   }
@@ -69,18 +66,15 @@ const exit = (code) => {
 };
 
 const getRandomDate = () => {
-  const MAX_MONTHS_FROM_NOW = 3;
   const currentDate = dayjs();
-  const pastDate = dayjs(currentDate).subtract(MAX_MONTHS_FROM_NOW, `month`);
+  const pastDate = dayjs(currentDate)
+    .subtract(GENERATE_MAX_MONTHS_FROM_NOW, `month`);
   const start = pastDate.valueOf();
   const end = currentDate;
-
   return dayjs(getRangomInteger(start, end, true)).format(DATE_FORMAT);
 };
 
-const getRandomString = (arr) => {
-  return arr[getRangomInteger(0, arr.length - 1)];
-};
+const getRandomString = (arr) => arr[getRangomInteger(0, arr.length - 1)];
 
 const getRandomStrings = (arr, maxArrLength) => {
   const shuffledArr = shuffle(arr);
@@ -95,7 +89,6 @@ const getRandomStrings = (arr, maxArrLength) => {
 
   const newArrLength = getRangomInteger(1, shuffledArrLength - 1);
   const res = shuffledArr.slice(0, newArrLength);
-
   return res;
 };
 
@@ -103,13 +96,16 @@ const parseCommandParam = (param) => parseInt(param[0], 10);
 
 class CustomError extends Error {
   constructor(statusCode, message) {
-    super(message || `Unknown error`);
+    super(message || _f(`UNKNOWN_ERROR`));
     this.statusCode = statusCode || HttpCodes.INTERNAL_SERVER_ERROR;
     this.text = message;
   }
 }
 
-const isFileExistsAsync = async (filePath) => !!(await fs.promises.stat(filePath).catch(() => false));
+const isFileExistsAsync = async (filePath) => {
+  const exists = await fs.promises.stat(filePath).catch(() => false);
+  return !!exists;
+};
 
 const sqlzParse = (data) => JSON.parse(JSON.stringify(data));
 
@@ -120,21 +116,20 @@ const sqlzObjsToArr = (data, key, objKey) => {
     if (item[key]) {
       formattedField[key] = item[key].map((el) => el[objKey]);
     }
-    return ({
+    return {
       ...item,
       ...formattedField,
-    });
+    };
   });
   return formattedData;
 };
 
 const getHighlitedMatches = (queryString, string) => {
   let newString = ``;
-  const rgxp = new RegExp(`(\\S*)?(` + queryString + `)(\\S*)?`, `ig`);
-
+  const rgxp = new RegExp(`(\\S*)?(${queryString})(\\S*)?`, `ig`);
   if (queryString.trim().length > 0) {
     newString = string.replace(rgxp, (match, $1, $2, $3) => {
-      return ($1 || ``) + `<b>` + $2 + `</b>` + ($3 || ``);
+      return `${$1 || ``}<b>${$2}</b>${$3 || ``}`;
     });
   }
   return newString.length !== string.length ? newString : ``;
@@ -147,16 +142,15 @@ const getPaginationData = ({articlesTotalCount, page}) => {
       pagesCount: Math.ceil(articlesTotalCount / ARTICLES_PAGE_LIMIT),
       articlesTotalCount,
     };
-  } else {
-    return {};
   }
+  return {};
 };
 
 const catchAsync = (fn) => (req, res, next) => fn(req, res, next).catch(next);
 
 const capitalizeFirstLetter = (str) => str[0].toUpperCase() + str.slice(1);
 
-const commonErrorsHandler = (logCb) => (error, req, res, next, cb) => {
+const useCommonErrorsHandler = (logCb) => (error, req, res, next, cb) => {
   const {text, statusCode} = error;
   const {method, url} = req;
   const formattedText = Array.isArray(text) ? JSON.stringify(text) : text;
@@ -169,9 +163,8 @@ const normalizeDate = (date, formatStr) => {
   const dateObj = date ? dayjs(date, BACKEND_DATE_FORMAT) : dayjs();
   if (formatStr) {
     return dateObj.format(formatStr);
-  } else {
-    return dateObj;
   }
+  return dateObj;
 };
 
 module.exports = {
@@ -193,6 +186,6 @@ module.exports = {
   getPaginationData,
   catchAsync,
   capitalizeFirstLetter,
-  commonErrorsHandler,
+  useCommonErrorsHandler,
   normalizeDate,
 };

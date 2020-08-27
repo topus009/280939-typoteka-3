@@ -2,53 +2,65 @@
 
 const {Router} = require(`express`);
 const {HttpCodes} = require(`../../../../config/constants`);
-const {
-  validate,
-  rules,
-} = require(`../../validation`);
 const {catchAsync} = require(`../../../utils/utils`);
+const {
+  validationMiddleware,
+  rulesMiddleware,
+} = require(`../../validation`);
+
+const categoriesRouter = new Router();
 
 const router = (api) => {
-  const categoriesRouter = new Router();
-
   categoriesRouter.get(`/`, catchAsync(async (req, res) => {
     const data = await api.categories.getAll();
-    return res.status(HttpCodes.OK).json(data);
+    res.status(HttpCodes.OK).json(data);
+    return;
   }));
 
   categoriesRouter.get(`/:id`, catchAsync(async (req, res) => {
     const {id} = req.params;
     const data = await api.categories.findById(id);
-    return res.status(HttpCodes.OK).json(data);
+    res.status(HttpCodes.OK).json(data);
+    return;
   }));
 
-  categoriesRouter.post(`/`, rules.category(api), validate, catchAsync(async (req, res) => {
+  categoriesRouter.post(`/`, [
+    rulesMiddleware.category(api),
+    validationMiddleware,
+  ], catchAsync(async (req, res) => {
     const data = await api.categories.add(req.body);
-    return res.status(HttpCodes.OK).json(data);
+    res.status(HttpCodes.OK).json(data);
+    return;
   }));
 
-  categoriesRouter.put(`/:id`, rules.category(api), validate, catchAsync(async (req, res) => {
+  categoriesRouter.put(`/:id`, [
+    rulesMiddleware.category(api),
+    validationMiddleware,
+  ], catchAsync(async (req, res) => {
     const {id} = req.params;
     const data = await api.categories.edit(id, req.body);
-    return res.status(HttpCodes.OK).json(data);
+    res.status(HttpCodes.OK).json(data);
+    return;
   }));
 
   categoriesRouter.delete(`/:id`, catchAsync(async (req, res) => {
     const {id} = req.params;
     const data = await api.categories.delete(id);
-    return res.status(HttpCodes.OK).json(data);
+    res.status(HttpCodes.OK).json(data);
+    return;
   }));
 
   categoriesRouter.get(`/categories/my`, catchAsync(async (req, res) => {
     const data = await api.categories.getAll();
-    return res.status(HttpCodes.OK).json(data);
+    res.status(HttpCodes.OK).json(data);
+    return;
   }));
 
   categoriesRouter.get(`/categories/count`, catchAsync(async (req, res) => {
-    const data = await api.categories.getCategoriesCount();
-    return res.status(HttpCodes.OK).json(data);
+    const data = await api.categories.countAll();
+    res.status(HttpCodes.OK).json(data);
+    return;
   }));
-
   return categoriesRouter;
 };
 

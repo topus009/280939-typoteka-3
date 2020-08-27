@@ -1,11 +1,11 @@
 'use strict';
 
-const {exit} = require(`../utils/utils`);
 const {
   DEFAULT_COMMAND,
   USER_ARGV_INDEX,
   ExitCodes,
 } = require(`../../config/constants`);
+const {exit} = require(`../utils/utils`);
 const {cli} = require(`./cli`);
 
 const userArguments = process.argv.slice(USER_ARGV_INDEX);

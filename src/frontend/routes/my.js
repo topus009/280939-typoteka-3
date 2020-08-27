@@ -1,51 +1,63 @@
 'use strict';
 
 const {Router} = require(`express`);
-const axios = require(`../axios`);
+const {HttpCodes} = require(`../../../config/constants`);
 const {catchAsync} = require(`../../utils/utils`);
+const axios = require(`../axios`);
 const {
-  auth,
-  admin,
-  csrf,
+  authMiddleware,
+  adminMiddleware,
+  csrfMiddleware,
 } = require(`../utils/utils`);
 
 const myRouter = new Router();
 
-myRouter.get(`/categories`, [auth, admin, csrf], catchAsync(async (req, res) => {
+myRouter.get(`/categories`, [
+  authMiddleware,
+  adminMiddleware,
+  csrfMiddleware,
+], catchAsync(async (req, res) => {
   const {data} = await axios.get(`/pages/my/categories`);
-  return res.render(`pages/my/admin-categories`, {
+  res.render(`pages/my/admin-categories`, {
     ...data,
-    csrf: req.csrfToken()
+    csrf: req.csrfToken(),
   });
+  return;
 }));
 
-myRouter.get(`/categories/delete/:id`, [auth, admin], catchAsync(async (req, res) => {
+myRouter.get(`/categories/delete/:id`, [
+  authMiddleware,
+  adminMiddleware,
+], catchAsync(async (req, res) => {
   const {id} = req.params;
   await axios.delete(`/categories/${id}`);
-  return res.redirect(`/my/categories`);
+  res.redirect(`/my/categories`);
+  return;
 }));
 
-myRouter.post(`/categories`, [auth, admin, csrf], async (req, res, next) => {
+myRouter.post(`/categories`, [
+  authMiddleware,
+  adminMiddleware,
+  csrfMiddleware,
+], async (req, res, next) => {
   const {id, label} = req.body;
   try {
-    let method = id ? `put` : `post`;
-    let path = id ? `/categories/${id}` : `/categories`;
-    const apiReq = await axios[method](path, {label});
-    if (apiReq.status === 200) {
+    const apiReq = await axios[id ? `put` : `post`](`/categories${id ? `/${id}` : ``}`, {label});
+    if (apiReq.status === HttpCodes.OK) {
       res.redirect(`/my/categories`);
     }
     return;
   } catch (error) {
-    if (error.statusCode === 400) {
+    if (error.statusCode === HttpCodes.BAD_REQUEST) {
       const {data} = await axios.get(`/pages/my/categories`);
       const errors = Array.isArray(error.text) ? error.text : [{
         id: +id,
-        label: error.text
+        label: error.text,
       }];
       res.render(`pages/my/admin-categories`, {
         ...data,
         errors,
-        csrf: req.csrfToken()
+        csrf: req.csrfToken(),
       });
       return;
     }
@@ -53,26 +65,42 @@ myRouter.post(`/categories`, [auth, admin, csrf], async (req, res, next) => {
   }
 });
 
-myRouter.get(`/comments`, [auth, admin], catchAsync(async (req, res) => {
+myRouter.get(`/comments`, [
+  authMiddleware,
+  adminMiddleware,
+], catchAsync(async (req, res) => {
   const {data} = await axios.get(`/pages/my/comments`);
-  return res.render(`pages/my/admin-comments`, data);
+  res.render(`pages/my/admin-comments`, data);
+  return;
 }));
 
-myRouter.get(`/comments/:articleId/:id/delete`, [auth, admin], catchAsync(async (req, res) => {
+myRouter.get(`/comments/:articleId/:id/delete`, [
+  authMiddleware,
+  adminMiddleware,
+], catchAsync(async (req, res) => {
   const {id, articleId} = req.params;
   await axios.delete(`/comments/article/${articleId}/${id}`);
-  return res.redirect(`/my/comments`);
+  res.redirect(`/my/comments`);
+  return;
 }));
 
-myRouter.get(`/articles`, [auth, admin], catchAsync(async (req, res) => {
+myRouter.get(`/articles`, [
+  authMiddleware,
+  adminMiddleware,
+], catchAsync(async (req, res) => {
   const {data} = await axios.get(`/pages/my/articles`);
-  return res.render(`pages/my/admin-articles`, data);
+  res.render(`pages/my/admin-articles`, data);
+  return;
 }));
 
-myRouter.get(`/articles/delete/:id`, [auth, admin], catchAsync(async (req, res) => {
+myRouter.get(`/articles/delete/:id`, [
+  authMiddleware,
+  adminMiddleware,
+], catchAsync(async (req, res) => {
   const {id} = req.params;
   await axios.delete(`/articles/${id}`);
-  return res.redirect(`/my/articles`);
+  res.redirect(`/my/articles`);
+  return;
 }));
 
 module.exports = myRouter;

@@ -10,11 +10,11 @@ class Comment extends Model {
         autoIncrement: true,
         autoIncrementIdentity: true,
         primaryKey: true,
-        allowNull: false
+        allowNull: false,
       },
       comment: {
         type: DataTypes.TEXT,
-        allowNull: false
+        allowNull: false,
       },
       userId: {
         type: DataTypes.INTEGER,
@@ -35,20 +35,20 @@ class Comment extends Model {
       sequelize,
       tableName: `comments`,
       timestamps: false,
-      underscored: false
+      underscored: false,
     });
   }
 
   static associate(models) {
     this.commentsArticles = this.belongsTo(models.Article, {
       as: `articles`,
-      foreignKey: `articleId`
+      foreignKey: `articleId`,
     });
     this.commentsUsers = this.belongsTo(models.User, {
       as: `users`,
       foreignKey: `userId`,
       onUpdate: `cascade`,
-      onDelete: `cascade`
+      onDelete: `cascade`,
     });
   }
 }

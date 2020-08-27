@@ -1,19 +1,22 @@
 'use strict';
 
 const {Router} = require(`express`);
-const axios = require(`../axios`);
 const {catchAsync} = require(`../../utils/utils`);
-const {csrf} = require(`../utils/utils`);
+const axios = require(`../axios`);
+const {csrfMiddleware} = require(`../utils/utils`);
 
 const mainRouter = new Router();
 
 mainRouter.get(`/`, catchAsync(async (req, res) => {
   const {page} = req.query;
   const {data} = await axios.get(`/pages/main`, {params: {page}});
-  return res.render(`pages/main/main`, data);
+  res.render(`pages/main/main`, data);
+  return;
 }));
 
-mainRouter.get(`/search`, csrf, catchAsync(async (req, res) => {
+mainRouter.get(`/search`, [
+  csrfMiddleware,
+], catchAsync(async (req, res) => {
   const {query} = req.query;
   if (!query) {
     res.render(`pages/main/search`);
@@ -31,7 +34,8 @@ mainRouter.get(`/category/:id`, catchAsync(async (req, res) => {
   const {id} = req.params;
   const {page} = req.query;
   const {data} = await axios.get(`/pages/main/category/${id}`, {params: {page}});
-  return res.render(`pages/main/category`, data);
+  res.render(`pages/main/category`, data);
+  return;
 }));
 
 module.exports = mainRouter;

@@ -1,55 +1,54 @@
 'use strict';
 
-const axios = require(`../axios`);
-const csrfProtection = require(`csurf`);
-const {
-  commonErrorsHandler,
-  CustomError,
-  catchAsync,
-} = require(`../../utils/utils`);
+const csurf = require(`csurf`);
 const {
   HttpCodes,
   UsersRoles,
+  SESSION_COOKIE_NAME,
+  SESSION_UID,
 } = require(`../../../config/constants`);
+const {
+  useCommonErrorsHandler,
+  CustomError,
+  catchAsync,
+} = require(`../../utils/utils`);
+const axios = require(`../axios`);
 
 const sendError = (res, next, error) => {
-  return res
+  res
     .status(error.statusCode)
     .render(`pages/errors/error`, {error});
+  return;
 };
 
-const errorsHandler = (log) => (error, req, res, next) => {
-  return commonErrorsHandler(log)(error, req, res, next, sendError);
+const errorsMiddleware = (log) => (error, req, res, next) => {
+  return useCommonErrorsHandler(log)(error, req, res, next, sendError);
 };
 
-const auth = (req, res, next) => {
+const authMiddleware = (req, res, next) => {
   const {session, cookies} = req;
-  if (session.uid && cookies.sid) {
+  if (session[SESSION_UID] && cookies[SESSION_COOKIE_NAME]) {
     return next();
-  } else {
-    throw new CustomError(HttpCodes.UNAUTHORIZED, _f(`USER_NOT_AUTHORIZED`));
   }
+  throw new CustomError(HttpCodes.UNAUTHORIZED, _f(`USER_NOT_AUTHORIZED`));
 };
 
-const admin = (req, res, next) => {
+const adminMiddleware = (req, res, next) => {
   const {locals} = res;
-  if (locals.currentUser) {
-    const isAdmin = locals.currentUser.role === UsersRoles.ADMIN;
-    if (!isAdmin) {
-      throw new CustomError(HttpCodes.FORBIDDEN, _f(`USER_IS_NOT_ADMIN`));
-    }
+  if (locals.currentUser && locals.currentUser.role !== UsersRoles.ADMIN) {
+    throw new CustomError(HttpCodes.FORBIDDEN, _f(`USER_IS_NOT_ADMIN`));
   }
   return next();
 };
 
-const getUser = catchAsync(async (req, res, next) => {
+const getUserMiddleware = catchAsync(async (req, res, next) => {
   if (req.path !== `/logout`) {
     const {sessionID, sessionStore} = req;
     res.locals.currentUser = {};
     const SessionModel = sessionStore.sessionModel.sequelize.models.Session;
     const sessionData = await SessionModel.findByPk(sessionID);
     if (sessionData) {
-      const {uid} = JSON.parse(sessionData.data);
+      const {[SESSION_UID]: uid} = JSON.parse(sessionData.data);
       const {data: userData} = await axios.get(`/users/${uid}`);
       res.locals.currentUser = userData;
     }
@@ -57,12 +56,12 @@ const getUser = catchAsync(async (req, res, next) => {
   return next();
 });
 
-const csrf = csrfProtection({cookie: true});
+const csrfMiddleware = csurf({cookie: true});
 
 module.exports = {
-  errorsHandler,
-  auth,
-  getUser,
-  admin,
-  csrf,
+  errorsMiddleware,
+  authMiddleware,
+  getUserMiddleware,
+  adminMiddleware,
+  csrfMiddleware,
 };

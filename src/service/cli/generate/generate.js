@@ -3,6 +3,7 @@
 const {
   MockFilesPaths,
   ExitCodes,
+  AppCommands,
 } = require(`../../../../config/constants`);
 const {exit} = require(`../../../utils/utils`);
 const generateUsers = require(`./generate-users`);
@@ -24,8 +25,8 @@ const run = async (input) => {
 };
 
 module.exports = {
-  name: `--generate`,
-  run
+  name: AppCommands.GENERATE,
+  run,
 };
 
 // run([4]); // for debugging

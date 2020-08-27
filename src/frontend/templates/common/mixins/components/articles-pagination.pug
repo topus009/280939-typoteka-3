@@ -7,11 +7,19 @@ mixin page(index, linkPrefix)
 mixin articlesPagination(activePage, pagesCount, byCategories, activeCategoryId)
   - i = 1
   - linkPrefix = !byCategories ? '' : `/category/${activeCategoryId}`
+  - backBtnClass = `${activePage === 1 ? 'button--disabled' : ''}`
+  - forwardBtnClass = `${+activePage >= +pagesCount ? 'button--disabled' : ''}`
   .preview__toggle-wrapper
     ul.preview__pagination.pagination
       li
-        a.pagination__button.button.button--backwards(class=`${activePage === 1 ? 'button--disabled' : ''}` href=`${linkPrefix}?page=${+activePage - 1}` aria-label='Страница назад') Назад
+        a.pagination__button.button.button--backwards(
+          class=backBtnClass
+          href=`${linkPrefix}?page=${+activePage - 1}`
+          aria-label='Страница назад') Назад
       while i <= +pagesCount
         +page(i++, linkPrefix)
       li
-        a.pagination__button.button.button--forward(class=`${+activePage >= +pagesCount ? 'button--disabled' : ''}` href=`${linkPrefix}?page=${activePage + 1}` aria-label='Страница вперед') Вперед
+        a.pagination__button.button.button--forward(
+          class=forwardBtnClass
+          href=`${linkPrefix}?page=${activePage + 1}`
+          aria-label='Страница вперед') Вперед

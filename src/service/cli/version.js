@@ -1,15 +1,16 @@
 'use strict';
 
 const {
-  createLogger,
+  AppCommands,
   LoggerNames,
-} = require(`../../utils/logger`);
+} = require(`../../../config/constants`);
+const {createLogger} = require(`../../utils/logger`);
 
 const log = createLogger(LoggerNames.BACKEND);
 
 module.exports = {
-  name: `--version`,
+  name: AppCommands.VERSION,
   run() {
     log.info(process.version);
-  }
+  },
 };

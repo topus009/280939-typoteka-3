@@ -2,15 +2,19 @@
 
 const bcrypt = require(`bcrypt`);
 const {
-  getRandomString,
-  writeToFileAsync,
-} = require(`../../../utils/utils`);
-const {
   MY_FIRSTNAME,
   MY_LASTNAME,
   MY_EMAIL,
   UsersRoles,
+  GENERATE_USERS_MAX_COUNT,
+  ADMIN_ID,
+  GENERATE_ADMIN_AVATAR,
+  GENERATE_ADMIN_AVATAR_SMALL,
 } = require(`../../../../config/constants`);
+const {
+  getRandomString,
+  writeToFileAsync,
+} = require(`../../../utils/utils`);
 const {getSamples} = require(`./utils`);
 
 const generateData = async (count) => {
@@ -42,22 +46,20 @@ const generateData = async (count) => {
   // add myself
   const myPassword = await bcrypt.hash(process.env.MY_PASSWORD, +process.env.PASSWORD_SALT);
   data.unshift({
-    id: 1,
+    id: ADMIN_ID,
     firstName: MY_FIRSTNAME,
     lastName: MY_LASTNAME,
     email: MY_EMAIL,
     password: myPassword,
     role: UsersRoles.ADMIN,
-    avatar: `https://avatars0.githubusercontent.com/u/22383491?s=88&u=db063b8130d3a29442c041b5720662aa78d45e78&v=4`,
-    avatarSmall: `https://avatars0.githubusercontent.com/u/22383491?s=40&v=4`
+    avatar: GENERATE_ADMIN_AVATAR,
+    avatarSmall: GENERATE_ADMIN_AVATAR_SMALL,
   });
-
   return data;
 };
 
 const generateUsers = async (fileName) => {
-  const COUNT = 10;
-  const data = await generateData(COUNT);
+  const data = await generateData(GENERATE_USERS_MAX_COUNT);
   await writeToFileAsync(``, fileName, JSON.stringify(data));
   return data;
 };

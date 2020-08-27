@@ -1,36 +1,46 @@
 'use strict';
 
 const {Router} = require(`express`);
-const axios = require(`../axios`);
-const {userImgUpload} = require(`../../utils/upload`);
+const {
+  HttpCodes,
+  SESSION_COOKIE_NAME,
+  SESSION_UID,
+} = require(`../../../config/constants`);
+const {userImgUploadMiddleware} = require(`../../utils/upload`);
 const {catchAsync} = require(`../../utils/utils`);
-const {csrf} = require(`../utils/utils`);
+const axios = require(`../axios`);
+const {csrfMiddleware} = require(`../utils/utils`);
 
 const registerRouter = new Router();
 const loginRouter = new Router();
 const logoutRouter = new Router();
 
-registerRouter.get(`/`, csrf, (req, res) => {
+registerRouter.get(`/`, [
+  csrfMiddleware,
+], (req, res) => {
   res.render(`pages/auth/registration`, {csrf: req.csrfToken()});
   return;
 });
 
-registerRouter.post(`/`, [userImgUpload, csrf], async (req, res, next) => {
+registerRouter.post(`/`, [
+  userImgUploadMiddleware,
+  csrfMiddleware,
+], async (req, res, next) => {
   try {
     const data = req.body;
     if (req.file) {
       data.file = req.file;
     }
     const registerData = await axios.post(`/users/auth/register`, data);
-    if (registerData.status === 200) {
+    if (registerData.status === HttpCodes.OK) {
       res.redirect(`/login`);
     }
     return;
   } catch (error) {
-    if (error.statusCode === 400 && Array.isArray(error.text)) {
+    if (error.statusCode === HttpCodes.BAD_REQUEST && Array.isArray(error.text)) {
       res.render(`pages/auth/registration`, {
         errors: error.text,
-        csrf: req.csrfToken()
+        csrf: req.csrfToken(),
       });
       return;
     }
@@ -38,27 +48,31 @@ registerRouter.post(`/`, [userImgUpload, csrf], async (req, res, next) => {
   }
 });
 
-loginRouter.get(`/`, csrf, (req, res) => {
+loginRouter.get(`/`, [
+  csrfMiddleware,
+], (req, res) => {
   res.render(`pages/auth/login`, {csrf: req.csrfToken()});
   return;
 });
 
-loginRouter.post(`/`, csrf, catchAsync(async (req, res) => {
+loginRouter.post(`/`, [
+  csrfMiddleware,
+], catchAsync(async (req, res) => {
   const {data} = await axios.post(`/users/auth/login`, req.body);
   if (data) {
     const {data: userData} = await axios.get(`/users/${data}`);
     res.locals.currentUser = userData;
-    req.session.uid = data;
+    req.session[SESSION_UID] = data;
   }
   req.session.save(() => res.redirect(`/`));
   return;
 }));
 
-logoutRouter.get(`/`, catchAsync(async (req, res) => {
-  res.clearCookie(`sid`);
+logoutRouter.get(`/`, (req, res) => {
+  res.clearCookie(SESSION_COOKIE_NAME);
   res.redirect(`/login`);
   return;
-}));
+});
 
 module.exports = {
   registerRouter,

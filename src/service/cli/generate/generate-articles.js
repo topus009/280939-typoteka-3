@@ -1,6 +1,12 @@
 'use strict';
 
 const {
+  DEFAULT_ARTICLE,
+  GENERATE_ANNOUNCE_MAX_COUNT,
+  GENERATE_CATEGORIES_MAX_COUNT,
+  GENERATE_ARTICLE_IMG_INDEX,
+} = require(`../../../../config/constants`);
+const {
   getRandomDate,
   getRandomString,
   getRandomStrings,
@@ -21,18 +27,18 @@ const generateMockData = async (count, categories) => {
         id: id + 1,
         title: getRandomString(samples.titles),
         createdDate: getRandomDate(),
-        announce: sentences.slice(0, 5).join(` `),
+        announce: sentences.slice(0, GENERATE_ANNOUNCE_MAX_COUNT).join(` `),
         sentences: sentences.join(` `),
-        categories: getRandomStrings(categoriesIds, 3).slice(0, 3),
+        categories:
+          getRandomStrings(categoriesIds, GENERATE_CATEGORIES_MAX_COUNT)
+            .slice(0, GENERATE_CATEGORIES_MAX_COUNT),
       };
 
-      if (id % 5 !== 0) {
-        content.img = `img/articles/sea@1x.jpg`;
+      if (id % GENERATE_ARTICLE_IMG_INDEX !== 0) {
+        content.img = DEFAULT_ARTICLE;
       }
-
       return content;
     });
-
   return data;
 };
 

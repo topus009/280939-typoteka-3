@@ -5,4 +5,3 @@ mixin themesItem(theme, categoriesCount, isActive = false)
       a.themes__item-link(href=`/category/${theme.id}` class=`${isActive && 'themes__item-link--active'}`)
         span= theme.label
         sup= ` ${count}`
-      //- button.themes__remove-btn(type='button') Удалить категорию

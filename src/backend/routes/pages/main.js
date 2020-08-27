@@ -24,14 +24,13 @@ const router = (api) => {
     ] = await Promise.all([
       api.users.getAll(),
       api.categories.getAll(),
-      api.articles.getArticlesByPage(page),
+      api.articles.getAllByPage(page),
       api.comments.getAll(),
-      api.comments.getLatestComments(),
-      api.articles.getHotArticles(),
-      api.categories.getCategoriesCount(),
+      api.comments.getLatest(),
+      api.articles.getHot(),
+      api.categories.countAll(),
       api.articles.getTotalCount(),
     ]);
-
     const data = {
       users,
       categories,
@@ -40,29 +39,30 @@ const router = (api) => {
       lastComments,
       mostPopularArticles,
       categoriesCount,
-      ...getPaginationData({articlesTotalCount, page}),
+      ...getPaginationData({
+        articlesTotalCount,
+        page,
+      }),
     };
-
-    return res.status(HttpCodes.OK).json(data);
+    res.status(HttpCodes.OK).json(data);
+    return;
   }));
 
   mainPageRouter.get(`/search`, catchAsync(async (req, res) => {
     const {query} = req.query;
-
     const searchResults = await api.articles.searchByTitle(query);
-
     const data = {
       query,
       searchResults,
     };
-
-    return res.status(HttpCodes.OK).json(data);
+    res.status(HttpCodes.OK).json(data);
+    return;
   }));
 
   mainPageRouter.get(`/category/:id`, catchAsync(async (req, res) => {
     const {id} = req.params;
     const page = req.query.page || 1;
-    const articles = await api.articles.getArticlesByCategoryId(id, page);
+    const articles = await api.articles.getAllByCategoryId(id, page);
     const [
       categories,
       categoriesCount,
@@ -70,23 +70,24 @@ const router = (api) => {
       articlesTotalCount,
     ] = await Promise.all([
       api.categories.getAll(),
-      api.categories.getCategoriesCount(),
+      api.categories.countAll(),
       api.comments.getAll(),
       api.articles.getTotalCount(+id),
     ]);
-
     const data = {
       categories,
       articles,
       comments,
       categoriesCount,
       activeCategoryId: id,
-      ...getPaginationData({articlesTotalCount, page}),
+      ...getPaginationData({
+        articlesTotalCount,
+        page,
+      }),
     };
-
-    return res.status(HttpCodes.OK).json(data);
+    res.status(HttpCodes.OK).json(data);
+    return;
   }));
-
   return mainPageRouter;
 };
 

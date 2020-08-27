@@ -1,13 +1,13 @@
 "use strict";
 
-const dayjs = require(`../../utils/dayjs`);
 const {
   DATE_FORMAT,
   ADMIN_ID,
   HttpCodes,
-  MAX_LATEST_COUNT,
+  COMMENTS_MAX_LATEST_COUNT,
   COMMON_DATE_FORMAT,
 } = require(`../../../config/constants`);
+const dayjs = require(`../../utils/dayjs`);
 const {
   CustomError,
   sqlzParse,
@@ -49,15 +49,16 @@ const commentsApi = (entityName, database) => ({
     if (!user) {
       throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_USER_ID`, {id: userId}));
     }
-    return await database[entityName].create({
+    const createdComment = await database[entityName].create({
       ...data,
       articleId,
       userId: user.id,
       createdDate: dayjs().format(DATE_FORMAT),
     });
+    return createdComment;
   },
 
-  async getCommentsByArticleId(articleId) {
+  async getAllByArticleId(articleId) {
     const articleInDB = await database.Article.findByPk(articleId);
     if (!articleInDB) {
       throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_ARTICLE_ID`, {id: articleId}));
@@ -72,7 +73,7 @@ const commentsApi = (entityName, database) => ({
     }));
   },
 
-  async getMyComments() {
+  async getMy() {
     const user = await database.User.findByPk(ADMIN_ID);
     if (!user) {
       throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_USER_ID`, {id: ADMIN_ID}));
@@ -87,12 +88,13 @@ const commentsApi = (entityName, database) => ({
     }));
   },
 
-  async getLatestComments() {
-    return await database[entityName].findAll({
+  async getLatest() {
+    const latestComments = await database[entityName].findAll({
       order: [[`createdDate`, `DESC`]],
-      limit: MAX_LATEST_COUNT,
+      limit: COMMENTS_MAX_LATEST_COUNT,
     });
-  }
+    return latestComments;
+  },
 });
 
 module.exports = commentsApi;

@@ -1,52 +1,58 @@
 'use strict';
 
 const {Router} = require(`express`);
-const axios = require(`../axios`);
 const {
-  articleImgUpload,
+  UsersRoles,
+  HttpCodes,
+} = require(`../../../config/constants`);
+const {
+  articleImgUploadMiddleware,
   addFile,
 } = require(`../../utils/upload`);
 const {catchAsync} = require(`../../utils/utils`);
-const {UsersRoles} = require(`../../../config/constants`);
 const {
-  auth,
-  admin,
-  csrf,
+  authMiddleware,
+  adminMiddleware,
+  csrfMiddleware,
 } = require(`../utils/utils`);
+const axios = require(`../axios`);
 
 const articlesRouter = new Router();
 
-articlesRouter.get(`/article/:id`, [csrf], catchAsync(async (req, res) => {
+articlesRouter.get(`/article/:id`, [
+  csrfMiddleware,
+], catchAsync(async (req, res) => {
   const {id} = req.params;
   const {data} = await axios.get(`/pages/articles/article/${id}`);
-  return res.render(`pages/articles/article`, {
+  res.render(`pages/articles/article`, {
     ...data,
-    csrf: req.csrfToken()
+    csrf: req.csrfToken(),
   });
+  return;
 }));
 
-articlesRouter.post(`/article/:id`, [auth, csrf], async (req, res, next) => {
+articlesRouter.post(`/article/:id`, [
+  authMiddleware,
+  csrfMiddleware,
+], async (req, res, next) => {
   const {id} = req.params;
-  const {currentUser} = res.locals;
-  const userId = currentUser.id;
-  const role = currentUser.role;
+  const {currentUser: {id: userId, role: role}} = res.locals;
   try {
     const apiReq = await axios.post(`/comments/article/${id}`, {
       ...req.body,
-      userId
+      userId,
     });
-    if (apiReq.status === 200) {
-      const url = role === UsersRoles.ADMIN ? `/my/comments` : req.originalUrl;
-      res.redirect(url);
+    if (apiReq.status === HttpCodes.OK) {
+      res.redirect(role === UsersRoles.ADMIN ? `/my/comments` : req.originalUrl);
     }
     return;
   } catch (error) {
-    if (error.statusCode === 400 && Array.isArray(error.text)) {
+    if (error.statusCode === HttpCodes.BAD_REQUEST && Array.isArray(error.text)) {
       const {data} = await axios.get(`/pages/articles/article/${id}`);
       res.render(`pages/articles/article`, {
         ...data,
         errors: error.text,
-        csrf: req.csrfToken()
+        csrf: req.csrfToken(),
       });
       return;
     }
@@ -55,47 +61,44 @@ articlesRouter.post(`/article/:id`, [auth, csrf], async (req, res, next) => {
 });
 
 articlesRouter.get(`/article/edit/:id`, [
-  auth,
-  admin,
-  csrf,
+  authMiddleware,
+  adminMiddleware,
+  csrfMiddleware,
 ], catchAsync(async (req, res) => {
   const {id} = req.params;
   const {data} = await axios.get(`/pages/articles/article/edit/${id}`);
-  return res.render(`pages/articles/article-form`, {
+  res.render(`pages/articles/article-form`, {
     ...data,
-    csrf: req.csrfToken()
+    csrf: req.csrfToken(),
   });
+  return;
 }));
 
 articlesRouter.post(`/article/edit/:id`, [
-  auth,
-  admin,
-  articleImgUpload,
-  csrf,
+  authMiddleware,
+  adminMiddleware,
+  articleImgUploadMiddleware,
+  csrfMiddleware,
 ], async (req, res, next) => {
   const {id} = req.params;
-  const articleData = req.body;
-  addFile(req, articleData);
+  addFile(req, req.body);
   try {
-    const apiReq = await axios.put(`/articles/${id}`, articleData);
-    if (apiReq.status === 200) {
+    const apiReq = await axios.put(`/articles/${id}`, req.body);
+    if (apiReq.status === HttpCodes.OK) {
       res.redirect(`/my/articles`);
     }
     return;
   } catch (error) {
-    if (error.statusCode === 400 && Array.isArray(error.text)) {
+    if (error.statusCode === HttpCodes.BAD_REQUEST && Array.isArray(error.text)) {
       const {data} = await axios.get(`/pages/articles/article/edit/${id}`);
-      const prevArticleData = {
+      res.render(`pages/articles/article-form`, {
         ...data,
         article: {
           ...data.article,
-          ...articleData,
+          ...req.body,
         },
-        errors: error.text
-      };
-      res.render(`pages/articles/article-form`, {
-        ...prevArticleData,
-        csrf: req.csrfToken()
+        errors: error.text,
+        csrf: req.csrfToken(),
       });
       return;
     }
@@ -103,29 +106,34 @@ articlesRouter.post(`/article/edit/:id`, [
   }
 });
 
-articlesRouter.get(`/add`, [auth, admin, csrf], catchAsync(async (req, res) => {
+articlesRouter.get(`/add`, [
+  authMiddleware,
+  adminMiddleware,
+  csrfMiddleware,
+], catchAsync(async (req, res) => {
   const {data} = await axios.get(`/pages/articles/add`);
-  return res.render(`pages/articles/article-form`, {
+  res.render(`pages/articles/article-form`, {
     ...data,
-    csrf: req.csrfToken()
+    csrf: req.csrfToken(),
   });
+  return;
 }));
 
 articlesRouter.post(`/add`, [
-  auth,
-  admin,
-  articleImgUpload,
-  csrf,
+  authMiddleware,
+  adminMiddleware,
+  articleImgUploadMiddleware,
+  csrfMiddleware,
 ], async (req, res, next) => {
   const articleData = req.body;
   addFile(req, articleData);
   try {
     const apiReq = await axios.post(`/articles`, articleData);
-    if (apiReq.status === 200) {
+    if (apiReq.status === HttpCodes.OK) {
       res.redirect(`/my/articles`);
     }
   } catch (error) {
-    if (error.statusCode === 400 && Array.isArray(error.text)) {
+    if (error.statusCode === HttpCodes.BAD_REQUEST && Array.isArray(error.text)) {
       const {data} = await axios.get(`/pages/articles/add`);
       const prevArticleData = {
         ...data,
@@ -133,11 +141,11 @@ articlesRouter.post(`/add`, [
           ...data.article,
           ...articleData,
         },
-        errors: error.text
+        errors: error.text,
       };
       res.render(`pages/articles/article-form`, {
         ...prevArticleData,
-        csrf: req.csrfToken()
+        csrf: req.csrfToken(),
       });
       return;
     }

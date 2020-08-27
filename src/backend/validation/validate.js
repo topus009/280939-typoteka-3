@@ -1,8 +1,8 @@
 'use strict';
 
 const {validationResult} = require(`express-validator`);
-const {CustomError} = require(`../../utils/utils`);
 const {HttpCodes} = require(`../../../config/constants`);
+const {CustomError} = require(`../../utils/utils`);
 
 const getErrorObject = (err, req) => {
   const errObj = {[err.param]: err.msg};
@@ -12,7 +12,7 @@ const getErrorObject = (err, req) => {
   return errObj;
 };
 
-const validate = (req, res, next) => {
+const validationMiddleware = (req, res, next) => {
   const errors = validationResult(req);
   if (errors.isEmpty()) {
     return next();
@@ -24,4 +24,6 @@ const validate = (req, res, next) => {
   throw new CustomError(HttpCodes.BAD_REQUEST, extractedErrors);
 };
 
-module.exports = validate;
+module.exports = {
+  validationMiddleware,
+};

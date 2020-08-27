@@ -12,8 +12,8 @@ const myPageRouter = new Router();
 const router = (api) => {
   myPageRouter.get(`/categories`, catchAsync(async (req, res) => {
     const categories = await api.categories.getAll();
-
-    return res.status(HttpCodes.OK).json({categories});
+    res.status(HttpCodes.OK).json({categories});
+    return;
   }));
 
   myPageRouter.get(`/comments`, catchAsync(async (req, res) => {
@@ -24,25 +24,23 @@ const router = (api) => {
     ] = await Promise.all([
       api.comments.getAll(),
       api.articles.getAll(),
-      api.comments.getMyComments(),
+      api.comments.getMy(),
       api.users.findById(ADMIN_ID),
     ]);
-
     const data = {
       comments,
       articles,
       myComments,
     };
-
-    return res.status(HttpCodes.OK).json(data);
+    res.status(HttpCodes.OK).json(data);
+    return;
   }));
 
   myPageRouter.get(`/articles`, catchAsync(async (req, res) => {
     const articles = await api.articles.getAll();
-
-    return res.status(HttpCodes.OK).json({articles});
+    res.status(HttpCodes.OK).json({articles});
+    return;
   }));
-
   return myPageRouter;
 };
 

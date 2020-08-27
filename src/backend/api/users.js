@@ -3,6 +3,7 @@
 const bcrypt = require(`bcrypt`);
 const {Op} = require(`sequelize`);
 const {
+  DEFAULT_AVATAR,
   HttpCodes,
   UsersRoles,
 } = require(`../../../config/constants`);
@@ -13,7 +14,8 @@ const {
 
 const usersApi = (entityName, database) => ({
   async getAll() {
-    return await database[entityName].findAll();
+    const data = await database[entityName].findAll();
+    return data;
   },
 
   async findById(id) {
@@ -25,35 +27,37 @@ const usersApi = (entityName, database) => ({
   },
 
   async findByEmail(email) {
-    return await database[entityName].findOne({
+    const data = await database[entityName].findOne({
       where: {
         email: {
-          [Op.like]: `%${email}%`
-        }
-      }
+          [Op.like]: `%${email}%`,
+        },
+      },
     });
+    return data;
   },
 
   async add(data) {
     delete data.passwordConfirmation;
     const {password, ...userData} = data;
     const hash = await bcrypt.hash(password, +process.env.PASSWORD_SALT);
-    return await database[entityName].create({
+    const createdUser = await database[entityName].create({
       ...userData,
       password: hash,
       role: UsersRoles.READER,
-      avatar: userData.avatar || `img/icons/smile.svg`,
-      avatarSmall: userData.avatarSmall || `img/icons/smile.svg`,
+      avatar: userData.avatar || DEFAULT_AVATAR,
+      avatarSmall: userData.avatarSmall || DEFAULT_AVATAR,
     });
+    return createdUser;
   },
 
   async auth({email, password}) {
     const user = await database[entityName].scope(`withPassword`).findOne({
       where: {
         email: {
-          [Op.like]: `%${email}%`
-        }
-      }
+          [Op.like]: `%${email}%`,
+        },
+      },
     });
     if (!user) {
       throw new CustomError(HttpCodes.BAD_REQUEST, _f(`USER_WITH_EMAIL_NOT_EXISTS`, {email}));
@@ -64,7 +68,7 @@ const usersApi = (entityName, database) => ({
       throw new CustomError(HttpCodes.BAD_REQUEST, _f(`PASSWORD_IS_INCORRECT`));
     }
     return id;
-  }
+  },
 });
 
 module.exports = usersApi;

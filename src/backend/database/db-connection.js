@@ -2,10 +2,11 @@
 
 const {Sequelize} = require(`sequelize`);
 const {
-  createLogger,
+  ExitCodes,
+  databaseOptions,
   LoggerNames,
-} = require(`../../utils/logger`);
-const {ExitCodes} = require(`../../../config/constants`);
+} = require(`../../../config/constants`);
+const {createLogger} = require(`../../utils/logger`);
 const {exit} = require(`../../utils/utils`);
 const UserModel = require(`./models/user`);
 const ArticleModel = require(`./models/article`);
@@ -14,49 +15,35 @@ const CommentModel = require(`./models/comment`);
 
 const log = createLogger(LoggerNames.DATABASE);
 
-const sequelize = new Sequelize(
-    process.env.PG_DATABASE,
-    process.env.PG_USER,
-    process.env.PG_PASSWORD,
-    {
-      host: process.env.PG_HOST,
-      dialect: process.env.PG_DIALECT,
-      pool: {
-        max: 5,
-        min: 0,
-        idle: 10000
-      },
-      logging: false,
-    }
-);
+const database = new Sequelize(...databaseOptions);
 
 const models = {
-  Article: ArticleModel.init(sequelize, Sequelize),
-  Category: CategoryModel.init(sequelize, Sequelize),
-  Comment: CommentModel.init(sequelize, Sequelize),
-  User: UserModel.init(sequelize, Sequelize),
+  Article: ArticleModel.init(database, Sequelize),
+  Category: CategoryModel.init(database, Sequelize),
+  Comment: CommentModel.init(database, Sequelize),
+  User: UserModel.init(database, Sequelize),
 };
 
 Object.values(models).forEach((model) => model.associate(models));
 
 const initDatabase = async () => {
-  await sequelize.sync({force: true});
-  log.info(`DB structure has been created`);
+  await database.sync({force: true});
+  log.info(_f(`DB_STRUCTURE_CREATED`));
 };
 
 const connectToDatabase = async () => {
   try {
-    log.debug(`Connecting to Database started.`);
-    await sequelize.authenticate();
-    log.info(`Connection to Database has been established successfully.`);
+    log.debug(_f(`DB_CONNECTION_STARTED`));
+    await database.authenticate();
+    log.info(_f(`DB_CONNECTION_SUCCESS`));
   } catch (err) {
-    log.error(`Unable to connect to the database: ${err}`);
+    log.error(_f(`DB_CONNECTION_ERROR`, {err}));
     exit(ExitCodes.ERROR);
   }
 };
 
 module.exports = {
   connectToDatabase,
-  sequelize,
+  database,
   initDatabase,
 };

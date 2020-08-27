@@ -10,18 +10,18 @@ class Category extends Model {
         autoIncrement: true,
         autoIncrementIdentity: true,
         primaryKey: true,
-        allowNull: false
+        allowNull: false,
       },
       label: {
         type: DataTypes.TEXT,
         allowNull: false,
-        unique: true
-      }
+        unique: true,
+      },
     }, {
       sequelize,
       tableName: `categories`,
       timestamps: false,
-      underscored: false
+      underscored: false,
     });
   }
 

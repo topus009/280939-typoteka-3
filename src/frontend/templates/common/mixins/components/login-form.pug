@@ -6,8 +6,6 @@ mixin loginForm(errors)
         label
           input(type='email' name='email' placeholder='Электронная почта' required)
       +getError(errors, 'email')
-      //- if errors
-      //-   p.form__error-message Некоторая ошибка произошла, беда!
       .form__field
         label
           input(type='password' name='password' placeholder='Пароль' required)

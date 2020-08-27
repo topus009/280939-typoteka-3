@@ -4,7 +4,11 @@ mixin registrationForm(errors)
       input(type='hidden' name='_csrf' value= csrf)
       .form__field
         label
-          input(type='email' name='email' placeholder='Электронная почта' required)
+          input(
+            type='email'
+            name='email'
+            placeholder='Электронная почта'
+            required)
       +getError(errors, 'email')
       .form__field
         label
@@ -20,7 +24,11 @@ mixin registrationForm(errors)
       +getError(errors, 'password')
       .form__field
         label
-          input(type='password' name='passwordConfirmation' placeholder='Повтор пароля' required)
+          input(
+            type='password'
+            name='passwordConfirmation'
+            placeholder='Повтор пароля'
+            required)
       +getError(errors, 'passwordConfirmation')
       .form__image-loader
         a.form__avatar.avatar
@@ -28,6 +36,6 @@ mixin registrationForm(errors)
         label
           input.visually-hidden(type='file' name='avatar')
           | Загрузить фото профиля
-      //- +getError(errors, 'avatar')
       +getError(errors, 'file')
-      button.form__submit-btn.form__submit-btn--register.button.button--colored(type='submit') Зарегистрироваться
+      button.form__submit-btn.form__submit-btn--register.button.button--colored(
+        type='submit') Зарегистрироваться

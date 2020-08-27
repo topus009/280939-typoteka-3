@@ -4,13 +4,14 @@ const {
   Op,
   literal,
 } = require(`sequelize`);
-const dayjs = require(`../../utils/dayjs`);
 const {
+  ARTICLES_MAX_HOT_COUNT,
   DATE_FORMAT,
   HttpCodes,
   ARTICLES_PAGE_LIMIT,
   COMMON_DATE_FORMAT,
 } = require(`../../../config/constants`);
+const dayjs = require(`../../utils/dayjs`);
 const {
   CustomError,
   sqlzObjsToArr,
@@ -28,7 +29,7 @@ const articlesApi = (entityName, database) => ({
           as: `categories`,
           required: false,
           attributes: [`id`],
-          through: {attributes: []}
+          through: {attributes: []},
         },
       ],
       order: [[`createdDate`, `DESC`]],
@@ -41,15 +42,18 @@ const articlesApi = (entityName, database) => ({
   },
 
   async getTotalCount(categoryId) {
+    let count;
     if (!isNaN(categoryId)) {
       const category = await database.Category.findByPk(categoryId);
-      return await category.countArticle();
+      count = await category.countArticle();
+    } else {
+      count = await database[entityName].count();
     }
-    return await database[entityName].count();
+    return count;
   },
 
-  async getArticlesByPage(page) {
-    let num = parseInt(page, 10);
+  async getAllByPage(page) {
+    const num = parseInt(page, 10);
     if (isNaN(num)) {
       throw new CustomError(HttpCodes.BAD_REQUEST, _f(`PAGE_SHOULD_BE_A_NUMBER`));
     } else if (num <= 0) {
@@ -62,7 +66,7 @@ const articlesApi = (entityName, database) => ({
           as: `categories`,
           required: false,
           attributes: [`id`],
-          through: {attributes: []}
+          through: {attributes: []},
         },
       ],
       limit: ARTICLES_PAGE_LIMIT,
@@ -86,7 +90,7 @@ const articlesApi = (entityName, database) => ({
     const data = {
       ...article,
       categories: categories.map((el) => el.id),
-      createdDate: dayjs(article.createdDate).format(COMMON_DATE_FORMAT)
+      createdDate: dayjs(article.createdDate).format(COMMON_DATE_FORMAT),
     };
     return data;
   },
@@ -101,12 +105,13 @@ const articlesApi = (entityName, database) => ({
 
   async add(data) {
     const createdDate = normalizeDate(data.createdDate, DATE_FORMAT);
-
     const article = await database[entityName].create({
       ...data,
       createdDate,
     });
-    await article.setCategories(Array.isArray(data.categories) ? data.categories : [data.categories]);
+    await article.setCategories(
+      Array.isArray(data.categories) ? data.categories : [data.categories],
+    );
     return article.id;
   },
 
@@ -115,21 +120,23 @@ const articlesApi = (entityName, database) => ({
     if (!targetArticle) {
       throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_ARTICLE_ID`, {id}));
     }
-    const preparedData = data;
-    if (preparedData.createdDate) {
-      preparedData.createdDate = normalizeDate(data.createdDate, DATE_FORMAT);
+    if (data.createdDate) {
+      data.createdDate = normalizeDate(data.createdDate, DATE_FORMAT);
     }
-    const article = await targetArticle.update(preparedData);
+    const article = await targetArticle.update(data);
     let categories = Array.isArray(data.categories) ? data.categories : [data.categories];
     categories = categories.filter(Boolean);
     if (categories.length) {
       await article.setCategories(categories);
     }
-    return {...article.toJSON(), categories};
+    return {
+      ...article.toJSON(),
+      categories,
+    };
   },
 
-  async getArticlesByCategoryId(id, page = 1) {
-    let num = parseInt(page, 10);
+  async getAllByCategoryId(id, page = 1) {
+    const num = parseInt(page, 10);
     if (isNaN(num)) {
       throw new CustomError(HttpCodes.BAD_REQUEST, _f(`PAGE_SHOULD_BE_A_NUMBER`));
     } else if (num <= 0) {
@@ -164,7 +171,7 @@ const articlesApi = (entityName, database) => ({
   async searchByTitle(query) {
     const data = await database[entityName].findAll({
       where: {
-        title: {[Op.iLike]: `%${query}%`}
+        title: {[Op.iLike]: `%${query}%`},
       },
       include: [
         {
@@ -172,7 +179,7 @@ const articlesApi = (entityName, database) => ({
           as: `categories`,
           required: false,
           attributes: [`id`],
-          through: {attributes: []}
+          through: {attributes: []},
         },
       ],
       order: [[`createdDate`, `DESC`]],
@@ -188,25 +195,27 @@ const articlesApi = (entityName, database) => ({
       if (formattedMatch) {
         results.push({
           ...article,
-          title: formattedMatch
+          title: formattedMatch,
         });
       }
     });
     return results;
   },
 
-  async getHotArticles() {
-    const MAX_HOT_COUNT = 4;
+  async getHot() {
     const articles = await database[entityName].findAll({
       attributes: {
         include: [
-          [literal(`(SELECT COUNT(*) FROM comments WHERE "comments"."articleId" = "Article"."id")`), `commentsCount`],
-        ]
+          [
+            literal(`(SELECT COUNT(*) FROM comments WHERE "comments"."articleId" = "Article"."id")`),
+            `commentsCount`,
+          ],
+        ],
       },
       order: [[literal(`"commentsCount"`), `DESC`]],
-      limit: MAX_HOT_COUNT,
+      limit: ARTICLES_MAX_HOT_COUNT,
     });
-    return sqlzParse(articles).map((item) => ([item.id, +item.commentsCount, item.title]));
+    return sqlzParse(articles).map((item) => [item.id, +item.commentsCount, item.title]);
   },
 });
 

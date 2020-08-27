@@ -1,10 +1,16 @@
 mixin adminComment(article, comment, user)
+  - articleHref = `/articles/article/${article.id}`
+  - deleteBtnHref = `/my/comments/${comment.articleId}/${comment.id}/delete`
   li.publication__list-item
     .publication__header
-      img.publication__list-image(src=user.avatarSmall width='20' height='20' alt='Аватар пользователя')
+      img.publication__list-image(
+        src=user.avatarSmall
+        width='20'
+        height='20'
+        alt='Аватар пользователя')
       b.publication__list-name= `${user.lastName} ${user.firstName}`
-      +formattedDate(comment.createdDate, {class: 'publication__item-time'})
-    a.publication__item-text(href=`/articles/article/${article.id}`)= article.title
+      +formatDate(comment.createdDate, {class: 'publication__item-time'})
+    a.publication__item-text(href=articleHref)= article.title
     p.publication__text-strong= comment.comment
-    a.publication__button.button.button--close-item(href=`/my/comments/${comment.articleId}/${comment.id}/delete`)
+    a.publication__button.button.button--close-item(href=deleteBtnHref)
       span.visually-hidden Закрыть строку списка

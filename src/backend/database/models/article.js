@@ -10,11 +10,11 @@ class Article extends Model {
         autoIncrement: true,
         autoIncrementIdentity: true,
         primaryKey: true,
-        allowNull: false
+        allowNull: false,
       },
       title: {
         type: DataTypes.TEXT,
-        allowNull: false
+        allowNull: false,
       },
       createdDate: {
         type: DataTypes.TEXT,
@@ -23,21 +23,21 @@ class Article extends Model {
       },
       announce: {
         type: DataTypes.TEXT,
-        allowNull: false
+        allowNull: false,
       },
       sentences: {
         type: DataTypes.TEXT,
-        allowNull: true
+        allowNull: true,
       },
       img: {
         type: DataTypes.TEXT,
-        allowNull: true
+        allowNull: true,
       },
     }, {
       sequelize,
       tableName: `articles`,
       timestamps: false,
-      underscored: false
+      underscored: false,
     });
   }
 
@@ -46,7 +46,7 @@ class Article extends Model {
       as: `comments`,
       foreignKey: `articleId`,
       onUpdate: `cascade`,
-      onDelete: `cascade`
+      onDelete: `cascade`,
     });
     this.articlesCategories = this.belongsToMany(models.Category, {
       through: `articles_categories`,

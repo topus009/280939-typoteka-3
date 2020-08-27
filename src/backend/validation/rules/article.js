@@ -2,35 +2,48 @@
 
 const {body} = require(`express-validator`);
 const path = require(`path`);
-const {validExtensions} = require(`../../../utils/upload`);
+const {
+  ARTICLE_TITLE_MIN_LETTERS,
+  ARTICLE_TITLE_MAX_LETTERS,
+  MIN_CATEGORY_SELECTED,
+  ARTICLE_ANNOUNCE_MIN_LETTERS,
+  ARTICLE_ANNOUNCE_MAX_LETTERS,
+  ARTICLE_FULLTEXT_MAX_LETTERS,
+  ValidImgExtensions,
+} = require(`../../../../config/constants`);
 
 const articleValidators = (api) => ({
   title: (fieldEl) => fieldEl
-    .isLength({min: 30, max: 250})
-    .withMessage(`The title must contain a minimum of 30 characters and a maximum of 250`),
+    .isLength({
+      min: ARTICLE_TITLE_MIN_LETTERS,
+      max: ARTICLE_TITLE_MAX_LETTERS,
+    })
+    .withMessage(_f(`ARTICLE_TITLE_MINMAX_LETTERS`)),
   file: (fieldEl) => fieldEl
     .custom((file) => {
       if (!file) {
         return true;
-      } else {
-        const ext = path.extname(file.originalname);
-        return validExtensions.includes(ext);
       }
+      const ext = path.extname(file.originalname);
+      return ValidImgExtensions.includes(ext);
     })
-    .withMessage(`Only png,jpg,jpeg files supported`),
+    .withMessage(_f(`ONLY_FILES_SUPPORTED`)),
   categories: (fieldEl) => fieldEl
     .toArray()
-    .isArray({min: 1})
-    .withMessage(`At least 1 category must be selected`)
+    .isArray({min: MIN_CATEGORY_SELECTED})
+    .withMessage(_f(`MIN_CATEGORY_SELECTED`))
     .custom(async (arr) => {
       await Promise.all(arr.map((id) => api.categories.findById(id)));
     }),
   announce: (fieldEl) => fieldEl
-    .isLength({min: 30, max: 250})
-    .withMessage(`The announcement must contain a minimum of 30 characters and a maximum of 250`),
+    .isLength({
+      min: ARTICLE_ANNOUNCE_MIN_LETTERS,
+      max: ARTICLE_ANNOUNCE_MAX_LETTERS,
+    })
+    .withMessage(_f(`ARTICLE_ANNOUNCE_MINMAX_LETTERS`)),
   sentences: (fieldEl) => fieldEl
-    .isLength({max: 1000})
-    .withMessage(`Publication text must not exceed 1000 characters`),
+    .isLength({max: ARTICLE_FULLTEXT_MAX_LETTERS})
+    .withMessage(_f(`ARTICLE_FULLTEXT_MAX_LETTERS`)),
 });
 
 const article = (api, optional) => {
@@ -41,7 +54,9 @@ const article = (api, optional) => {
     announce: optional ? body(`announce`).optional() : body(`announce`),
     sentences: optional ? body(`sentences`).optional() : body(`sentences`),
   };
-  return Object.keys(articleFields).map((field) => articleValidators(api)[field](articleFields[field]));
+  return Object.keys(articleFields).map((field) => {
+    return articleValidators(api)[field](articleFields[field]);
+  });
 };
 
 module.exports = article;

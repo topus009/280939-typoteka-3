@@ -1,11 +1,12 @@
 'use strict';
 
 const {
-  sequelize,
+  database,
   initDatabase,
 } = require(`./db-connection`);
+require(`../../../config/localization.setup`);
 
 (async () => {
   await initDatabase();
-  await sequelize.close();
+  await database.close();
 })();

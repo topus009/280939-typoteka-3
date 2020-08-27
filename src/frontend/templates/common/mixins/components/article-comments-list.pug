@@ -24,7 +24,7 @@ mixin articleCommentItem({comment, user})
     .comments__text
       .comments__head
         p= `${user.lastName} ${user.firstName} •`
-        +formattedDate(comment.createdDate, {class: 'comments__date'})
+        +formatDate(comment.createdDate, {class: 'comments__date'})
       p.comments__message= comment.comment
 
 mixin articleCommentsList({currentUser, comments, users, articleId, errors})

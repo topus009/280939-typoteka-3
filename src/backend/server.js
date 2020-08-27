@@ -5,17 +5,14 @@ const bodyParser = require(`body-parser`);
 const {
   HttpCodes,
   BACKEND_API_PREFIX,
-} = require(`../../config/constants`);
-const {
-  CustomError,
-} = require(`../utils/utils`);
-const {
-  createLogger,
   LoggerNames,
-} = require(`../utils/logger`);
+  AppCommands,
+} = require(`../../config/constants`);
+const {CustomError} = require(`../utils/utils`);
+const {createLogger} = require(`../utils/logger`);
 const router = require(`./router`);
-const api = require(`./api`);
-const {errorsHandler} = require(`./utils/utils`);
+const api = require(`./api/api`);
+const {errorsMiddleware} = require(`./utils/utils`);
 require(`../../config/localization.setup`);
 
 const log = createLogger(LoggerNames.BACKEND);
@@ -45,8 +42,7 @@ const createServer = async () => {
     next(new CustomError(HttpCodes.NOT_FOUND, _f(`NO_ROUTE_IN_API`)));
   });
 
-  app.use(errorsHandler(logApi));
-
+  app.use(errorsMiddleware(logApi));
   return app;
 };
 
@@ -56,13 +52,13 @@ const run = async () => {
     if (error) {
       log.error(error);
     } else {
-      log.info(`Server running on port: ${DEFAULT_PORT}`);
+      log.info(_f(`SERVER_RUNNING`, {port: DEFAULT_PORT}));
     }
   });
 };
 
 module.exports = {
-  name: `--server`,
+  name: AppCommands.SERVER,
   run,
   createServer,
 };

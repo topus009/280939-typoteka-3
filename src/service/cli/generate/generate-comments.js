@@ -1,5 +1,6 @@
 'use strict';
 
+const {GENERATE_CIMMENTS_COUNT_MULTIPLIER} = require(`../../../../config/constants`);
 const {
   getRandomDate,
   getRandomString,
@@ -24,12 +25,15 @@ const generateData = async (count, users, articles) => {
       createdDate: getRandomDate(),
     });
   }
-
   return data;
 };
 
 const generateComments = async (fileName, count, users, articles) => {
-  const data = await generateData(count * 3, users, articles);
+  const data = await generateData(
+    count * GENERATE_CIMMENTS_COUNT_MULTIPLIER,
+    users,
+    articles,
+  );
   await writeToFileAsync(``, fileName, JSON.stringify(data));
   return data;
 };

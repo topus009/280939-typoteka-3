@@ -2,12 +2,16 @@
 
 const {body} = require(`express-validator`);
 const path = require(`path`);
-const {validExtensions} = require(`../../../utils/upload`);
+const {
+  VALID_NAME_REGEXP,
+  PASSWORD_MIN_LETTERS,
+  ValidImgExtensions,
+} = require(`../../../../config/constants`);
 
-const registration = (api) => ([
+const registration = (api) => [
   body(`email`)
     .isEmail()
-    .withMessage(`Email is not valid`)
+    .withMessage(_f(`INVALID_EMAIL`))
     .custom(async (email) => {
       const data = await api.users.findByEmail(email);
       if (data) {
@@ -17,17 +21,17 @@ const registration = (api) => ([
   body(`firstName`)
     .trim()
     .exists()
-    .matches(/^(?=.{1,40}$)[a-zA-Zа-яА-Я]+(?:[-'][a-zA-Z]+)*$/)
-    .withMessage(`Firstname shouldn't contain digits and special characters`),
+    .matches(VALID_NAME_REGEXP)
+    .withMessage(_f(`FIRSTNAME_ONLY_LETTERS`)),
   body(`lastName`)
     .trim()
     .exists()
-    .matches(/^(?=.{1,40}$)[a-zA-Zа-яА-Я]+(?:[-'][a-zA-Z]+)*$/)
-    .withMessage(`Lastname shouldn't contain digits and special characters`),
+    .matches(VALID_NAME_REGEXP)
+    .withMessage(_f(`LASTNAME_ONLY_LETTERS`)),
   body(`password`)
     .trim()
-    .isLength({min: 6})
-    .withMessage(`Password must be at least 6 characters`),
+    .isLength({min: PASSWORD_MIN_LETTERS})
+    .withMessage(_f(`PASSWORD_MIN_LETTERS`)),
   body(`passwordConfirmation`)
     .custom((value, {req}) => {
       if (value !== req.body.password) {
@@ -35,28 +39,27 @@ const registration = (api) => ([
       }
       return true;
     })
-    .withMessage(`Passwords don't match`),
+    .withMessage(_f(`PASSWORD_DONT_MATCH`)),
   body(`file`)
     .custom((file) => {
       if (!file) {
         return true;
-      } else {
-        const ext = path.extname(file.originalname);
-        return validExtensions.includes(ext);
       }
+      const ext = path.extname(file.originalname);
+      return ValidImgExtensions.includes(ext);
     })
-    .withMessage(`Only png,jpg,jpeg files supported`),
-]);
+    .withMessage(_f(`ONLY_FILES_SUPPORTED`)),
+];
 
-const login = () => ([
+const login = () => [
   body(`email`)
     .isEmail()
-    .withMessage(`Email is not valid`),
+    .withMessage(_f(`INVALID_EMAIL`)),
   body(`password`)
     .trim()
-    .isLength({min: 6})
-    .withMessage(`Password must be at least 6 characters`),
-]);
+    .isLength({min: PASSWORD_MIN_LETTERS})
+    .withMessage(_f(`PASSWORD_MIN_LETTERS`)),
+];
 
 const userValidation = {
   registration,
