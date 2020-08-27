@@ -8,9 +8,6 @@ env:
 
 extends: 'htmlacademy/node'
 
-globals:
-  _f: true
-
 rules:
   arrow-spacing: 'error'
   comma-dangle: ['error', 'always-multiline']
@@ -19,7 +16,7 @@ rules:
   indent: ['error', 2]
   max-depth: ['error', 2]
   max-len: ['error', { 'code': 101 }]
-  max-lines: ['error', 223]
+  max-lines: ['error', 224]
   max-params: ['error', 5]
   max-statements: ['error', 16, { 'ignoreTopLevelFunctions': true }]
   no-await-in-loop: 'error'
