@@ -3,6 +3,7 @@
 const {Op} = require(`sequelize`);
 const {HttpCodes} = require(`../../../config/constants`);
 const {CustomError} = require(`../../utils/utils`);
+const fm = require(`../../utils/localization`);
 
 const categoriesApi = (entityName, database) => ({
   async getAll() {
@@ -13,7 +14,7 @@ const categoriesApi = (entityName, database) => ({
   async findById(id) {
     const category = await database[entityName].findByPk(id);
     if (!category) {
-      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_CATEGORY_ID`, {id}));
+      throw new CustomError(HttpCodes.NOT_FOUND, fm(`NO_CATEGORY_ID`, {id}));
     }
     return category;
   },
@@ -32,7 +33,7 @@ const categoriesApi = (entityName, database) => ({
   async delete(id) {
     const category = await database[entityName].findByPk(id);
     if (!category) {
-      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_CATEGORY_ID`, {id}));
+      throw new CustomError(HttpCodes.NOT_FOUND, fm(`NO_CATEGORY_ID`, {id}));
     }
     const articles = await category.getArticle();
     const blockedArticles = [];
@@ -52,7 +53,7 @@ const categoriesApi = (entityName, database) => ({
     if (blockedArticles.length) {
       throw new CustomError(
         HttpCodes.BAD_REQUEST,
-        _f(`DELETING_CATEGORY_HAS_ARTICLES`, {ids: blockedArticles}),
+        fm(`DELETING_CATEGORY_HAS_ARTICLES`, {ids: blockedArticles}),
       );
     }
     await category.destroy();
@@ -67,7 +68,7 @@ const categoriesApi = (entityName, database) => ({
   async edit(id, data) {
     const targetCategory = await database[entityName].findByPk(id);
     if (!targetCategory) {
-      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_CATEGORY_ID`, {id}));
+      throw new CustomError(HttpCodes.NOT_FOUND, fm(`NO_CATEGORY_ID`, {id}));
     }
     const updatedCategory = await targetCategory.update(data);
     return updatedCategory;

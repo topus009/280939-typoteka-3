@@ -1,7 +1,8 @@
 'use strict';
 
-const {HttpCodes} = require(`../../../../config/constants`);
 const comments = require(`../../../../mocks/comments.json`);
+const {HttpCodes} = require(`../../../../config/constants`);
+const fm = require(`../../../utils/localization`);
 
 const apiPrefix = `/api/comments`;
 
@@ -24,7 +25,7 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
     const id = 999;
     const res = await request.get(`${apiPrefix}/article/${id}`);
     expect(res.statusCode).toBe(HttpCodes.NOT_FOUND);
-    expect(res.body.text).toBe(_f(`NO_ARTICLE_ID`, {id}));
+    expect(res.body.text).toBe(fm(`NO_ARTICLE_ID`, {id}));
   });
   test(`GET /article/:articleId/:id - correct - return ${HttpCodes.OK}`, async () => {
     const {articleId, id} = comments[0];
@@ -36,7 +37,7 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
     const id = 999;
     const res = await request.get(`${apiPrefix}/article/999/${id}`);
     expect(res.statusCode).toBe(HttpCodes.NOT_FOUND);
-    expect(res.body.text).toBe(_f(`NO_COMMENT_ID`, {id}));
+    expect(res.body.text).toBe(fm(`NO_COMMENT_ID`, {id}));
   });
   test(`GET /comments/my - return ${HttpCodes.OK}`, async () => {
     const res = await request.get(`${apiPrefix}/comments/my`);
@@ -56,7 +57,7 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
     const res = await request.post(`${apiPrefix}/article/${articleId}`).send(commentData);
     expect(res.statusCode).toBe(HttpCodes.BAD_REQUEST);
     expect(res.body.text).toIncludeAllMembers([
-      {comment: _f(`COMMENT_MIN_LETTERS`)},
+      {comment: fm(`COMMENT_MIN_LETTERS`)},
     ]);
   });
   test(`POST /article/:articleId - correct - return ${HttpCodes.OK}`, async () => {
@@ -73,7 +74,7 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
     const id = 999;
     const res = await request.delete(`${apiPrefix}/article/${articleId}/${id}`);
     expect(res.statusCode).toBe(HttpCodes.NOT_FOUND);
-    expect(res.body.text).toBe(_f(`NO_COMMENT_ID`, {id}));
+    expect(res.body.text).toBe(fm(`NO_COMMENT_ID`, {id}));
   });
   test(`DELETE /article/:articleId/:id - correct - return ${HttpCodes.OK}`, async () => {
     const {articleId, id} = comments[1];

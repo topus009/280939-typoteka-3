@@ -8,6 +8,7 @@ const {
 } = require(`../../../config/constants`);
 const {createLogger} = require(`../../utils/logger`);
 const {exit} = require(`../../utils/utils`);
+const fm = require(`../../utils/localization`);
 const UserModel = require(`./models/user`);
 const ArticleModel = require(`./models/article`);
 const CategoryModel = require(`./models/category`);
@@ -28,16 +29,16 @@ Object.values(models).forEach((model) => model.associate(models));
 
 const initDatabase = async () => {
   await database.sync({force: true});
-  log.info(_f(`DB_STRUCTURE_CREATED`));
+  log.info(fm(`DB_STRUCTURE_CREATED`));
 };
 
 const connectToDatabase = async () => {
   try {
-    log.debug(_f(`DB_CONNECTION_STARTED`));
+    log.debug(fm(`DB_CONNECTION_STARTED`));
     await database.authenticate();
-    log.info(_f(`DB_CONNECTION_SUCCESS`));
+    log.info(fm(`DB_CONNECTION_SUCCESS`));
   } catch (err) {
-    log.error(_f(`DB_CONNECTION_ERROR`, {err}));
+    log.error(fm(`DB_CONNECTION_ERROR`, {err}));
     exit(ExitCodes.ERROR);
   }
 };

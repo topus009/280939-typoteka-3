@@ -11,6 +11,7 @@ const {
   ARTICLE_FULLTEXT_MAX_LETTERS,
   ValidImgExtensions,
 } = require(`../../../../config/constants`);
+const fm = require(`../../../utils/localization`);
 
 const articleValidators = (api) => ({
   title: (fieldEl) => fieldEl
@@ -18,7 +19,7 @@ const articleValidators = (api) => ({
       min: ARTICLE_TITLE_MIN_LETTERS,
       max: ARTICLE_TITLE_MAX_LETTERS,
     })
-    .withMessage(_f(`ARTICLE_TITLE_MINMAX_LETTERS`)),
+    .withMessage(fm(`ARTICLE_TITLE_MINMAX_LETTERS`)),
   file: (fieldEl) => fieldEl
     .custom((file) => {
       if (!file) {
@@ -27,11 +28,11 @@ const articleValidators = (api) => ({
       const ext = path.extname(file.originalname);
       return ValidImgExtensions.includes(ext);
     })
-    .withMessage(_f(`ONLY_FILES_SUPPORTED`)),
+    .withMessage(fm(`ONLY_FILES_SUPPORTED`)),
   categories: (fieldEl) => fieldEl
     .toArray()
     .isArray({min: MIN_CATEGORY_SELECTED})
-    .withMessage(_f(`MIN_CATEGORY_SELECTED`))
+    .withMessage(fm(`MIN_CATEGORY_SELECTED`))
     .custom(async (arr) => {
       await Promise.all(arr.map((id) => api.categories.findById(id)));
     }),
@@ -40,10 +41,10 @@ const articleValidators = (api) => ({
       min: ARTICLE_ANNOUNCE_MIN_LETTERS,
       max: ARTICLE_ANNOUNCE_MAX_LETTERS,
     })
-    .withMessage(_f(`ARTICLE_ANNOUNCE_MINMAX_LETTERS`)),
+    .withMessage(fm(`ARTICLE_ANNOUNCE_MINMAX_LETTERS`)),
   sentences: (fieldEl) => fieldEl
     .isLength({max: ARTICLE_FULLTEXT_MAX_LETTERS})
-    .withMessage(_f(`ARTICLE_FULLTEXT_MAX_LETTERS`)),
+    .withMessage(fm(`ARTICLE_FULLTEXT_MAX_LETTERS`)),
 });
 
 const article = (api, optional) => {

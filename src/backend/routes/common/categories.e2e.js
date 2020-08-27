@@ -1,7 +1,8 @@
 'use strict';
 
-const {HttpCodes} = require(`../../../../config/constants`);
 const categories = require(`../../../../mocks/categories.json`);
+const {HttpCodes} = require(`../../../../config/constants`);
+const fm = require(`../../../utils/localization`);
 
 const apiPrefix = `/api/categories`;
 
@@ -24,7 +25,7 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
     const id = 999;
     const res = await request.get(`${apiPrefix}/${id}`);
     expect(res.statusCode).toBe(HttpCodes.NOT_FOUND);
-    expect(res.body.text).toBe(_f(`NO_CATEGORY_ID`, {id}));
+    expect(res.body.text).toBe(fm(`NO_CATEGORY_ID`, {id}));
   });
   test(`GET /categories/my - return ${HttpCodes.OK}`, async () => {
     const res = await request.get(`${apiPrefix}/categories/my`);
@@ -46,7 +47,7 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
     });
     expect(res.statusCode).toBe(HttpCodes.BAD_REQUEST);
     expect(res.body.text).toIncludeAllMembers([
-      {label: _f(`CATEGORY_LABEL_MINMAX_LETTERS`)},
+      {label: fm(`CATEGORY_LABEL_MINMAX_LETTERS`)},
     ]);
   });
   test(`PUT / - wrong - return ${HttpCodes.BAD_REQUEST}`, async () => {
@@ -58,7 +59,7 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
     expect(res.body.text).toIncludeAllMembers([
       {
         id: `${id}`,
-        label: _f(`CATEGORY_LABEL_MINMAX_LETTERS`),
+        label: fm(`CATEGORY_LABEL_MINMAX_LETTERS`),
       },
     ]);
   });
@@ -79,7 +80,7 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
     expect(res.body.text).toIncludeAllMembers([
       {
         id: `${id}`,
-        label: _f(`DUPLICATE_CATEGORY_LABEL`, categoryDate),
+        label: fm(`DUPLICATE_CATEGORY_LABEL`, categoryDate),
       },
     ]);
   });
@@ -97,14 +98,14 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
     const res = await request.post(`${apiPrefix}/`).send(categoryDate);
     expect(res.statusCode).toBe(HttpCodes.BAD_REQUEST);
     expect(res.body.text).toIncludeAllMembers([
-      {label: _f(`DUPLICATE_CATEGORY_LABEL`, categoryDate)},
+      {label: fm(`DUPLICATE_CATEGORY_LABEL`, categoryDate)},
     ]);
   });
   test(`DELETE / - wrong - return ${HttpCodes.NOT_FOUND}`, async () => {
     const id = 999;
     const res = await request.delete(`${apiPrefix}/${id}`);
     expect(res.statusCode).toBe(HttpCodes.NOT_FOUND);
-    expect(res.body.text).toBe(_f(`NO_CATEGORY_ID`, {id}));
+    expect(res.body.text).toBe(fm(`NO_CATEGORY_ID`, {id}));
   });
   test(`DELETE / - correct - return ${HttpCodes.OK}`, async () => {
     const {id} = categories[0];

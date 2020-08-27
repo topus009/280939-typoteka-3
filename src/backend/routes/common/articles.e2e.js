@@ -1,8 +1,9 @@
 'use strict';
 
-const {HttpCodes} = require(`../../../../config/constants`);
-const articles = require(`../../../../mocks/articles.json`);
 const categories = require(`../../../../mocks/categories.json`);
+const articles = require(`../../../../mocks/articles.json`);
+const {HttpCodes} = require(`../../../../config/constants`);
+const fm = require(`../../../utils/localization`);
 
 const apiPrefix = `/api/articles`;
 
@@ -25,7 +26,7 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
     const id = 999;
     const res = await request.get(`${apiPrefix}/${id}`);
     expect(res.statusCode).toBe(HttpCodes.NOT_FOUND);
-    expect(res.body.text).toBe(_f(`NO_ARTICLE_ID`, {id}));
+    expect(res.body.text).toBe(fm(`NO_ARTICLE_ID`, {id}));
   });
   test(`GET /categories/:categoryId - correct - return ${HttpCodes.OK}`, async () => {
     const {id} = categories[1];
@@ -37,7 +38,7 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
     const id = 999;
     const res = await request.get(`${apiPrefix}/categories/${id}`);
     expect(res.statusCode).toBe(HttpCodes.NOT_FOUND);
-    expect(res.body.text).toBe(_f(`NO_CATEGORY_ID`, {id}));
+    expect(res.body.text).toBe(fm(`NO_CATEGORY_ID`, {id}));
   });
   test(`GET /articles/my - return ${HttpCodes.OK}`, async () => {
     const res = await request.get(`${apiPrefix}/articles/my`);
@@ -75,7 +76,7 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
     });
     expect(res.statusCode).toBe(HttpCodes.BAD_REQUEST);
     expect(res.body.text).toIncludeAllMembers([
-      {categories: _f(`MIN_CATEGORY_SELECTED`)},
+      {categories: fm(`MIN_CATEGORY_SELECTED`)},
     ]);
   });
   test(`POST / - correct - return ${HttpCodes.OK}`, async () => {
@@ -97,7 +98,7 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
     expect(res.body.text).toIncludeAllMembers([
       {
         id: `${id}`,
-        title: _f(`ARTICLE_TITLE_MINMAX_LETTERS`),
+        title: fm(`ARTICLE_TITLE_MINMAX_LETTERS`),
       },
     ]);
   });
@@ -107,7 +108,7 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
       title: `aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa`,
     });
     expect(res.statusCode).toBe(HttpCodes.NOT_FOUND);
-    expect(res.body.text).toBe(_f(`NO_ARTICLE_ID`, {id}));
+    expect(res.body.text).toBe(fm(`NO_ARTICLE_ID`, {id}));
   });
   test(`PUT /:id - correct - return ${HttpCodes.OK}`, async () => {
     const {id} = articles[1];
@@ -128,7 +129,7 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
     const id = 999;
     const res = await request.delete(`${apiPrefix}/${id}`);
     expect(res.statusCode).toBe(HttpCodes.NOT_FOUND);
-    expect(res.body.text).toBe(_f(`NO_ARTICLE_ID`, {id}));
+    expect(res.body.text).toBe(fm(`NO_ARTICLE_ID`, {id}));
   });
   test(`DELETE /:id - correct - return ${HttpCodes.OK}`, async () => {
     const {id} = articles[0];

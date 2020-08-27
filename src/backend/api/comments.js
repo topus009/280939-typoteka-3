@@ -12,6 +12,7 @@ const {
   CustomError,
   sqlzParse,
 } = require(`../../utils/utils`);
+const fm = require(`../../utils/localization`);
 
 const commentsApi = (entityName, database) => ({
   async getAll() {
@@ -27,7 +28,7 @@ const commentsApi = (entityName, database) => ({
   async findById(id) {
     const comment = await database[entityName].findByPk(id);
     if (!comment) {
-      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_COMMENT_ID`, {id}));
+      throw new CustomError(HttpCodes.NOT_FOUND, fm(`NO_COMMENT_ID`, {id}));
     }
     return comment;
   },
@@ -35,7 +36,7 @@ const commentsApi = (entityName, database) => ({
   async delete(id) {
     const num = await database[entityName].destroy({where: {id}});
     if (!+num) {
-      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_COMMENT_ID`, {id}));
+      throw new CustomError(HttpCodes.NOT_FOUND, fm(`NO_COMMENT_ID`, {id}));
     }
     return id;
   },
@@ -43,11 +44,11 @@ const commentsApi = (entityName, database) => ({
   async add(articleId, {userId, ...data}) {
     const articleInDB = await database.Article.findByPk(articleId);
     if (!articleInDB) {
-      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_ARTICLE_ID`, {id: articleId}));
+      throw new CustomError(HttpCodes.NOT_FOUND, fm(`NO_ARTICLE_ID`, {id: articleId}));
     }
     const user = await database.User.findByPk(userId);
     if (!user) {
-      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_USER_ID`, {id: userId}));
+      throw new CustomError(HttpCodes.NOT_FOUND, fm(`NO_USER_ID`, {id: userId}));
     }
     const createdComment = await database[entityName].create({
       ...data,
@@ -61,7 +62,7 @@ const commentsApi = (entityName, database) => ({
   async getAllByArticleId(articleId) {
     const articleInDB = await database.Article.findByPk(articleId);
     if (!articleInDB) {
-      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_ARTICLE_ID`, {id: articleId}));
+      throw new CustomError(HttpCodes.NOT_FOUND, fm(`NO_ARTICLE_ID`, {id: articleId}));
     }
     const data = await database[entityName].findAll({
       where: {articleId},
@@ -76,7 +77,7 @@ const commentsApi = (entityName, database) => ({
   async getMy() {
     const user = await database.User.findByPk(ADMIN_ID);
     if (!user) {
-      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_USER_ID`, {id: ADMIN_ID}));
+      throw new CustomError(HttpCodes.NOT_FOUND, fm(`NO_USER_ID`, {id: ADMIN_ID}));
     }
     const data = await database[entityName].findAll({
       where: {userId: user.id},

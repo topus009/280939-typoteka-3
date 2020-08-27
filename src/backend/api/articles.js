@@ -19,6 +19,7 @@ const {
   getHighlitedMatches,
   normalizeDate,
 } = require(`../../utils/utils`);
+const fm = require(`../../utils/localization`);
 
 const articlesApi = (entityName, database) => ({
   async getAll() {
@@ -55,9 +56,9 @@ const articlesApi = (entityName, database) => ({
   async getAllByPage(page) {
     const num = parseInt(page, 10);
     if (isNaN(num)) {
-      throw new CustomError(HttpCodes.BAD_REQUEST, _f(`PAGE_SHOULD_BE_A_NUMBER`));
+      throw new CustomError(HttpCodes.BAD_REQUEST, fm(`PAGE_SHOULD_BE_A_NUMBER`));
     } else if (num <= 0) {
-      throw new CustomError(HttpCodes.BAD_REQUEST, _f(`PAGE_SHOULD_BE_GREATER_THAN_ZERO`));
+      throw new CustomError(HttpCodes.BAD_REQUEST, fm(`PAGE_SHOULD_BE_GREATER_THAN_ZERO`));
     }
     const data = await database[entityName].findAll({
       include: [
@@ -83,7 +84,7 @@ const articlesApi = (entityName, database) => ({
   async findById(id) {
     let article = await database[entityName].findByPk(id);
     if (!article) {
-      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_ARTICLE_ID`, {id}));
+      throw new CustomError(HttpCodes.NOT_FOUND, fm(`NO_ARTICLE_ID`, {id}));
     }
     const categories = await article.getCategories({raw: true});
     article = article.toJSON();
@@ -98,7 +99,7 @@ const articlesApi = (entityName, database) => ({
   async delete(id) {
     const num = await database[entityName].destroy({where: {id}});
     if (!num) {
-      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_ARTICLE_ID`, {id}));
+      throw new CustomError(HttpCodes.NOT_FOUND, fm(`NO_ARTICLE_ID`, {id}));
     }
     return id;
   },
@@ -118,7 +119,7 @@ const articlesApi = (entityName, database) => ({
   async edit(id, data) {
     const targetArticle = await database[entityName].findByPk(id);
     if (!targetArticle) {
-      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_ARTICLE_ID`, {id}));
+      throw new CustomError(HttpCodes.NOT_FOUND, fm(`NO_ARTICLE_ID`, {id}));
     }
     if (data.createdDate) {
       data.createdDate = normalizeDate(data.createdDate, DATE_FORMAT);
@@ -138,13 +139,13 @@ const articlesApi = (entityName, database) => ({
   async getAllByCategoryId(id, page = 1) {
     const num = parseInt(page, 10);
     if (isNaN(num)) {
-      throw new CustomError(HttpCodes.BAD_REQUEST, _f(`PAGE_SHOULD_BE_A_NUMBER`));
+      throw new CustomError(HttpCodes.BAD_REQUEST, fm(`PAGE_SHOULD_BE_A_NUMBER`));
     } else if (num <= 0) {
-      throw new CustomError(HttpCodes.BAD_REQUEST, _f(`PAGE_SHOULD_BE_GREATER_THAN_ZERO`));
+      throw new CustomError(HttpCodes.BAD_REQUEST, fm(`PAGE_SHOULD_BE_GREATER_THAN_ZERO`));
     }
     const category = await database.Category.findByPk(id);
     if (!category) {
-      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_CATEGORY_ID`, {id}));
+      throw new CustomError(HttpCodes.NOT_FOUND, fm(`NO_CATEGORY_ID`, {id}));
     }
     const data = await category.getArticle({
       joinTableAttributes: [],

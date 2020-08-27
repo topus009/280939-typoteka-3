@@ -7,31 +7,32 @@ const {
   PASSWORD_MIN_LETTERS,
   ValidImgExtensions,
 } = require(`../../../../config/constants`);
+const fm = require(`../../../utils/localization`);
 
 const registration = (api) => [
   body(`email`)
     .isEmail()
-    .withMessage(_f(`INVALID_EMAIL`))
+    .withMessage(fm(`INVALID_EMAIL`))
     .custom(async (email) => {
       const data = await api.users.findByEmail(email);
       if (data) {
-        throw new Error(_f(`USER_WITH_EMAIL_EXISTS`, {email}));
+        throw new Error(fm(`USER_WITH_EMAIL_EXISTS`, {email}));
       }
     }),
   body(`firstName`)
     .trim()
     .exists()
     .matches(VALID_NAME_REGEXP)
-    .withMessage(_f(`FIRSTNAME_ONLY_LETTERS`)),
+    .withMessage(fm(`FIRSTNAME_ONLY_LETTERS`)),
   body(`lastName`)
     .trim()
     .exists()
     .matches(VALID_NAME_REGEXP)
-    .withMessage(_f(`LASTNAME_ONLY_LETTERS`)),
+    .withMessage(fm(`LASTNAME_ONLY_LETTERS`)),
   body(`password`)
     .trim()
     .isLength({min: PASSWORD_MIN_LETTERS})
-    .withMessage(_f(`PASSWORD_MIN_LETTERS`)),
+    .withMessage(fm(`PASSWORD_MIN_LETTERS`)),
   body(`passwordConfirmation`)
     .custom((value, {req}) => {
       if (value !== req.body.password) {
@@ -39,7 +40,7 @@ const registration = (api) => [
       }
       return true;
     })
-    .withMessage(_f(`PASSWORD_DONT_MATCH`)),
+    .withMessage(fm(`PASSWORD_DONT_MATCH`)),
   body(`file`)
     .custom((file) => {
       if (!file) {
@@ -48,17 +49,17 @@ const registration = (api) => [
       const ext = path.extname(file.originalname);
       return ValidImgExtensions.includes(ext);
     })
-    .withMessage(_f(`ONLY_FILES_SUPPORTED`)),
+    .withMessage(fm(`ONLY_FILES_SUPPORTED`)),
 ];
 
 const login = () => [
   body(`email`)
     .isEmail()
-    .withMessage(_f(`INVALID_EMAIL`)),
+    .withMessage(fm(`INVALID_EMAIL`)),
   body(`password`)
     .trim()
     .isLength({min: PASSWORD_MIN_LETTERS})
-    .withMessage(_f(`PASSWORD_MIN_LETTERS`)),
+    .withMessage(fm(`PASSWORD_MIN_LETTERS`)),
 ];
 
 const userValidation = {

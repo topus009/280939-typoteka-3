@@ -10,10 +10,10 @@ const {
 } = require(`../../config/constants`);
 const {CustomError} = require(`../utils/utils`);
 const {createLogger} = require(`../utils/logger`);
+const fm = require(`../utils/localization`);
 const router = require(`./router`);
 const api = require(`./api/api`);
 const {errorsMiddleware} = require(`./utils/utils`);
-require(`../../config/localization.setup`);
 
 const log = createLogger(LoggerNames.BACKEND);
 const logApi = createLogger(LoggerNames.BACKEND_API);
@@ -39,7 +39,7 @@ const createServer = async () => {
   });
 
   app.use((req, res, next) => {
-    next(new CustomError(HttpCodes.NOT_FOUND, _f(`NO_ROUTE_IN_API`)));
+    next(new CustomError(HttpCodes.NOT_FOUND, fm(`NO_ROUTE_IN_API`)));
   });
 
   app.use(errorsMiddleware(logApi));
@@ -52,7 +52,7 @@ const run = async () => {
     if (error) {
       log.error(error);
     } else {
-      log.info(_f(`SERVER_RUNNING`, {port: DEFAULT_PORT}));
+      log.info(fm(`SERVER_RUNNING`, {port: DEFAULT_PORT}));
     }
   });
 };

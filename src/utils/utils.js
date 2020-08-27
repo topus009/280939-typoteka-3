@@ -14,6 +14,7 @@ const {
 } = require(`../../config/constants`);
 const dayjs = require(`./dayjs`);
 const {createLogger} = require(`./logger`);
+const fm = require(`./localization`);
 
 const log = createLogger(LoggerNames.COMMON);
 
@@ -54,8 +55,8 @@ const writeToFileAsync = async (pathToFile, name, content) => {
   const filePath = path.join(pathToFile, name);
   try {
     await fs.promises.writeFile(filePath, content, DEFAULT_FILE_ENCODING);
-    log.info(_f(`FILE_CREATED`, {name}));
-    log.info(_f(`FILE_DESTINATION`, {dest: path.resolve(filePath)}));
+    log.info(fm(`FILE_CREATED`, {name}));
+    log.info(fm(`FILE_DESTINATION`, {dest: path.resolve(filePath)}));
   } catch (err) {
     log.error(err);
   }
@@ -96,7 +97,7 @@ const parseCommandParam = (param) => parseInt(param[0], 10);
 
 class CustomError extends Error {
   constructor(statusCode, message) {
-    super(message || _f(`UNKNOWN_ERROR`));
+    super(message || fm(`UNKNOWN_ERROR`));
     this.statusCode = statusCode || HttpCodes.INTERNAL_SERVER_ERROR;
     this.text = message;
   }

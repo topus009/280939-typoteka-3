@@ -14,6 +14,7 @@ const {
 const dayjs = require(`../utils/dayjs`);
 const {CustomError} = require(`../utils/utils`);
 const {createLogger} = require(`../utils/logger`);
+const fm = require(`../utils/localization`);
 const routers = require(`./router`);
 const {
   errorsMiddleware,
@@ -23,7 +24,6 @@ const {
   store,
   userSessionsMiddleware,
 } = require(`./session-store`);
-require(`../../config/localization.setup`);
 require(`dayjs/locale/ru`);
 
 dayjs.locale(DAYJS_DEFAULT_LOCALE);
@@ -57,7 +57,7 @@ app.use((req, res, next) => {
 Object.entries(routers).forEach(([key, router]) => app.use(key, router));
 
 app.use((req, res, next) => {
-  next(new CustomError(HttpCodes.NOT_FOUND, _f(`NO_ROUTE_IN_APP`)));
+  next(new CustomError(HttpCodes.NOT_FOUND, fm(`NO_ROUTE_IN_APP`)));
 });
 
 app.use(errorsMiddleware(logApi));
@@ -66,6 +66,6 @@ app.listen(DEFAULT_PORT, (error) => {
   if (error) {
     log.error(error);
   } else {
-    log.info(_f(`SERVER_RUNNING`, {port: DEFAULT_PORT}));
+    log.info(fm(`SERVER_RUNNING`, {port: DEFAULT_PORT}));
   }
 });

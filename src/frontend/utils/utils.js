@@ -12,6 +12,7 @@ const {
   CustomError,
   catchAsync,
 } = require(`../../utils/utils`);
+const fm = require(`../../utils/localization`);
 const axios = require(`../axios`);
 
 const sendError = (res, next, error) => {
@@ -30,13 +31,13 @@ const authMiddleware = (req, res, next) => {
   if (session[SESSION_UID] && cookies[SESSION_COOKIE_NAME]) {
     return next();
   }
-  throw new CustomError(HttpCodes.UNAUTHORIZED, _f(`USER_NOT_AUTHORIZED`));
+  throw new CustomError(HttpCodes.UNAUTHORIZED, fm(`USER_NOT_AUTHORIZED`));
 };
 
 const adminMiddleware = (req, res, next) => {
   const {locals} = res;
   if (locals.currentUser && locals.currentUser.role !== UsersRoles.ADMIN) {
-    throw new CustomError(HttpCodes.FORBIDDEN, _f(`USER_IS_NOT_ADMIN`));
+    throw new CustomError(HttpCodes.FORBIDDEN, fm(`USER_IS_NOT_ADMIN`));
   }
   return next();
 };

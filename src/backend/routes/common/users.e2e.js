@@ -5,6 +5,7 @@ const {
   MY_EMAIL,
   HttpCodes,
 } = require(`../../../../config/constants`);
+const fm = require(`../../../utils/localization`);
 
 const apiPrefix = `/api/users`;
 
@@ -35,7 +36,7 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
     const id = 999;
     const res = await request.get(`${apiPrefix}/${id}`);
     expect(res.statusCode).toBe(HttpCodes.NOT_FOUND);
-    expect(res.body.text).toBe(_f(`NO_USER_ID`, {id}));
+    expect(res.body.text).toBe(fm(`NO_USER_ID`, {id}));
   });
   test(`POST /auth/register - same email - wrong - return ${HttpCodes.NOT_FOUND}`, async () => {
     const userData = {
@@ -47,8 +48,8 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
     const res = await request.post(`${apiPrefix}/auth/register`).send(userData);
     expect(res.statusCode).toBe(HttpCodes.BAD_REQUEST);
     expect(res.body.text).toIncludeAllMembers([
-      {email: _f(`USER_WITH_EMAIL_EXISTS`, {email: userData.email})},
-      {passwordConfirmation: _f(`PASSWORD_DONT_MATCH`)},
+      {email: fm(`USER_WITH_EMAIL_EXISTS`, {email: userData.email})},
+      {passwordConfirmation: fm(`PASSWORD_DONT_MATCH`)},
     ]);
   });
   test(`POST /auth/login - no-user - wrong - return ${HttpCodes.NOT_FOUND}`, async () => {
@@ -58,7 +59,7 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
     };
     const res = await request.post(`${apiPrefix}/auth/login`).send(userData);
     expect(res.statusCode).toBe(HttpCodes.BAD_REQUEST);
-    expect(res.body.text).toBe(_f(`USER_WITH_EMAIL_NOT_EXISTS`, {email: userData.email}));
+    expect(res.body.text).toBe(fm(`USER_WITH_EMAIL_NOT_EXISTS`, {email: userData.email}));
   });
   test(`POST /auth/login - no-password - wrong - return ${HttpCodes.NOT_FOUND}`, async () => {
     const userData = {
@@ -67,7 +68,7 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
     const res = await request.post(`${apiPrefix}/auth/login`).send(userData);
     expect(res.statusCode).toBe(HttpCodes.BAD_REQUEST);
     expect(res.body.text).toIncludeAllMembers([
-      {password: _f(`PASSWORD_MIN_LETTERS`)},
+      {password: fm(`PASSWORD_MIN_LETTERS`)},
     ]);
   });
   test(`POST /auth/register - wrong - return ${HttpCodes.NOT_FOUND}`, async () => {
@@ -78,9 +79,9 @@ describe(`Testing end-points (${apiPrefix}...)`, () => {
     });
     expect(res.statusCode).toBe(HttpCodes.BAD_REQUEST);
     expect(res.body.text).toIncludeAllMembers([
-      {email: _f(`INVALID_EMAIL`)},
-      {lastName: _f(`LASTNAME_ONLY_LETTERS`)},
-      {passwordConfirmation: _f(`PASSWORD_DONT_MATCH`)},
+      {email: fm(`INVALID_EMAIL`)},
+      {lastName: fm(`LASTNAME_ONLY_LETTERS`)},
+      {passwordConfirmation: fm(`PASSWORD_DONT_MATCH`)},
     ]);
   });
   test(`POST /auth/register - correct - return ${HttpCodes.OK}`, async () => {

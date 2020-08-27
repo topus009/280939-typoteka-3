@@ -14,8 +14,8 @@ const {
   parseCommandParam,
   exit,
 } = require(`../../../utils/utils`);
+const fm = require(`../../../utils/localization`);
 const {createLogger} = require(`../../../utils/logger`);
-require(`../../../../config/localization.setup`);
 
 const log = createLogger(LoggerNames.COMMON);
 
@@ -23,10 +23,10 @@ const getUserCount = (input) => {
   const parsedCount = parseCommandParam(input);
 
   if (isNaN(parsedCount)) {
-    log.error(_f(`GENERATE_ARTICLES_NO_COUNT`));
+    log.error(fm(`GENERATE_ARTICLES_NO_COUNT`));
     return DEFAULT_GENERATE_COUNT;
   } else if (parsedCount > GENERATE_MAX_ITEMS_ALLOWED) {
-    log.error(_f(`GENERATE_ARTICLES_MAX_LIMIT`, {limit: GENERATE_MAX_ITEMS_ALLOWED}));
+    log.error(fm(`GENERATE_ARTICLES_MAX_LIMIT`, {limit: GENERATE_MAX_ITEMS_ALLOWED}));
     exit(ExitCodes.ERROR);
   }
   return parsedCount;

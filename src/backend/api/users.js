@@ -11,6 +11,7 @@ const {
   CustomError,
   sqlzParse,
 } = require(`../../utils/utils`);
+const fm = require(`../../utils/localization`);
 
 const usersApi = (entityName, database) => ({
   async getAll() {
@@ -21,7 +22,7 @@ const usersApi = (entityName, database) => ({
   async findById(id) {
     const user = await database[entityName].findByPk(id);
     if (!user) {
-      throw new CustomError(HttpCodes.NOT_FOUND, _f(`NO_USER_ID`, {id}));
+      throw new CustomError(HttpCodes.NOT_FOUND, fm(`NO_USER_ID`, {id}));
     }
     return user;
   },
@@ -60,12 +61,12 @@ const usersApi = (entityName, database) => ({
       },
     });
     if (!user) {
-      throw new CustomError(HttpCodes.BAD_REQUEST, _f(`USER_WITH_EMAIL_NOT_EXISTS`, {email}));
+      throw new CustomError(HttpCodes.BAD_REQUEST, fm(`USER_WITH_EMAIL_NOT_EXISTS`, {email}));
     }
     const {password: userPassword, id} = sqlzParse(user);
     const isPasswordMatch = await bcrypt.compare(password, userPassword);
     if (!isPasswordMatch) {
-      throw new CustomError(HttpCodes.BAD_REQUEST, _f(`PASSWORD_IS_INCORRECT`));
+      throw new CustomError(HttpCodes.BAD_REQUEST, fm(`PASSWORD_IS_INCORRECT`));
     }
     return id;
   },
