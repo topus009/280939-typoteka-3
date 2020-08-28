@@ -9,7 +9,7 @@ function expandTextAreaOnPostArticlePage() {
   if(targetUrl.indexOf(window.location.href) >= 0) {
     var textArea = getElById('textarea');
 
-    for (var i = 0; i < tx.length; i++) {
+    for (var i = 0; i < textArea.length; i++) {
       textArea[i].setAttribute('style', 'height:' + (textArea[i].scrollHeight) + 'px;overflow-y:hidden;');
       textArea[i].addEventListener('input', onInput, false);
     }
