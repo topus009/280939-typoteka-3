@@ -19,6 +19,7 @@ const routers = require(`./router`);
 const {
   errorsMiddleware,
   getUserMiddleware,
+  appRunningMiddleware,
 } = require(`./utils/utils`);
 const {
   store,
@@ -34,6 +35,10 @@ const logApi = createLogger(LoggerNames.FRONTEND_API);
 const DEFAULT_PORT = process.env.FRONTEND_PORT;
 
 const app = express();
+
+app.listen(DEFAULT_PORT, (err) => {
+  appRunningMiddleware(err, DEFAULT_PORT, log);
+});
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
@@ -61,11 +66,3 @@ app.use((req, res, next) => {
 });
 
 app.use(errorsMiddleware(logApi));
-
-app.listen(DEFAULT_PORT, (error) => {
-  if (error) {
-    log.error(error);
-  } else {
-    log.info(fm(`SERVER_RUNNING`, {port: DEFAULT_PORT}));
-  }
-});

@@ -1,31 +1,44 @@
-function onInput(e) {
-  this.style.height = 'auto';
-  this.style.height = (this.scrollHeight) + 'px';
-}
-
 document.addEventListener('DOMContentLoaded', function() {
-  var location = window.location
-  var pathname = location.pathname
-  var targetUrl = location.origin + '/posts/post/';
-  if(~~targetUrl.indexOf(location.href)) {
-    var tx = document.getElementsByTagName('textarea');
+  expandTextAreaOnPostArticlePage();
+  handleDeleteFileOnPostArticlePage();
+})
+
+function expandTextAreaOnPostArticlePage() {
+  var targetUrl = window.location.origin + '/posts/post/';
+
+  if(targetUrl.indexOf(window.location.href) >= 0) {
+    var textArea = getElById('textarea');
 
     for (var i = 0; i < tx.length; i++) {
-      tx[i].setAttribute('style', 'height:' + (tx[i].scrollHeight) + 'px;overflow-y:hidden;');
-      tx[i].addEventListener("input", onInput, false);
+      textArea[i].setAttribute('style', 'height:' + (textArea[i].scrollHeight) + 'px;overflow-y:hidden;');
+      textArea[i].addEventListener('input', onInput, false);
     }
   }
+}
 
-  if(~~'/articles/article/edit/'.indexOf(pathname)) {
-    var articleFormImgDeleteBtn = document.getElementById('image-file-delete');
+function handleDeleteFileOnPostArticlePage() {
+  if('/articles/article/edit/'.indexOf(window.location.pathname) >= 0) {
+    var articleFormImgDeleteBtn = getElById('image-file-delete');
+
     if(articleFormImgDeleteBtn) {
       articleFormImgDeleteBtn.addEventListener('click', function(e) {
         e.preventDefault();
-        var articleFormImg = document.getElementById('image-name-field');
-        var prevArticleFormImg = document.getElementById('prevImage-name-field');
+
+        var articleFormImg = getElById('image-name-field');
+        var prevArticleFormImg = getElById('prevImage-name-field');
+
         prevArticleFormImg.value = articleFormImg.value;
         articleFormImg.value = '';
       })
     }
   }
-})
+}
+
+function onInput(e) {
+  this.style.height = 'auto';
+  this.style.height = (this.scrollHeight) + 'px';
+}
+
+function getElById(id) {
+  return document.getElementById(id);
+}

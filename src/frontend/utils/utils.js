@@ -59,10 +59,19 @@ const getUserMiddleware = catchAsync(async (req, res, next) => {
 
 const csrfMiddleware = csurf({cookie: true});
 
+const appRunningMiddleware = (err, port, log) => {
+  if (err) {
+    log.error(err);
+  } else {
+    log.info(fm(`SERVER_RUNNING`, {port}));
+  }
+};
+
 module.exports = {
   errorsMiddleware,
   authMiddleware,
   getUserMiddleware,
   adminMiddleware,
   csrfMiddleware,
+  appRunningMiddleware,
 };
