@@ -1,4 +1,9 @@
-**/public
+**/public/css
+**/public/fonts
+**/public/img
+**/public/js/vendors
+**/public/js/main.js
+
 **/templates
 *.md
 **/testing

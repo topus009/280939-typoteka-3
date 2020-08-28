@@ -42,3 +42,18 @@ overrides:
   - files: ['*.e2e.js', './config/constants.js']
     rules:
       no-magic-numbers: 'off'
+  - files: [
+      './src/frontend/public/js/fixes.js',
+      './src/frontend/public/js/socket.js',
+    ]
+    env:
+      browser: true
+    rules:
+      no-var: 'off'
+      prefer-arrow-callback: 'off'
+      no-magic-numbers: 'off'
+      vars-on-top: 'off'
+      prefer-template: 'off'
+      no-invalid-this: 'off'
+    globals:
+      io: true
