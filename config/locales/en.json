@@ -35,5 +35,7 @@
   "GENERATE_ARTICLES_MAX_LIMIT": "It is possible to create no more than {limit} records",
   "UNKNOWN_ERROR": "Unknown error",
   "FILE_CREATED": "File {name} was created!",
-  "FILE_DESTINATION": "Destination: {dest}"
+  "FILE_DESTINATION": "Destination: {dest}",
+  "SOCKET_USER_CONNECTED": "User with ID «{id}» connected",
+  "SOCKET_USER_DISCONNECTED": "User with ID «{id}» disconnected"
 }

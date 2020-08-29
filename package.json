@@ -33,7 +33,7 @@
     "db:drop": "dropdb --if-exists -h localhost -U postgres -e typoteka",
     "db:generate:fill": "npm run generate && npm run db:prepare",
     "db:init": "node -r ./config ./src/backend/database/db-init.js",
-    "db:all": "cross-env npm-run-all db:drop db:create db:init db:fill",
+    "db:all": "npm-run-all db:drop db:create db:init db:fill",
     "view:logs": "tail -F logs/logs -n",
     "view:test-logs": "tail -F logs/test-logs -n"
   },
@@ -81,7 +81,8 @@
     "pg": "8.3.0",
     "pino": "6.3.2",
     "pug": "3.0.0",
-    "sequelize": "6.3.3"
+    "sequelize": "6.3.3",
+    "socket.io": "2.3.0"
   },
   "husky": {
     "hooks": {

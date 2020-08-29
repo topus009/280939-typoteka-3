@@ -96,6 +96,7 @@ const LoggerNames = {
   BACKEND_API: `BACKEND_API`,
   DATABASE: `DATABASE`,
   COMMON: `COMMON`,
+  SOCKET: `SOCKET`,
 };
 const LogFileTypes = {
   LOG: `logs`,
