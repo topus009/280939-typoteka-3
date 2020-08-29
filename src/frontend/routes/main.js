@@ -3,11 +3,14 @@
 const {Router} = require(`express`);
 const {catchAsync} = require(`../../utils/utils`);
 const axios = require(`../axios`);
-const {csrfMiddleware} = require(`../utils/utils`);
+const {
+  csrfMiddleware,
+  countMainPageUsersMiddleware,
+} = require(`../utils/utils`);
 
 const mainRouter = new Router();
 
-mainRouter.get(`/`, catchAsync(async (req, res) => {
+mainRouter.get(`/`, [countMainPageUsersMiddleware], catchAsync(async (req, res) => {
   const {page} = req.query;
   const {data} = await axios.get(`/pages/main`, {params: {page}});
   res.render(`pages/main/main`, data);

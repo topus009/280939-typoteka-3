@@ -16,6 +16,7 @@ const {CustomError} = require(`../utils/utils`);
 const {createLogger} = require(`../utils/logger`);
 const fm = require(`../utils/localization`);
 const routers = require(`./router`);
+const {createSocketServer} = require(`./socket/socket`);
 const {
   errorsMiddleware,
   getUserMiddleware,
@@ -36,9 +37,13 @@ const DEFAULT_PORT = process.env.FRONTEND_PORT;
 
 const app = express();
 
-app.listen(DEFAULT_PORT, (err) => {
+const server = app.listen(DEFAULT_PORT, (err) => {
   appRunningMiddleware(err, DEFAULT_PORT, log);
 });
+
+const io = createSocketServer(server);
+
+app.set(`io`, io);
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
@@ -55,6 +60,7 @@ app.use(express.static(EXPRESS_PATH_TO_PUBLIC));
 app.use((req, res, next) => {
   const {method, url} = req;
   res.locals.path = req.path;
+  res.locals.NODE_ENV = process.env.NODE_ENV;
   logApi.debug(`${method} ${url}`);
   next();
 });

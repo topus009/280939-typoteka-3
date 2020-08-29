@@ -16,6 +16,7 @@ const {
   csrfMiddleware,
 } = require(`../utils/utils`);
 const axios = require(`../axios`);
+const {sendLastAndHotTemplatesBySocket} = require(`../socket/actions`);
 
 const articlesRouter = new Router();
 
@@ -36,13 +37,14 @@ articlesRouter.post(`/article/:id`, [
   csrfMiddleware,
 ], async (req, res, next) => {
   const {id} = req.params;
-  const {currentUser: {id: userId, role: role}} = res.locals;
+  const {currentUser: {id: userId, role}} = res.locals;
   try {
-    const apiReq = await axios.post(`/comments/article/${id}`, {
+    const commentRes = await axios.post(`/comments/article/${id}`, {
       ...req.body,
       userId,
     });
-    if (apiReq.status === HttpCodes.OK) {
+    if (commentRes.status === HttpCodes.OK) {
+      await sendLastAndHotTemplatesBySocket(req, commentRes, userId);
       res.redirect(role === UsersRoles.ADMIN ? `/my/comments` : req.originalUrl);
     }
     return;

@@ -6,14 +6,18 @@ const {
   UsersRoles,
   SESSION_COOKIE_NAME,
   SESSION_UID,
+  LoggerNames,
 } = require(`../../../config/constants`);
 const {
   useCommonErrorsHandler,
   CustomError,
   catchAsync,
 } = require(`../../utils/utils`);
+const {createLogger} = require(`../../utils/logger`);
 const fm = require(`../../utils/localization`);
 const axios = require(`../axios`);
+
+const log = createLogger(LoggerNames.SOCKET);
 
 const sendError = (res, next, error) => {
   res
@@ -22,8 +26,8 @@ const sendError = (res, next, error) => {
   return;
 };
 
-const errorsMiddleware = (log) => (error, req, res, next) => {
-  return useCommonErrorsHandler(log)(error, req, res, next, sendError);
+const errorsMiddleware = (logger) => (error, req, res, next) => {
+  return useCommonErrorsHandler(logger)(error, req, res, next, sendError);
 };
 
 const authMiddleware = (req, res, next) => {
@@ -59,12 +63,26 @@ const getUserMiddleware = catchAsync(async (req, res, next) => {
 
 const csrfMiddleware = csurf({cookie: true});
 
-const appRunningMiddleware = (err, port, log) => {
+const appRunningMiddleware = (err, port, logger) => {
   if (err) {
-    log.error(err);
+    logger.error(err);
   } else {
-    log.info(fm(`SERVER_RUNNING`, {port}));
+    logger.info(fm(`SERVER_RUNNING`, {port}));
   }
+};
+
+const countMainPageUsersMiddleware = (req, res, next) => {
+  const io = req.app.get(`io`);
+  io.on(`connect`, (socket) => {
+    log.debug(fm(`SOCKET_USER_CONNECTED`, {id: socket.id}));
+    io.emit(`MAIN_PAGE_READERS_COUNT`, io.engine.clientsCount);
+
+    socket.on(`disconnect`, () => {
+      log.debug(fm(`SOCKET_USER_DISCONNECTED`, {id: socket.id}));
+      io.emit(`MAIN_PAGE_READERS_COUNT`, io.engine.clientsCount);
+    });
+  });
+  return next();
 };
 
 module.exports = {
@@ -74,4 +92,5 @@ module.exports = {
   adminMiddleware,
   csrfMiddleware,
   appRunningMiddleware,
+  countMainPageUsersMiddleware,
 };
