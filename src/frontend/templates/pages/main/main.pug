@@ -2,7 +2,11 @@ include ../../common/index.pug
 
 +layout('Типотека')
   +body({noVendor: true})
+    - socketVersion = NODE_ENV === 'production' ? 'slim' : 'dev'
+    script(src=`js/vendors/socket.io.${socketVersion}.js`)
+    script(src='js/socket.js')
     main.main-page
+      .current-page-readers
       +helloMsg
       if articles.length
         +themesList(categories, categoriesCount)

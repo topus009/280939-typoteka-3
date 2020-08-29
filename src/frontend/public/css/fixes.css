@@ -74,3 +74,11 @@
   height: 372px;
   overflow-y: scroll;
 }
+
+.current-page-readers {
+  position: fixed;
+  padding: 4px 8px;
+  top: 0;
+  left: 0;
+  color: red;
+}
