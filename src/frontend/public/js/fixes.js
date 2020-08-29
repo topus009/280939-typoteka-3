@@ -6,10 +6,12 @@ document.addEventListener(`DOMContentLoaded`, function () {
 });
 
 function expandTextAreaOnPostArticlePage() {
-  var targetUrl = window.location.origin + `/posts/post/`;
+  var pathname = window.location.pathname;
+  var addPath = `/articles/add`;
+  var editPath = `/articles/article/edit`;
 
-  if (targetUrl.indexOf(window.location.href) >= 0) {
-    var textArea = getElById(`textarea`);
+  if (pathname.indexOf(addPath) >= 0 || pathname.indexOf(editPath) >= 0) {
+    var textArea = document.querySelectorAll(`textarea`);
 
     for (var i = 0; i < textArea.length; i++) {
       textArea[i].setAttribute(

@@ -55,5 +55,6 @@ overrides:
       vars-on-top: 'off'
       prefer-template: 'off'
       no-invalid-this: 'off'
+      max-depth: ['error', 3]
     globals:
       io: true
