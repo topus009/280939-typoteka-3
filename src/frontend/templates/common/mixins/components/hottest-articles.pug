@@ -1,3 +1,17 @@
+mixin hottestArticle(id, count, text)
+  li.hot__list-item
+    a.hot__list-link(href=`/articles/article/${id}`)
+      +limitString(text, 100)
+      sup.hot__link-sup= ` ${count}`
+
+mixin hottestArticlesList(mostPopularArticles)
+  ul#hot-list.hot__list
+    each popularArticle in mostPopularArticles
+      - id = popularArticle[0]
+      - count = popularArticle[1]
+      - text = popularArticle[2]
+        +hottestArticle(id, count, text)
+
 mixin hottestArticles(mostPopularArticles)
   section.main-page__hot.hot
     h2.hot__name
@@ -6,11 +20,4 @@ mixin hottestArticles(mostPopularArticles)
     if mostPopularArticles.length === 0
       p.hot__empty Здесь пока ничего нет...
     else
-      ul.hot__list
-        each popularArticle in mostPopularArticles
-          - id = popularArticle[0]
-          - count = popularArticle[1]
-            li.hot__list-item
-              a.hot__list-link(href=`/articles/article/${id}`)
-                +limitString(popularArticle[2], 100)
-                sup.hot__link-sup= ` ${count}`
+      +hottestArticlesList(mostPopularArticles)
