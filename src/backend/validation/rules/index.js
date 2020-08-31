@@ -5,11 +5,9 @@ const category = require(`./category`);
 const comment = require(`./comment`);
 const article = require(`./article`);
 
-const rules = {
+module.exports = {
   user,
   category,
   comment,
   article,
 };
-
-module.exports = rules;

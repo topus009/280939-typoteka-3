@@ -6,7 +6,7 @@ const {
   ExitCodes,
 } = require(`../../config/constants`);
 const {exit} = require(`../utils/utils`);
-const {cli} = require(`./cli`);
+const cli = require(`./cli`);
 
 const userArguments = process.argv.slice(USER_ARGV_INDEX);
 const [userCommand] = userArguments;
