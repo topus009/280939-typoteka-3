@@ -23,7 +23,7 @@ function expandTextAreaOnPostArticlePage() {
 }
 
 function handleDeleteFileOnPostArticlePage() {
-  if (`/articles/article/edit/`.indexOf(window.location.pathname) >= 0) {
+  if (window.location.pathname.indexOf(`/articles/article/edit/`) >= 0) {
     var articleFormImgDeleteBtn = getElById(`image-file-delete`);
 
     if (articleFormImgDeleteBtn) {

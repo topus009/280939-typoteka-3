@@ -6,7 +6,6 @@
   "license": "ISC",
   "main": "./src/service/service.js",
   "scripts": {
-    "eslint": "eslint --ext .js \"src/**\"",
     "find:dup": "jscpd src -f \"javascript\"",
     "lint:pug": "pug-lint ./src",
     "lint:eslint": "eslint .",
@@ -29,9 +28,7 @@
     "all:watch:debug": "cross-env LOG_LEVEL=debug npm run all:watch",
     "db:create": "psql -h localhost -U postgres -f ./src/backend/database/sql/schema.sql",
     "db:fill": "psql -h localhost -U postgres -f ./src/backend/database/sql/fill-db.sql",
-    "db:prepare": "npm run db:create && npm run db:fill",
     "db:drop": "dropdb --if-exists -h localhost -U postgres -e typoteka",
-    "db:generate:fill": "npm run generate && npm run db:prepare",
     "db:init": "node -r ./config ./src/backend/database/db-init.js",
     "db:all": "npm-run-all db:drop db:create db:init db:fill",
     "view:logs": "tail -F logs/logs -n",
